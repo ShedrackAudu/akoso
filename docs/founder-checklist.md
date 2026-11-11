@@ -17,6 +17,16 @@ Items are grouped by the stage that needs them, not by date. "Blocks" says what 
 - [x] Approve the project documents, brief split, risks list, `AGENTS.md` and scaffold (Stage 1 checkpoint). *Done 11/11/2026.*
 
 ### Paystack (start early; approvals take time)
+
+**Found in spike 04 (11/11/2026), do these first:**
+
+- [ ] **Register the company with CAC now,** not later: Paystack refuses dedicated accounts and subaccounts to a Starter (individual) business, even in test mode. *Blocks: the rest of spike 04 and risk R1.*
+- [ ] **Upgrade the Paystack account from Starter to Registered Business** once the CAC certificate is in hand.
+- [ ] **Ask Paystack to enable dedicated accounts, subaccounts and split payments,** in test and live mode, then tell the agent so spike 04 can finish.
+- [ ] **Turn off "pass transaction charges to customers"** in the Paystack dashboard settings. Test checkouts added Paystack's fee on top (₦45,000 became ₦45,786.81); the brief says parents never pay extra.
+- [ ] **Roll the test secret key and the webhook signing secret** in the dashboard (they were pasted into a chat), and put the new ones in `apps/web/.env.local` when next needed.
+- [ ] **Clear the test webhook URL** in the dashboard (it pointed at a temporary tunnel that is now closed).
+
 - [ ] Open the Paystack business account and complete registered-business KYC and go-live. *Blocks: live dedicated accounts and fee collection.*
 - [ ] Set the business category to **education/software**, not "Financial services" or "General services", so parents are not asked for their BVN.
 - [ ] Ask Paystack to enable subaccounts, split payments and Direct Debit for Akoso.

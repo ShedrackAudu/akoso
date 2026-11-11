@@ -18,7 +18,10 @@ In this order (brief section 32, Stage 1):
 1. Architecture spikes, each with a short written result: RLS and `withTenant()` with the
    real connection pooler (**done**: R16 closed, D-7 decided); offline queue on a real 2 GB
    Android phone (R13; **done**, on a Redmi A2+; storage protection not granted); Gotenberg with a realistic report-card template (R15; **done**: 600 cards in 2 minutes, about 61 KB each); Paystack
-   dedicated accounts and split payments in test mode (R1).
+   dedicated accounts and split payments in test mode (R1; **partly done, then blocked**:
+   signed webhooks work end to end and repeats are recognised, but Paystack refuses
+   dedicated accounts and subaccounts to a Starter business, so the split scenarios wait
+   for the founder's registered-business upgrade; see `docs/spikes/04-paystack.md`).
 2. CI/CD and environments: the remaining security scans (T3), staging deploy.
 3. Service-layer and `/api/v1` conventions (section 5.1): confirm the patterns in
    `ARCHITECTURE-ESSENTIALS.md` with the first real use case.

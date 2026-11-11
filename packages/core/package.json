@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@akoso/db": "workspace:*",
+    "@akoso/providers": "workspace:*",
     "@akoso/schemas": "workspace:*",
     "zod": "^4.6.7"
   },

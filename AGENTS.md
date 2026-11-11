@@ -162,6 +162,7 @@ invent a new module, package or top-level folder: propose it in `docs/decisions.
 | `pnpm test:e2e`                                  | Browser tests (Playwright); builds and starts the web app; needs Docker                     |
 | `pnpm spike:offline:setup`                       | Spike 02 only: recreate the offline spike tables                                            |
 | `pnpm --filter @akoso/worker spike:report-cards` | Spike 03 only: render the made-up report cards (Docker running; `--preview`, `--breakdown`) |
+| `pnpm spike:paystack:setup`                      | Spike 04 only: recreate the Paystack webhook inbox tables                                   |
 | `pnpm boundaries`                                | Import-boundary and circular-dependency check                                               |
 | `pnpm unused`                                    | Unused files, exports and dependencies (knip)                                               |
 | `pnpm format` / `pnpm format:check`              | Prettier                                                                                    |

@@ -16,6 +16,7 @@
     "test:db": "vitest run --config vitest.db.config.ts",
     "test:e2e": "playwright test",
     "spike:offline:setup": "docker compose exec -T postgres psql -q -U akoso_owner -d akoso_dev -f - < packages/db/src/spike/offline-schema.sql",
+    "spike:paystack:setup": "docker compose exec -T postgres psql -q -U akoso_owner -d akoso_dev -f - < packages/db/src/spike/paystack-schema.sql",
     "boundaries": "depcruise apps packages --config .dependency-cruiser.cjs",
     "unused": "knip",
     "brief:split": "node scripts/split-brief.mjs docs/MASTER_PROMPT.md docs/brief",
