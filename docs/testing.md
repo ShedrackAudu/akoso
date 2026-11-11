@@ -5,19 +5,20 @@ in the same pull request that adds it.
 
 ## What runs today
 
-| Check             | Command                                                | What it proves                                                                                                                          |
-| ----------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Unit tests        | `pnpm test`                                            | Vitest. Today: the environment validation tests, plus one placeholder (`it.todo`) per module that names the brief section it will cover |
-| Database tests    | `pnpm test:db`                                         | Needs `docker compose up -d`. Today: spike 01's tenant-isolation, pooler, platform-read and query-plan tests (40)                       |
-| One file          | `pnpm vitest run packages/core/src/config/env.test.ts` |                                                                                                                                         |
-| Watch mode        | `pnpm vitest`                                          |                                                                                                                                         |
-| Types             | `pnpm typecheck`                                       | Strict TypeScript in every app and package                                                                                              |
-| Lint              | `pnpm lint`                                            | ESLint with type-aware strict rules, zero warnings, and the icon-library ban                                                            |
-| Import boundaries | `pnpm boundaries`                                      | The layer and module rules in `.dependency-cruiser.cjs`; no circular imports                                                            |
-| Unused code       | `pnpm unused`                                          | No unused files, exports or dependencies (knip)                                                                                         |
-| Formatting        | `pnpm format:check`                                    | Prettier                                                                                                                                |
-| All of the above  | `pnpm check`                                           |                                                                                                                                         |
-| Build             | `pnpm build`                                           | The web and admin apps build                                                                                                            |
+| Check             | Command                                                | What it proves                                                                                                                                            |
+| ----------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unit tests        | `pnpm test`                                            | Vitest. Today: the environment validation tests, plus one placeholder (`it.todo`) per module that names the brief section it will cover                   |
+| Database tests    | `pnpm test:db`                                         | Needs `docker compose up -d`. Today: spike 01's tenant-isolation, pooler, platform-read and query-plan tests (40)                                         |
+| Browser tests     | `pnpm test:e2e`                                        | Needs `docker compose up -d`. Builds the web app, starts it on port 3200 and runs Playwright on a Pixel 5 screen. Today: spike 02 nine offline-sync tests |
+| One file          | `pnpm vitest run packages/core/src/config/env.test.ts` |                                                                                                                                                           |
+| Watch mode        | `pnpm vitest`                                          |                                                                                                                                                           |
+| Types             | `pnpm typecheck`                                       | Strict TypeScript in every app and package                                                                                                                |
+| Lint              | `pnpm lint`                                            | ESLint with type-aware strict rules, zero warnings, and the icon-library ban                                                                              |
+| Import boundaries | `pnpm boundaries`                                      | The layer and module rules in `.dependency-cruiser.cjs`; no circular imports                                                                              |
+| Unused code       | `pnpm unused`                                          | No unused files, exports or dependencies (knip)                                                                                                           |
+| Formatting        | `pnpm format:check`                                    | Prettier                                                                                                                                                  |
+| All of the above  | `pnpm check`                                           |                                                                                                                                                           |
+| Build             | `pnpm build`                                           | The web and admin apps build                                                                                                                              |
 
 CI (`.github/workflows/ci.yml`) runs all of these on every pull request, plus a secret
 scan (gitleaks). The database tests run in their own job, against the same Docker

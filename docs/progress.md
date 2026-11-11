@@ -17,7 +17,7 @@ In this order (brief section 32, Stage 1):
 
 1. Architecture spikes, each with a short written result: RLS and `withTenant()` with the
    real connection pooler (**done**: R16 closed, D-7 decided); offline queue on a real 2 GB
-   Android phone (R13); Gotenberg with a realistic report-card template (R15); Paystack
+   Android phone (R13; **desktop part done**, phone session waiting); Gotenberg with a realistic report-card template (R15); Paystack
    dedicated accounts and split payments in test mode (R1).
 2. CI/CD and environments: the remaining security scans (T3), staging deploy.
 3. Service-layer and `/api/v1` conventions (section 5.1): confirm the patterns in
@@ -61,6 +61,20 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
 
+### 11/11/2026: Spike 02, offline score entry and sync (Claude)
+
+- Recorded the skipped cross-model review on spike 01 (D-8) and deleted the two merged
+  branches.
+- Spec approved, with the sign-out rule D-9 (try to send, then confirm before discarding).
+- Built the offline queue, sync protocol, service worker and 9 Playwright tests, plus a
+  CI job. All pass locally, twice; **the CI job has not run yet**.
+- Result: works in a desktop browser emulating a phone. **Still to do: the session on a
+  real 2 GB Android phone** with the founder. Full write-up: `docs/spikes/02-offline-queue.md`.
+- Found: Serwist reloads the page on reconnect by default (switched off, A-15); the parent
+  first-load budget is already exceeded (297 KiB, plus a 986 KiB precache: R14, T13, T14);
+  Drizzle returns raw timestamps as text.
+- New tech debt T12: the spike switches route has no sign-in and must never be deployed.
+
 ### 11/11/2026: Spike 01, row-level security and `withTenant()` (Claude)
 
 - Spec approved by the founder, with `pg` as the Postgres driver (D-6).
@@ -70,7 +84,14 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
   option (a), published figures with no RLS bypass (D-7), which also closes R12. Full write-up: `docs/spikes/01-rls-with-tenant.md`.
 - Found: a local PostgreSQL 18 service holds port 5432, so the Docker Postgres moved to 5433. Docker Desktop was started for the first time; the Compose services for
   Postgres and PgBouncer now run. Gotenberg and MinIO are still unproven.
-- Committed on branch `spike/01-rls-with-tenant` and opened as a pull request.
+- Committed on branch `spike/01-rls-with-tenant` and opened as pull request #5. All
+  three CI checks passed, including the database tests on GitHub's Linux runners for
+  the first time. The database tests are now a required check on `main`.
+- **Merged by the founder without the cross-model review** that working rule 11 asks
+  for on row-level security changes (D-8). No second model has reviewed `withTenant()`,
+  the roles or the policies.
+- Deleted the merged branches `spike/01-rls-with-tenant` and
+  `docs/record-checkpoint-approval`.
 
 ### 11/11/2026: Checkpoint approved, branches tidied (Claude)
 

@@ -159,6 +159,8 @@ invent a new module, package or top-level folder: propose it in `docs/decisions.
 | `pnpm lint`                         | ESLint, zero warnings allowed                                           |
 | `pnpm test`                         | Vitest                                                                  |
 | `pnpm test:db`                      | Database and tenant-isolation tests; needs `docker compose up -d` first |
+| `pnpm test:e2e`                     | Browser tests (Playwright); builds and starts the web app; needs Docker |
+| `pnpm spike:offline:setup`          | Spike 02 only: recreate the offline spike tables                        |
 | `pnpm boundaries`                   | Import-boundary and circular-dependency check                           |
 | `pnpm unused`                       | Unused files, exports and dependencies (knip)                           |
 | `pnpm format` / `pnpm format:check` | Prettier                                                                |
