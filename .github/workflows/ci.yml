@@ -39,6 +39,22 @@ jobs:
           APP_BASE_DOMAIN: akoso.example
           DATABASE_URL: postgres://ci:ci@localhost:5432/ci
 
+  database:
+    name: Database tests (tenant isolation)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@9bbca1e9dc2902adb87e8780fe5c98796985a62d # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # The same Postgres, roles and PgBouncer as local development.
+      - run: docker compose up -d --wait postgres pgbouncer
+      - run: pnpm test:db
+
   secrets:
     name: Secret scan
     runs-on: ubuntu-latest

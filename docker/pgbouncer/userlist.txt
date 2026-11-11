@@ -1,0 +1,3 @@
+"akoso_app" "akoso_app_local"
+"akoso_platform_reader" "akoso_platform_reader_local"
+"akoso_owner" "akoso_local_only"

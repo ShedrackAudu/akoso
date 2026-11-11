@@ -16,7 +16,7 @@ Feature work may now begin, one spec at a time, in the order below.
 In this order (brief section 32, Stage 1):
 
 1. Architecture spikes, each with a short written result: RLS and `withTenant()` with the
-   real connection pooler (settles D-OPEN-5 and risk R16); offline queue on a real 2 GB
+   real connection pooler (**done**: R16 closed, D-7 decided); offline queue on a real 2 GB
    Android phone (R13); Gotenberg with a realistic report-card template (R15); Paystack
    dedicated accounts and split payments in test mode (R1).
 2. CI/CD and environments: the remaining security scans (T3), staging deploy.
@@ -36,7 +36,6 @@ Full text and recommendations in `docs/decisions.md`.
 
 - **D-OPEN-1** Hosting region (needed for the Stage 1 checkpoint decision log).
 - **D-OPEN-3** Node 24 or another version.
-- **D-OPEN-5** How platform-wide screens read across schools under forced RLS.
 - **D-OPEN-7** Whether apps may import providers directly.
 - D-OPEN-2 (AI provider), D-OPEN-4 (update section 4.0 for the brand kit) and D-OPEN-6
   (changing an assessment scheme after scores exist) are not needed yet.
@@ -61,6 +60,18 @@ have long lead times. Each is listed once.
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 11/11/2026: Spike 01, row-level security and `withTenant()` (Claude)
+
+- Spec approved by the founder, with `pg` as the Postgres driver (D-6).
+- Built PgBouncer in transaction mode, three least-privilege roles, `withTenant()` and
+  40 database tests, plus a CI job for them. All pass locally; **the CI job has not run
+  yet** (nothing pushed).
+- Result: the pattern works. R16 closed. D-OPEN-5 tested both ways; the founder chose
+  option (a), published figures with no RLS bypass (D-7), which also closes R12. Full write-up: `docs/spikes/01-rls-with-tenant.md`.
+- Found: a local PostgreSQL 18 service holds port 5432, so the Docker Postgres moved to 5433. Docker Desktop was started for the first time; the Compose services for
+  Postgres and PgBouncer now run. Gotenberg and MinIO are still unproven.
+- Nothing committed. Spike work is on branch `spike/01-rls-with-tenant`.
 
 ### 11/11/2026: Checkpoint approved, branches tidied (Claude)
 

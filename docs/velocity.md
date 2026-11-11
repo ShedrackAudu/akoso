@@ -11,9 +11,10 @@ estimate, items are deferred from the cut-line (brief section 32.3).
 
 ## Stage 1: Foundations
 
-| Item                                                                                  | Estimate (h)  | Actual, agent (h) | Actual, founder review (h) | Ratio | Notes                                                                                              |
-| ------------------------------------------------------------------------------------- | ------------- | ----------------- | -------------------------- | ----- | -------------------------------------------------------------------------------------------------- |
-| Step 0: project documents, brief split, hard-questions review, scaffold (section 3.2) | not estimated | one session       |                            | n/a   | No estimate was recorded before starting, so there is no ratio. Estimates start with the next item |
+| Item                                                                                  | Estimate (h)  | Actual, agent (h) | Actual, founder review (h) | Ratio | Notes                                                                                               |
+| ------------------------------------------------------------------------------------- | ------------- | ----------------- | -------------------------- | ----- | --------------------------------------------------------------------------------------------------- |
+| Step 0: project documents, brief split, hard-questions review, scaffold (section 3.2) | not estimated | one session       |                            | n/a   | No estimate was recorded before starting, so there is no ratio. Estimates start with the next item  |
+| Spike 01: row-level security and `withTenant()`                                       | 8             | one session       |                            | n/a   | Agent time was not measured to the hour, so no ratio. Result in `docs/spikes/01-rls-with-tenant.md` |
 
 ## Cut-line (brief section 32.3)
 

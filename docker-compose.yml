@@ -12,14 +12,30 @@ services:
       POSTGRES_DB: akoso_dev
       TZ: UTC
     ports:
-      - "5432:5432"
+      # 5433 on the host: 5432 is often taken by a locally installed PostgreSQL.
+      - "5433:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      # Creates the least-privilege roles on first start (see the file for each role).
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U akoso_owner -d akoso_dev"]
       interval: 5s
       timeout: 5s
       retries: 10
+
+  # Connection pooler in transaction mode, as managed Postgres is usually pooled in
+  # production. The app connects here (port 6432), never straight to Postgres.
+  pgbouncer:
+    image: edoburu/pgbouncer:v1.26.1-p0
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "6432:6432"
+    volumes:
+      - ./docker/pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro
+      - ./docker/pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt:ro
 
   # HTML-to-PDF rendering for report cards, receipts and payslips. Called only by the worker.
   gotenberg:

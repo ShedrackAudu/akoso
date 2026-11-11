@@ -8,6 +8,7 @@ in the same pull request that adds it.
 | Check             | Command                                                | What it proves                                                                                                                          |
 | ----------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | Unit tests        | `pnpm test`                                            | Vitest. Today: the environment validation tests, plus one placeholder (`it.todo`) per module that names the brief section it will cover |
+| Database tests    | `pnpm test:db`                                         | Needs `docker compose up -d`. Today: spike 01's tenant-isolation, pooler, platform-read and query-plan tests (40)                       |
 | One file          | `pnpm vitest run packages/core/src/config/env.test.ts` |                                                                                                                                         |
 | Watch mode        | `pnpm vitest`                                          |                                                                                                                                         |
 | Types             | `pnpm typecheck`                                       | Strict TypeScript in every app and package                                                                                              |
@@ -19,9 +20,11 @@ in the same pull request that adds it.
 | Build             | `pnpm build`                                           | The web and admin apps build                                                                                                            |
 
 CI (`.github/workflows/ci.yml`) runs all of these on every pull request, plus a secret
-scan (gitleaks).
+scan (gitleaks). The database tests run in their own job, against the same Docker
+services as local development.
 
-Test files sit beside the code they test, named `*.test.ts`.
+Test files sit beside the code they test, named `*.test.ts`. Tests that need the
+database are named `*.db.test.ts`, so `pnpm test` skips them and `pnpm test:db` runs them.
 
 ## Suites still to come
 

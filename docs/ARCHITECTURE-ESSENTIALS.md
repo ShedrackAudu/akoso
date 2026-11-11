@@ -80,7 +80,9 @@ export async function getFamilyBalance(
   input: GetFamilyBalanceInput
 ): Promise<FamilyBalance> {
   authorize(ctx, "fees.statement.read", { familyId: input.familyId })
-  return withTenant(ctx.tenantId, (tx) => readFamilyBalance(tx, input.familyId))
+  return withTenant(ctx.db, ctx.tenantId, (tx) =>
+    readFamilyBalance(tx, input.familyId)
+  )
 }
 ```
 
@@ -125,10 +127,11 @@ states, status and small sizes.
 
 ```
 pnpm install                 install (pnpm via corepack; Node 24)
-docker compose up -d         Postgres, Gotenberg, MinIO
+docker compose up -d         Postgres (5433), PgBouncer (6432), Gotenberg, MinIO
 pnpm dev                     web app on http://localhost:3000
 pnpm dev:admin               platform admin on http://localhost:3001
-pnpm check                   everything CI runs except the build
+pnpm check                   everything CI runs except the build and database tests
+pnpm test:db                 database and tenant-isolation tests (needs Docker)
 pnpm typecheck | lint | test | boundaries | unused | format:check
 pnpm build                   build every app
 pnpm brief:split             regenerate docs/brief/ after the master prompt changes

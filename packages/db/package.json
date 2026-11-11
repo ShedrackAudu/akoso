@@ -11,6 +11,11 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@akoso/typescript-config": "workspace:*"
+    "@akoso/typescript-config": "workspace:*",
+    "@types/pg": "^8.23.1"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.4",
+    "pg": "^8.23.1"
   }
 }

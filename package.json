@@ -13,6 +13,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
+    "test:db": "vitest run --config vitest.db.config.ts",
     "boundaries": "depcruise apps packages --config .dependency-cruiser.cjs",
     "unused": "knip",
     "brief:split": "node scripts/split-brief.mjs docs/MASTER_PROMPT.md docs/brief",

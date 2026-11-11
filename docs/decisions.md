@@ -46,21 +46,6 @@ Each has a recommendation. Work continues on other things while these are open.
   are told (ADR 0004) that the brand kit wins. Only you edit the brief.
 - **Needed by:** not blocking.
 
-### D-OPEN-5: Platform-wide reads under forced RLS
-
-- **Question:** the founder's dashboard, the platform-fee ledger, health alerts and the
-  subscription overview need figures across schools, but the application role must never
-  bypass RLS (section 7).
-- **Why it is yours:** tenancy and RLS policy.
-- **Options:** (a) platform tables that are not tenant tables (`platform_fee_ledgers`,
-  `usage_snapshots`), written by tenant-scoped jobs, so platform screens read aggregates
-  that were deliberately published; (b) a separate, read-only database role for platform
-  reporting with narrow grants on specific views, used only by `apps/admin`.
-- **Recommendation:** (a) as the default, because nothing ever reads across tenants at
-  query time; (b) only for the few cases (a) cannot serve, each one listed and reviewed.
-  To be confirmed in the Stage 1 RLS spike.
-- **Needed by:** Stage 1.
-
 ### D-OPEN-6: Changing an assessment scheme after scores exist
 
 - **Question:** if a school changes a component maximum (say CA1 from 10 to 15)
@@ -86,13 +71,15 @@ Each has a recommendation. Work continues on other things while these are open.
 
 ### Founder decisions
 
-| ID  | Date       | Decision                                                                                                                                                                                                                                                  | Notes                                                                       |
-| --- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| D-5 | 11/11/2026 | **Logos always use the SVG where possible,** so they stay crisp. PNG only where a format requires it (manifest install icons, Apple touch icon, `.ico` favicon, emails or PDFs that cannot show SVG)                                                      | `AGENTS.md` section 10; [ADR 0004](adr/0004-brand-assets-from-brand-kit.md) |
-| D-4 | 11/11/2026 | **The app icon and favicon use the violet colourway** (`app-icons/tassel/violet/web`), replacing the agent's deep-purple pick (A-10)                                                                                                                      | [ADR 0004](adr/0004-brand-assets-from-brand-kit.md)                         |
-| D-3 | 11/11/2026 | **Brand assets come from the brand kit, tassel variant.** It supersedes the indigo, gold and knot direction and the "placeholder icon" in brief section 4.0                                                                                               | [ADR 0004](adr/0004-brand-assets-from-brand-kit.md). Colourway: see D-4     |
-| D-2 | 11/11/2026 | **The repository is the `akoso` folder; `akoso-refs/` stays on disk and is gitignored.** The brief and founder checklist are copied into `docs/`; only the brand assets the app uses are copied in. The prompts changelog and the website prompt stay out |                                                                             |
-| D-1 | 11/11/2026 | **The platform admin is a separate app, `apps/admin`,** not a route group in `apps/web`                                                                                                                                                                   | [ADR 0003](adr/0003-admin-as-separate-app.md)                               |
+| ID  | Date       | Decision                                                                                                                                                                                                                                                                                                                                               | Notes                                                                       |
+| --- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| D-7 | 11/11/2026 | **Platform-wide reads use published figures (option (a), was D-OPEN-5):** platform-wide screens read only figures that a tenant-scoped job has published into the `platform` schema. Nothing in the application bypasses row-level security, and no role with `BYPASSRLS` is created. Option (b), a live view owned by a `BYPASSRLS` role, is rejected | [Spike 01 result](spikes/01-rls-with-tenant.md), question 6                 |
+| D-6 | 11/11/2026 | **The Postgres driver is `pg` (node-postgres).** Approved with the spike 01 spec. Adds runtime dependencies `pg` and `drizzle-orm`, and development-only `drizzle-kit` and `@types/pg`                                                                                                                                                                 | [Spike 01 spec](specs/stage-1-spike-01-rls-with-tenant.md)                  |
+| D-5 | 11/11/2026 | **Logos always use the SVG where possible,** so they stay crisp. PNG only where a format requires it (manifest install icons, Apple touch icon, `.ico` favicon, emails or PDFs that cannot show SVG)                                                                                                                                                   | `AGENTS.md` section 10; [ADR 0004](adr/0004-brand-assets-from-brand-kit.md) |
+| D-4 | 11/11/2026 | **The app icon and favicon use the violet colourway** (`app-icons/tassel/violet/web`), replacing the agent's deep-purple pick (A-10)                                                                                                                                                                                                                   | [ADR 0004](adr/0004-brand-assets-from-brand-kit.md)                         |
+| D-3 | 11/11/2026 | **Brand assets come from the brand kit, tassel variant.** It supersedes the indigo, gold and knot direction and the "placeholder icon" in brief section 4.0                                                                                                                                                                                            | [ADR 0004](adr/0004-brand-assets-from-brand-kit.md). Colourway: see D-4     |
+| D-2 | 11/11/2026 | **The repository is the `akoso` folder; `akoso-refs/` stays on disk and is gitignored.** The brief and founder checklist are copied into `docs/`; only the brand assets the app uses are copied in. The prompts changelog and the website prompt stay out                                                                                              |                                                                             |
+| D-1 | 11/11/2026 | **The platform admin is a separate app, `apps/admin`,** not a route group in `apps/web`                                                                                                                                                                                                                                                                | [ADR 0003](adr/0003-admin-as-separate-app.md)                               |
 
 ### Agent decisions (within section 3.3 decision rights)
 
