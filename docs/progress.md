@@ -17,7 +17,7 @@ In this order (brief section 32, Stage 1):
 
 1. Architecture spikes, each with a short written result: RLS and `withTenant()` with the
    real connection pooler (**done**: R16 closed, D-7 decided); offline queue on a real 2 GB
-   Android phone (R13; **desktop part done**, phone session waiting); Gotenberg with a realistic report-card template (R15); Paystack
+   Android phone (R13; **done**, on a Redmi A2+; storage protection not granted); Gotenberg with a realistic report-card template (R15); Paystack
    dedicated accounts and split payments in test mode (R1).
 2. CI/CD and environments: the remaining security scans (T3), staging deploy.
 3. Service-layer and `/api/v1` conventions (section 5.1): confirm the patterns in
@@ -60,6 +60,15 @@ have long lead times. Each is listed once.
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 11/11/2026: Spike 02 phone session (Claude, with the founder)
+
+- Ran the offline tests by hand on a Redmi A2+ (Android 13 Go, 2 GB, Chrome 157) over
+  USB. 45 scores in 153 s, a register of 40 in 46 s; 90 unsent changes survived Chrome
+  swiped away and a reboot, and all 90 reached the server exactly once.
+- Chrome did not grant storage protection, and offered no install option. Recorded in
+  R13 and the spike result as open questions for staging.
+- Found and cleared a corrupt Next.js build cache (`apps/web/.next`).
 
 ### 11/11/2026: Spike 02, offline score entry and sync (Claude)
 

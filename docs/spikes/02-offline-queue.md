@@ -2,8 +2,9 @@
 
 - **Date:** 11/11/2026 · **Spec:** [stage-1-spike-02-offline-queue](../specs/stage-1-spike-02-offline-queue.md)
 - **Branch:** `spike/02-offline-queue`
-- **Outcome:** the design works in a desktop browser emulating a phone. **The real-phone
-  session is still to do**, so risk R13 is not closed. One new problem found: the parent
+- **Outcome:** the design works, in a desktop browser emulating a phone and on a real
+  2 GB Android phone (Redmi A2+). Risk R13 is closed for everything tested; one gap
+  remains: Chrome would not protect the app's storage. One new problem found: the parent
   download budget is already exceeded (risk R14).
 
 ## In one paragraph
@@ -60,12 +61,16 @@ precaches 25 files. Two things to know:
 - Its dependency `@swc/core` wants an install script that only re-checks a native binary
   already installed. It is listed as **not allowed** to run scripts (`pnpm-workspace.yaml`).
 
-### 2. Does queued work survive? **Yes, as far as a desktop browser can show.**
+### 2. Does queued work survive? **Yes, on a real phone too, but the storage is not protected.**
 
 Unsent changes survived closing the tab and killing and relaunching the browser with the
 same profile. What a desktop cannot show: Android evicting storage when the phone is full,
 battery saver, the browser being swiped away from recent apps, and whether the
-persistent-storage request is granted on a real phone. **That is the phone session.**
+persistent-storage request is granted on a real phone.
+
+On the Redmi A2+, 90 unsent changes survived Chrome being swiped away from recent apps
+and a full reboot. Chrome did **not** grant storage protection, even after the page was
+bookmarked; see the phone session below.
 
 ### 3. Does sync stay exactly-once when the connection drops at the worst moment? **Yes.**
 
@@ -80,10 +85,12 @@ The change received later wins, and the value it replaced is written to an appen
 conflict list shown to the head teacher. A phone's own earlier edits never count as
 conflicts with itself (the server compares phone IDs). No phone clock is used anywhere.
 
-### 5. How long do 45 scores and a register of 40 take on a phone? **Not yet answered.**
+### 5. How long do 45 scores and a register of 40 take on a phone? **Well within target.**
 
-A robot typing in a browser says nothing about a teacher's thumbs. This waits for the
-phone session (targets: 45 scores in under 10 minutes; a register of 40 in under 60 seconds).
+On the Redmi A2+, entered by hand: **45 scores in 153 seconds** (target: under 10
+minutes) and **a register of 40 in 46 seconds** (target: under 60 seconds). Times come
+from a recorder reading the phone every 3 seconds, so each is accurate to a few seconds.
+One person, one session: a guide, not a study of teachers.
 
 ### 6. How much does this add to a parent's download? **Too much, and the base is already over budget.**
 
@@ -126,18 +133,39 @@ add a bundle-size check to CI.
 6. **The spike-only `switches` route has no sign-in.** It only flips the spike's own
    tables, but it must never reach a deployed environment (recorded as tech debt T12).
 
-## Still to do: the phone session
+## The phone session (11/11/2026)
 
-Needs you, a 2 GB Android phone, a USB cable and Developer options turned on. With the
-phone on Chrome's USB port forwarding (so the app counts as a secure address), we run:
+**Phone:** Xiaomi Redmi A2+ (model 23028RNCAG), Android 13 Go edition, 1.8 GB usable
+memory (the 2 GB model; Chrome reports 2 GB), Chrome 157.0.8103.46, 6.9 GB storage free.
+Xiaomi's Android Go home screen (`com.gogo.launcher`).
 
-1. The section 20 acceptance test by hand in airplane mode.
-2. Unsent work through: battery saver on; Chrome swiped away from recent apps; a reboot.
-3. Whether the persistent-storage request is granted.
-4. Timing: 45 scores and a register of 40.
+**Set-up:** the production build on the development computer, reached from the phone's
+`localhost:3200` through `adb reverse` over USB, so the app counted as a secure address.
+Because that link runs over the cable, **airplane mode alone did not cut the phone off**:
+"offline" meant airplane mode on _and_ the USB link removed. State was read from the
+phone's Chrome through its debugging connection, touching only the Akoso tab.
 
-The result then records the phone's model, Android version and Chrome version, and R13
-can be closed or reopened.
+| Test                                | Result                                                                                                                                                                                        |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Page opens with no connection       | **Pass.** Reloaded in airplane mode from the service worker                                                                                                                                   |
+| 45 CA1 scores, offline              | **Pass.** 153 seconds                                                                                                                                                                         |
+| Register, offline                   | **Pass.** 40 marks in 46 seconds (all 45 marked in total)                                                                                                                                     |
+| Changes kept on the phone           | **Pass.** 90 waiting, none refused                                                                                                                                                            |
+| Chrome swiped away from recent apps | **Pass.** 90 still waiting when reopened offline                                                                                                                                              |
+| Battery saver on                    | **Pass, as reported.** The founder turned it on; it read off after the reboot, so this was not confirmed from the phone                                                                       |
+| Phone rebooted                      | **Pass.** Confirmed by uptime; 90 still waiting, page reopened offline                                                                                                                        |
+| Reconnect                           | **Pass.** Everything sent within about 6 seconds of the link returning, by the app's own retry, while airplane mode was still on                                                              |
+| Exactly once, on the server         | **Pass.** 90 changes applied, each once: 45 score cells and 45 register entries, all at version 1; no repeats, no conflicts; register dated 11/11/2026 (Lagos)                                |
+| Storage protection                  | **Not granted.** `navigator.storage.persist()` answered _false_ on first visit and again after bookmarking. 3.4 MB used of a 10 GB allowance                                                  |
+| Install to home screen              | **Not offered.** Chrome reported the app installable (no errors, manifest read), but its menu and share sheet had no install or "Add to home screen" item, online or offline. Cause not found |
+
+**What the storage result means.** Without protection, Android may clear the app's data
+if the phone runs critically low on space, which is common on cheap phones full of
+WhatsApp media. Nothing came close here (3.4 MB used, 6.9 GB free), and the test did not
+fill the phone to provoke it. Mitigations, for the real offline work: tell the teacher
+plainly how many changes are unsent (done); sync at the first chance (done); and retry
+installing from a real HTTPS address on staging, since the missing install option may
+come from the local test address or the Go launcher.
 
 ## What happens next
 
