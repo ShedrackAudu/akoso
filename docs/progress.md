@@ -17,7 +17,7 @@ In this order (brief section 32, Stage 1):
 
 1. Architecture spikes, each with a short written result: RLS and `withTenant()` with the
    real connection pooler (**done**: R16 closed, D-7 decided); offline queue on a real 2 GB
-   Android phone (R13; **done**, on a Redmi A2+; storage protection not granted); Gotenberg with a realistic report-card template (R15); Paystack
+   Android phone (R13; **done**, on a Redmi A2+; storage protection not granted); Gotenberg with a realistic report-card template (R15; **done**: 600 cards in 2 minutes, about 61 KB each); Paystack
    dedicated accounts and split payments in test mode (R1).
 2. CI/CD and environments: the remaining security scans (T3), staging deploy.
 3. Service-layer and `/api/v1` conventions (section 5.1): confirm the patterns in
@@ -60,6 +60,21 @@ have long lead times. Each is listed once.
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 11/11/2026: Spike 03, report-card PDFs (Claude)
+
+- Spec approved with new dependencies `react`/`react-dom` (worker), `qrcode` and `sharp` (D-11).
+- Pinned and locked down Gotenberg 9.4.0 (A-16); made the worker runnable by bundling it
+  with esbuild (A-17, closes T2).
+- Rendered 600 made-up report cards: 119 s on mains power (about 223 s on battery), about
+  61 KB each, CPU-bound; injected failures and a mid-batch Gotenberg restart lost no card;
+  the input-hash cache served a repeat run in 6.8 s. R15 closed. Result:
+  `docs/spikes/03-report-card-pdfs.md`.
+- The founder judged the sample card readable in black and white.
+- Opened as pull request #8; all four CI checks passed. **No cross-model review** (D-12, the
+  founder's choice).
+- Found: brand fonts triple a card's size (to about 207 KB); Gotenberg 9 moved merging to
+  `/forms/pdf/merge`.
 
 ### 11/11/2026: Spike 02 phone session (Claude, with the founder)
 

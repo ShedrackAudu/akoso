@@ -16,6 +16,7 @@ estimate, items are deferred from the cut-line (brief section 32.3).
 | Step 0: project documents, brief split, hard-questions review, scaffold (section 3.2) | not estimated | one session                       |                            | n/a   | No estimate was recorded before starting, so there is no ratio. Estimates start with the next item                               |
 | Spike 01: row-level security and `withTenant()`                                       | 8             | one session                       |                            | n/a   | Agent time was not measured to the hour, so no ratio. Result in `docs/spikes/01-rls-with-tenant.md`                              |
 | Spike 02: offline score entry and sync                                                | 12            | one session, plus a phone session |                            | n/a   | Phone session done on a Redmi A2+. Agent time not measured to the hour, so no ratio. Result in `docs/spikes/02-offline-queue.md` |
+| Spike 03: report-card PDFs with Gotenberg                                             | 10            | one session                       |                            | n/a   | Agent time not measured to the hour, so no ratio. Result in `docs/spikes/03-report-card-pdfs.md`                                 |
 
 ## Cut-line (brief section 32.3)
 

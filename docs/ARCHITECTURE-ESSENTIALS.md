@@ -133,6 +133,7 @@ pnpm dev:admin               platform admin on http://localhost:3001
 pnpm check                   everything CI runs except the build and database tests
 pnpm test:db                 database and tenant-isolation tests (needs Docker)
 pnpm test:e2e                browser tests with Playwright (needs Docker)
+pnpm --filter @akoso/worker build   bundle the worker with esbuild
 pnpm typecheck | lint | test | boundaries | unused | format:check
 pnpm build                   build every app
 pnpm brief:split             regenerate docs/brief/ after the master prompt changes
