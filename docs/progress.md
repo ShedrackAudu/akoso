@@ -49,15 +49,15 @@ Nothing is blocked for step 0. See "Founder tasks" for what the rest of Stage 1 
 Unticked items in `docs/founder-checklist.md` that block the next part of Stage 1 or
 have long lead times. Each is listed once.
 
-| Task                                                                                                                                                                         | Blocks                                               | Needed by                        |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | -------------------------------- |
-| Approve the project documents, brief split, risks list, `AGENTS.md` and scaffold                                                                                             | All feature code                                     | Now                              |
-| Create the GitHub repository (part of "create accounts the build needs") and give agents limited access. Set your git name and email on this machine                         | CI has never run; nothing can be committed or pushed | Stage 1                          |
-| Create and own the accounts the build needs: hosting, Cloudflare, Sentry, PostHog, the AI provider, Resend or SES. Give agents limited keys, never your own logins           | Staging deploy; observability                        | Stage 1                          |
-| Open the Paystack business account (test keys are enough to start); set the category to education or software                                                                | The Paystack spike on dedicated accounts and splits  | Stage 1 spike                    |
-| Start the slow approvals now: Paystack KYC and go-live, the written confirmation of split behaviour, Termii DND sender ID, Meta Business verification and WhatsApp templates | Live payments, SMS and WhatsApp. They take weeks     | Stages 4 and 5; start in Stage 1 |
-| Register the company (CAC), get a TIN, open a corporate bank account                                                                                                         | Paystack live mode, legal templates                  | Stage 4                          |
-| Register the domains, starting with `akoso.ng`                                                                                                                               | Staging addresses, email sending domain              | Stage 1                          |
+| Task                                                                                                                                                                         | Blocks                                              | Needed by                        |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------- |
+| Approve the project documents, brief split, risks list, `AGENTS.md` and scaffold                                                                                             | All feature code                                    | Now                              |
+| Create the GitHub repository (part of "create accounts the build needs") and give agents limited access                                                                      | CI has never run; nothing can be pushed             | Stage 1                          |
+| Create and own the accounts the build needs: hosting, Cloudflare, Sentry, PostHog, the AI provider, Resend or SES. Give agents limited keys, never your own logins           | Staging deploy; observability                       | Stage 1                          |
+| Open the Paystack business account (test keys are enough to start); set the category to education or software                                                                | The Paystack spike on dedicated accounts and splits | Stage 1 spike                    |
+| Start the slow approvals now: Paystack KYC and go-live, the written confirmation of split behaviour, Termii DND sender ID, Meta Business verification and WhatsApp templates | Live payments, SMS and WhatsApp. They take weeks    | Stages 4 and 5; start in Stage 1 |
+| Register the company (CAC), get a TIN, open a corporate bank account                                                                                                         | Paystack live mode, legal templates                 | Stage 4                          |
+| Register the domains, starting with `akoso.ng`                                                                                                                               | Staging addresses, email sending domain             | Stage 1                          |
 
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
@@ -69,9 +69,13 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 - Planned the project with the founder; three decisions recorded (D-1 admin as a
   separate app, D-2 repository layout, D-3 brand kit with the tassel variant).
-- Initialised git on branch `chore/stage-1-step-0-docs-and-scaffold`. **Nothing is
-  committed**: the founder has not asked for a commit, and git has no name or email
-  configured on this machine.
+- Initialised git on branch `chore/stage-1-step-0-docs-and-scaffold`. At the founder's
+  request, set the git author (name and email) for this repository only, not globally,
+  and made two commits: `2a2d24e` (documents, brief split and scaffold) and `f5ef12c`
+  (violet icons and SVG brand marks). Nothing is pushed: there is no remote yet.
+- Fixed the pre-commit hook for Windows: it now checks staged files in batches of 40
+  through `lint-staged.config.js`, because a large commit overflowed the Windows
+  command-line limit.
 - Copied the brief and founder checklist into `docs/` unchanged. Split the brief into
   45 files in `docs/brief/` with an index; joining them reproduces the master prompt
   byte for byte (checked by `pnpm brief:split`).
@@ -81,7 +85,10 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
   interfaces, each with a README and placeholder files.
 - Initialised shadcn with preset `b4bg87xLw8`; every setting matches the brief
   (ADR 0002). Installed the shadcn skill and MCP server config for Claude and Gemini.
-- Copied the tassel, deep-purple web icons from the brand kit (ADR 0004).
+- Copied the tassel web icons from the brand kit (ADR 0004): deep purple at first,
+  then replaced with the **violet** colourway at the founder's request (D-4).
+- The placeholder pages show the tassel mark from SVG, one file for light and one for
+  dark backgrounds (D-5: logos are SVG wherever possible).
 - Wired the tooling: strict TypeScript, ESLint (type-aware, icon-library ban),
   Prettier, Vitest, dependency-cruiser boundaries, knip, husky with lint-staged, Docker
   Compose, `.env.example`, and a CI workflow with Actions pinned to commit SHAs.
@@ -114,7 +121,7 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
   passes `docker compose config` only, so the three services and their health checks are
   unproven.
 - The admin app was built but not opened in a browser.
-- Nothing was committed.
+- Nothing is pushed (no remote).
 - The patterns in `ARCHITECTURE-ESSENTIALS.md` are intended shapes, not yet used by code.
 - The voice-guide examples and the proposed role keys and code names in the glossary
   are drafts.
