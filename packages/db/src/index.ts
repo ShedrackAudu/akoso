@@ -3,3 +3,5 @@
 export { createDatabase } from "./client"
 export type { Database, DatabaseHandle, TenantTransaction } from "./client"
 export { InvalidTenantIdError, withTenant } from "./with-tenant"
+// Re-exported so every package builds parameterised SQL with the same Drizzle version.
+export { sql } from "drizzle-orm"

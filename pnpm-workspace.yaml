@@ -7,6 +7,9 @@ allowBuilds:
   esbuild: true
   sharp: true
   unrs-resolver: true
+  # Pulled in by @serwist/turbopack. Its script only checks the native binary, which
+  # arrives as a platform package anyway, and would otherwise download a fallback.
+  "@swc/core": false
 
 minimumReleaseAgeExclude:
   - knip@6.45.1

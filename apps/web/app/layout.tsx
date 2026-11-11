@@ -1,3 +1,4 @@
+import { SerwistProvider } from "@serwist/turbopack/react"
 import type { Metadata, Viewport } from "next"
 import { Figtree, Geist_Mono, Merriweather } from "next/font/google"
 import type { JSX, ReactNode } from "react"
@@ -60,7 +61,10 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        {/* No reload on reconnect: it would throw away a teacher's half-typed entry. */}
+        <SerwistProvider swUrl="/serwist/sw.js" reloadOnOnline={false}>
+          <ThemeProvider>{children}</ThemeProvider>
+        </SerwistProvider>
       </body>
     </html>
   )

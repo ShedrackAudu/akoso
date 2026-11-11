@@ -94,6 +94,7 @@ local tools at real data.
 | `pnpm build`       | Build every app                                                   |
 | `pnpm test`        | Tests only                                                        |
 | `pnpm test:db`     | Database and tenant-isolation tests (start Docker first)          |
+| `pnpm test:e2e`    | Browser tests; builds and starts the app (start Docker first)     |
 | `pnpm format`      | Format with Prettier                                              |
 | `pnpm brief:split` | Regenerate `docs/brief/` after the master prompt changes          |
 

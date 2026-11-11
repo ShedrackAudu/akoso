@@ -4,7 +4,9 @@
     ".": {
       "entry": ["scripts/*.mjs"]
     },
-    "apps/web": {},
+    "apps/web": {
+      "entry": ["app/sw.ts"]
+    },
     "apps/admin": {},
     "apps/worker": {
       "entry": ["src/index.ts"]
