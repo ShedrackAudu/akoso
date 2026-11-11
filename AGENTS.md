@@ -230,6 +230,11 @@ word seems to mean something else, or two words seem to mean the same thing, sto
   shadcn MCP tools. Search the registry before writing a custom component. Never paste
   component code from a website. Do not hand-edit files in
   `packages/ui/src/components/` unless necessary, and say why in the pull request.
+- Logos and brand marks: always use the SVG where possible, so they stay crisp at
+  every size and screen density. The files are in each app's `public/brand/`. With
+  `next/image`, pass `unoptimized` so the SVG is served as it is. Use a PNG only where a
+  format requires one (the web manifest's install icons, the Apple touch icon, the
+  `.ico` favicon, and emails or PDFs that cannot show SVG).
 - Icons: Phosphor only, with the `...Icon` export names, through `Icon` from
   `@akoso/ui/akoso/icon`. Server components import icons from
   `@phosphor-icons/react/ssr`. Two weights only: `regular` and `fill`. When a registry

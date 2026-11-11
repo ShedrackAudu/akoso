@@ -81,7 +81,10 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
   interfaces, each with a README and placeholder files.
 - Initialised shadcn with preset `b4bg87xLw8`; every setting matches the brief
   (ADR 0002). Installed the shadcn skill and MCP server config for Claude and Gemini.
-- Copied the tassel, deep-purple web icons from the brand kit (ADR 0004).
+- Copied the tassel web icons from the brand kit (ADR 0004): deep purple at first,
+  then replaced with the **violet** colourway at the founder's request (D-4).
+- The placeholder pages show the tassel mark from SVG, one file for light and one for
+  dark backgrounds (D-5: logos are SVG wherever possible).
 - Wired the tooling: strict TypeScript, ESLint (type-aware, icon-library ban),
   Prettier, Vitest, dependency-cruiser boundaries, knip, husky with lint-staged, Docker
   Compose, `.env.example`, and a CI workflow with Actions pinned to commit SHAs.

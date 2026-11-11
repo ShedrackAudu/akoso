@@ -25,19 +25,31 @@ The two sources disagree, so the founder was asked (brief section 3.3).
 2. Akoso uses the **tassel** variant.
 3. The app uses the real artwork, not a placeholder. Icons are still **replaceable
    assets**: files in `apps/*/public/`, referenced by name, never inlined.
-4. Colourway for the app icon and favicon: **deep purple** (agent's choice within the
-   founder's decision). It is the one the kit's own overview presents, and the light
-   bead on a dark ground stays legible at 16 px on both light and dark browser chrome.
+4. Colourway for the app icon and favicon: **violet** (founder, 11/11/2026). The
+   scaffold first used deep purple, the agent's pick; the founder replaced it.
 5. The brand kit itself stays outside the repository, in `akoso-refs/akoso-brand-kit/`
    (gitignored). Only the files the app uses are copied in.
 
 ## What was copied
 
-From `akoso-refs/akoso-brand-kit/app-icons/tassel/deep/web/`:
+From `akoso-refs/akoso-brand-kit/app-icons/tassel/violet/web/`:
 
 - `apps/web/public/`: `favicon.ico`, `favicon.svg`, `favicon-16.png`, `favicon-32.png`,
   `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`
-- `apps/admin/public/`: `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-192.png`
+- `apps/admin/public/`: `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`
+
+From `akoso-refs/akoso-brand-kit/logos/svg/`, into `public/brand/` in both apps:
+
+- `akoso-mark-tassel-on-light.svg` (for light backgrounds)
+- `akoso-mark-tassel-on-deep.svg` (for dark backgrounds)
+
+## SVG first
+
+Logos and brand marks are shown from the SVG wherever possible (founder, 11/11/2026),
+so they stay crisp at every size. PNGs are kept only where a format requires one: the
+install icons for the web manifest, the Apple touch icon and the `.ico` favicon. Add
+the full logo with its wordmark (`akoso-logo-tassel-*.svg`, about 27 KB each) only
+where a screen needs it, and mind the parent experience's size budget.
 
 The web manifest is not copied yet; it is written with the PWA (Serwist) setup, where
 the name is "Akoso" with a capital A as section 4.0 requires (the kit's sample manifest
