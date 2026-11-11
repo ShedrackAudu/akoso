@@ -5,15 +5,13 @@ Newest session first.
 
 ## Where we are
 
-**Stage 1 (Foundations), step 0: complete and waiting at the section 3.2 checkpoint.**
+**Stage 1 (Foundations): step 0 approved; the rest of Stage 1 has not started.**
 
-No feature code may be written until the founder approves: the PRD, the two architecture
-documents, the risks list, the brief split, `AGENTS.md` and the scaffold.
+The founder approved the section 3.2 checkpoint on 11/11/2026: the PRD, the two
+architecture documents, the risks list, the brief split, `AGENTS.md` and the scaffold.
+Feature work may now begin, one spec at a time, in the order below.
 
-The founder merged the step 0 work into `main` (pull request #1). **Whether that merge
-is the checkpoint approval has not been confirmed**, so it is not recorded as one.
-
-## Next, after the checkpoint is approved
+## Next
 
 In this order (brief section 32, Stage 1):
 
@@ -54,7 +52,6 @@ have long lead times. Each is listed once.
 
 | Task                                                                                                                                                                                          | Blocks                                              | Needed by                        |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------- |
-| Approve the project documents, brief split, risks list, `AGENTS.md` and scaffold                                                                                                              | All feature code                                    | Now                              |
 | Create and own the remaining accounts the build needs (GitHub is done): hosting, Cloudflare, Sentry, PostHog, the AI provider, Resend or SES. Give agents limited keys, never your own logins | Staging deploy; observability                       | Stage 1                          |
 | Open the Paystack business account (test keys are enough to start); set the category to education or software                                                                                 | The Paystack spike on dedicated accounts and splits | Stage 1 spike                    |
 | Start the slow approvals now: Paystack KYC and go-live, the written confirmation of split behaviour, Termii DND sender ID, Meta Business verification and WhatsApp templates                  | Live payments, SMS and WhatsApp. They take weeks    | Stages 4 and 5; start in Stage 1 |
@@ -64,6 +61,17 @@ have long lead times. Each is listed once.
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 11/11/2026: Checkpoint approved, branches tidied (Claude)
+
+- The founder approved the section 3.2 checkpoint. Recorded here, ticked in
+  `docs/founder-checklist.md`, and ADRs 0001 and 0002 moved from Proposed to Accepted.
+  The PRD and architecture documents are no longer marked as drafts.
+- At the founder's request, deleted the three merged working branches
+  (`chore/stage-1-step-0-docs-and-scaffold`, `fix/ci-secret-scan-permissions`,
+  `docs/record-github-setup`) on GitHub and locally, after confirming each was fully
+  contained in `main`.
+- Next session starts the Stage 1 spikes ("Next" above), each with a spec first.
 
 ### 11/11/2026: GitHub set-up (Claude)
 

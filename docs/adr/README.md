@@ -6,12 +6,12 @@ needs an ADR and the founder's approval.
 
 | ADR                                         | Title                                         | Status   |
 | ------------------------------------------- | --------------------------------------------- | -------- |
-| [0001](0001-stack-and-monorepo.md)          | Stack and monorepo layout                     | Proposed |
-| [0002](0002-design-system.md)               | Design system from shadcn preset `b4bg87xLw8` | Proposed |
+| [0001](0001-stack-and-monorepo.md)          | Stack and monorepo layout                     | Accepted |
+| [0002](0002-design-system.md)               | Design system from shadcn preset `b4bg87xLw8` | Accepted |
 | [0003](0003-admin-as-separate-app.md)       | Platform admin as a separate app              | Accepted |
 | [0004](0004-brand-assets-from-brand-kit.md) | Brand assets from the brand kit               | Accepted |
 
-"Proposed" records become "Accepted" when the founder approves the section 3.2 checkpoint.
+A record is "Proposed" until the founder accepts it. ADRs 0001 and 0002 were accepted at the section 3.2 checkpoint on 11/11/2026.
 
 ## ADRs the brief already asks for
 

@@ -14,7 +14,7 @@ Items are grouped by the stage that needs them, not by date. "Blocks" says what 
 - [ ] Claim social handles (@akoso or @akosohq).
 - [ ] Ask a Yoruba speaker to confirm the tone and connotations of *àkóso*.
 - [ ] File the Akoso trademark at the Nigerian Trademarks Registry.
-- [ ] Approve the project documents, brief split, risks list, `AGENTS.md` and scaffold (Stage 1 checkpoint).
+- [x] Approve the project documents, brief split, risks list, `AGENTS.md` and scaffold (Stage 1 checkpoint). *Done 11/11/2026.*
 
 ### Paystack (start early; approvals take time)
 - [ ] Open the Paystack business account and complete registered-business KYC and go-live. *Blocks: live dedicated accounts and fee collection.*

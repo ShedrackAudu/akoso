@@ -1,6 +1,6 @@
 # ADR 0001: Stack and monorepo layout
 
-- **Status:** Proposed (accepted when the section 3.2 checkpoint is approved)
+- **Status:** Accepted (founder, 11/11/2026, at the section 3.2 checkpoint)
 - **Date:** 11/11/2026
 - **Brief:** sections 2, 3.1, 33
 

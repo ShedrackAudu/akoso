@@ -5,7 +5,7 @@ How Akoso is built. Day-to-day work uses the one-page
 need the reasoning. The brief (`docs/MASTER_PROMPT.md`) is the source of truth; section
 numbers below refer to it. An out-of-date architecture document is a bug.
 
-**Status:** draft for founder review at the section 3.2 checkpoint. The repository holds
+**Status:** Approved by the founder on 11/11/2026 (section 3.2 checkpoint). The repository holds
 an empty, building skeleton. Everything described as behaviour below is the **design to
 be built**, not something that exists yet, unless marked "in place".
 
