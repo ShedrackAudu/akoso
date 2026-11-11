@@ -62,11 +62,20 @@ async function observe(tenantId: string): Promise<Observation> {
 
 describe("withTenant() behind PgBouncer in transaction mode", () => {
   it("keeps every caller to its own school while server connections are shared between schools", async () => {
-    const observations = await Promise.all(
+    const observations: Observation[] = await Promise.all(
       Array.from({ length: CONCURRENT_CALLERS }, (_, i) =>
         observe(i % 2 === 0 ? TENANT_A : TENANT_B)
       )
     )
+
+    // Concurrent callers alone may not cross schools on one server process: if the
+    // pooler hands out its two connections in step with the A, B, A, B pattern, each
+    // connection only ever sees one school (this happened once in CI). Sequential
+    // calls make the crossing certain: PgBouncer reuses the most recently freed server
+    // connection, so consecutive transactions land on the same Postgres process.
+    for (let i = 0; i < 10; i += 1) {
+      observations.push(await observe(i % 2 === 0 ? TENANT_A : TENANT_B))
+    }
 
     for (const seen of observations) {
       expect(seen.setting).toBe(seen.asked)
