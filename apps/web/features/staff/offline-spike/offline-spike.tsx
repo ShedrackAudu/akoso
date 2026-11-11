@@ -18,6 +18,7 @@ import { StatusBar } from "./status-bar"
 import {
   clearAndSignOut,
   discardRejected,
+  getConnection,
   recordChange,
   refreshSheet,
   signIn,
@@ -97,7 +98,14 @@ export function OfflineSpike(): JSX.Element {
   }, [snapshot.cells, snapshot.queue])
 
   const onChange = useCallback((cellKey: string, value: string) => {
-    void recordChange(cellKey, value).then(() => syncNow())
+    void recordChange(cellKey, value).then(() => {
+      // Known to be offline: don't try to send on every edit. The reconnect event and
+      // the regular retry send everything. Each pointless attempt costs battery and
+      // splits quick re-edits of one cell into separate changes.
+      if (getConnection().online) {
+        void syncNow()
+      }
+    })
   }, [])
 
   const signInAgain = async (): Promise<void> => {

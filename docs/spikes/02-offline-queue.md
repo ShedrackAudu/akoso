@@ -116,7 +116,11 @@ add a bundle-size check to CI.
    once, at the end) needs more care with two phones sending the same change at once.
 4. **Merging repeated edits of one cell is best-effort.** If a second edit arrives while
    the first is being sent, both are sent and both applied (version 2). That is correct,
-   not a repeat, but it means "one change per cell" cannot be relied on.
+   not a repeat, but it means "one change per cell" cannot be relied on. On GitHub's
+   runner the acceptance test saw 180 waiting changes instead of 175 for this reason,
+   so the test now checks for at least one per cell. The screen also stopped trying to
+   send on every edit while it already knows it is offline; that removed most of the
+   effect and saves a phone pointless requests.
 5. **Playwright's page-level request interception does not see requests that go through
    a service worker.** Tests that intercept must do it on the browser context.
 6. **The spike-only `switches` route has no sign-in.** It only flips the spike's own

@@ -98,11 +98,15 @@ test("section 20 acceptance: 300 scores and a register of 40, entered offline, a
     expected.set(key, status.toLowerCase())
   }
 
-  // Everything is waiting on the phone: 135 score cells and 40 register entries.
-  await expect(page.getByTestId("status-bar")).toHaveAttribute(
-    "data-waiting",
-    "175"
-  )
+  // Everything is waiting on the phone: at least one change for each of the 135 score
+  // cells and 40 register entries. Usually exactly 175, but a quick re-edit of a cell
+  // that is mid-send is kept as a second change, so the count depends on timing. The
+  // exact proof of no loss and no repeats is the server check after syncing, below.
+  await expect
+    .poll(async () =>
+      Number(await page.getByTestId("status-bar").getAttribute("data-waiting"))
+    )
+    .toBeGreaterThanOrEqual(175)
 
   // Reconnect on a slow connection.
   await context.setOffline(false)
