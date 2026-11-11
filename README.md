@@ -74,11 +74,12 @@ The platform admin runs with `pnpm dev:admin` on http://localhost:3001.
 
 ### Local services
 
-| Service     | Address                                 | Purpose                     |
-| ----------- | --------------------------------------- | --------------------------- |
-| Postgres 16 | `localhost:5432`                        | The database                |
-| Gotenberg   | http://localhost:3100                   | HTML to PDF                 |
-| MinIO       | http://localhost:9000 (console on 9001) | Local S3-compatible storage |
+| Service     | Address                                 | Purpose                                                                          |
+| ----------- | --------------------------------------- | -------------------------------------------------------------------------------- |
+| Postgres 16 | `localhost:5433`                        | The database. Port 5433, because a locally installed PostgreSQL often takes 5432 |
+| PgBouncer   | `localhost:6432`                        | Connection pooler in transaction mode. The app connects here                     |
+| Gotenberg   | http://localhost:3100                   | HTML to PDF                                                                      |
+| MinIO       | http://localhost:9000 (console on 9001) | Local S3-compatible storage                                                      |
 
 Their credentials are local defaults in `docker-compose.yml`, not secrets. Never point
 local tools at real data.
@@ -92,6 +93,7 @@ local tools at real data.
 | `pnpm check`       | Formatting, types, lint, tests, import boundaries and unused code |
 | `pnpm build`       | Build every app                                                   |
 | `pnpm test`        | Tests only                                                        |
+| `pnpm test:db`     | Database and tenant-isolation tests (start Docker first)          |
 | `pnpm format`      | Format with Prettier                                              |
 | `pnpm brief:split` | Regenerate `docs/brief/` after the master prompt changes          |
 

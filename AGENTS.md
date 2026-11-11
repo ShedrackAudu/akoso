@@ -149,21 +149,22 @@ invent a new module, package or top-level folder: propose it in `docs/decisions.
 
 ## 9. Commands
 
-| Command                             | What it does                                          |
-| ----------------------------------- | ----------------------------------------------------- |
-| `pnpm install`                      | Install dependencies                                  |
-| `docker compose up -d`              | Start Postgres, Gotenberg and MinIO                   |
-| `pnpm dev`                          | Web app on http://localhost:3000                      |
-| `pnpm dev:admin`                    | Platform admin on http://localhost:3001               |
-| `pnpm typecheck`                    | TypeScript in every app and package                   |
-| `pnpm lint`                         | ESLint, zero warnings allowed                         |
-| `pnpm test`                         | Vitest                                                |
-| `pnpm boundaries`                   | Import-boundary and circular-dependency check         |
-| `pnpm unused`                       | Unused files, exports and dependencies (knip)         |
-| `pnpm format` / `pnpm format:check` | Prettier                                              |
-| `pnpm check`                        | All of the checks above                               |
-| `pnpm build`                        | Build every app                                       |
-| `pnpm brief:split`                  | Regenerate `docs/brief/` from `docs/MASTER_PROMPT.md` |
+| Command                             | What it does                                                            |
+| ----------------------------------- | ----------------------------------------------------------------------- |
+| `pnpm install`                      | Install dependencies                                                    |
+| `docker compose up -d`              | Start Postgres, Gotenberg and MinIO                                     |
+| `pnpm dev`                          | Web app on http://localhost:3000                                        |
+| `pnpm dev:admin`                    | Platform admin on http://localhost:3001                                 |
+| `pnpm typecheck`                    | TypeScript in every app and package                                     |
+| `pnpm lint`                         | ESLint, zero warnings allowed                                           |
+| `pnpm test`                         | Vitest                                                                  |
+| `pnpm test:db`                      | Database and tenant-isolation tests; needs `docker compose up -d` first |
+| `pnpm boundaries`                   | Import-boundary and circular-dependency check                           |
+| `pnpm unused`                       | Unused files, exports and dependencies (knip)                           |
+| `pnpm format` / `pnpm format:check` | Prettier                                                                |
+| `pnpm check`                        | All of the checks above                                                 |
+| `pnpm build`                        | Build every app                                                         |
+| `pnpm brief:split`                  | Regenerate `docs/brief/` from `docs/MASTER_PROMPT.md`                   |
 
 How to run each test suite: `docs/testing.md`.
 

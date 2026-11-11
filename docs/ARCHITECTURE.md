@@ -547,8 +547,9 @@ true)` is transaction-scoped, so it cannot outlive its transaction. Tested with 
 7. **Background jobs.** Each job carries its tenant ID and runs inside `withTenant()`.
 8. **Akoso staff and support sessions.** Consented, time-limited, view-only by default
    and logged on both sides.
-9. **Platform-wide reports** (the founder's dashboard) read aggregates through a
-   separate, narrowly granted path, never by turning RLS off in application code.
+9. **Platform-wide reports** (the founder's dashboard, the platform-fee ledger) read
+   only figures that a job published, school by school inside `withTenant()`, into
+   the `platform` schema (decision D-7). No role bypasses RLS.
 10. **Logs, error reports and analytics.** No personal data in logs; tenant ID only.
 11. **The AI provider.** No names or identifiers are sent.
 12. **Shared WhatsApp and SMS senders.** Every message starts with the school's name,
