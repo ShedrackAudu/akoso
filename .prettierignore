@@ -1,0 +1,15 @@
+# The brief is copied unchanged; formatting it would break the byte-for-byte rule.
+docs/MASTER_PROMPT.md
+docs/founder-checklist.md
+docs/brief/
+
+akoso-refs/
+node_modules/
+.next/
+dist/
+coverage/
+pnpm-lock.yaml
+.agents/
+.claude/
+skills-lock.json
+**/public/

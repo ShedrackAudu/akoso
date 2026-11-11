@@ -1,0 +1,10 @@
+// Public interface of @akoso/providers: every external service sits behind an interface, with a fake adapter for tests and local development.
+export * as payments from "./payments/index"
+export * as sms from "./sms/index"
+export * as whatsapp from "./whatsapp/index"
+export * as email from "./email/index"
+export * as push from "./push/index"
+export * as pdf from "./pdf/index"
+export * as ai from "./ai/index"
+export * as domains from "./domains/index"
+export * as storage from "./storage/index"

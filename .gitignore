@@ -1,0 +1,33 @@
+# Founder's private reference material (prompts changelog, website prompt, full brand kit).
+# The brief and checklist are copied into docs/; only the brand assets the app uses are copied in.
+akoso-refs/
+
+# dependencies
+node_modules
+
+# build output
+.next/
+out/
+build/
+dist/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# env files: never commit secrets; .env.example is the documented template
+.env
+.env.*
+!.env.example
+
+# golden files: raw school documents never enter the repository (brief section 30)
+golden-raw/
+
+# misc
+.DS_Store
+Thumbs.db
+*.pem
+*.log
+.vercel
+
+# local, per-developer agent settings
+.claude/settings.local.json

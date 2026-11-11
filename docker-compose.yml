@@ -1,0 +1,55 @@
+# Local development services only. Never point these at real data (working rule 7).
+# Credentials below are local defaults, not secrets; staging and production use the
+# hosting provider's secret store.
+name: akoso
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: akoso_owner
+      POSTGRES_PASSWORD: akoso_local_only
+      POSTGRES_DB: akoso_dev
+      TZ: UTC
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U akoso_owner -d akoso_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # HTML-to-PDF rendering for report cards, receipts and payslips. Called only by the worker.
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    ports:
+      - "3100:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Local S3-compatible storage standing in for Cloudflare R2.
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: akoso_local
+      MINIO_ROOT_PASSWORD: akoso_local_only
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-data:
+  minio-data:

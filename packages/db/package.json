@@ -1,0 +1,16 @@
+{
+  "name": "@akoso/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema/*": "./src/schema/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@akoso/typescript-config": "workspace:*"
+  }
+}

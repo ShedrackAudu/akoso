@@ -1,0 +1,10 @@
+{
+  "extends": "@akoso/typescript-config/react-library.json",
+  "compilerOptions": {
+    "paths": {
+      "@akoso/ui/*": ["./src/*"]
+    }
+  },
+  "include": ["."],
+  "exclude": ["node_modules", "dist"]
+}

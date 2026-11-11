@@ -1,0 +1,23 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/*.mjs"]
+    },
+    "apps/web": {},
+    "apps/admin": {},
+    "apps/worker": {
+      "entry": ["src/index.ts"]
+    },
+    "packages/core": {
+      "entry": ["src/*/index.ts"]
+    },
+    "packages/db": {
+      "entry": ["src/schema/*.ts"]
+    },
+    "packages/ui": {
+      "entry": ["src/components/*.tsx", "src/akoso/*.tsx", "src/lib/*.ts"]
+    }
+  },
+  "ignore": [".agents/**", ".claude/**", "akoso-refs/**"]
+}
