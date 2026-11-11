@@ -78,7 +78,7 @@ The platform admin runs with `pnpm dev:admin` on http://localhost:3001.
 | ----------- | --------------------------------------- | -------------------------------------------------------------------------------- |
 | Postgres 16 | `localhost:5433`                        | The database. Port 5433, because a locally installed PostgreSQL often takes 5432 |
 | PgBouncer   | `localhost:6432`                        | Connection pooler in transaction mode. The app connects here                     |
-| Gotenberg   | http://localhost:3100                   | HTML to PDF                                                                      |
+| Gotenberg   | http://localhost:3100                   | HTML to PDF (9.4.0, JavaScript off, no outbound requests)                        |
 | MinIO       | http://localhost:9000 (console on 9001) | Local S3-compatible storage                                                      |
 
 Their credentials are local defaults in `docker-compose.yml`, not secrets. Never point

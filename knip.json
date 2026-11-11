@@ -9,7 +9,7 @@
     },
     "apps/admin": {},
     "apps/worker": {
-      "entry": ["src/index.ts"]
+      "entry": ["src/index.ts", "src/spike/report-cards/batch.tsx", "build.mjs"]
     },
     "packages/core": {
       "entry": ["src/*/index.ts"]

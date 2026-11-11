@@ -38,8 +38,17 @@ services:
       - ./docker/pgbouncer/userlist.txt:/etc/pgbouncer/userlist.txt:ro
 
   # HTML-to-PDF rendering for report cards, receipts and payslips. Called only by the worker.
+  # Pinned (spike 03). The Chromium-only image: report cards need no office formats.
+  # Locked down: no JavaScript in templates, and Chromium may not fetch anything from
+  # any network, public or private. Every asset is uploaded with the HTML.
   gotenberg:
-    image: gotenberg/gotenberg:8
+    image: gotenberg/gotenberg:9.4.0-chromium
+    command:
+      - gotenberg
+      - --chromium-disable-javascript=true
+      - --chromium-deny-public-ips=true
+      - --chromium-deny-private-ips=true
+      - --chromium-auto-start=true
     ports:
       - "3100:3000"
     healthcheck:

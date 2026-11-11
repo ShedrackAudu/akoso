@@ -35,3 +35,6 @@ Thumbs.db
 # Playwright
 test-results/
 playwright-report/
+
+# Spike 03 sample output for review
+apps/worker/.spike-preview/
