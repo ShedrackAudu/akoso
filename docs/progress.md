@@ -69,6 +69,9 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
 - Chrome did not grant storage protection, and offered no install option. Recorded in
   R13 and the spike result as open questions for staging.
 - Found and cleared a corrupt Next.js build cache (`apps/web/.next`).
+- Pull request #6 (the spike 02 code) was merged before these phone results were pushed,
+  and **without the cross-model review** (D-10, the founder's choice). The results came to
+  `main` in their own pull request.
 
 ### 11/11/2026: Spike 02, offline score entry and sync (Claude)
 
