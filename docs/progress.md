@@ -10,6 +10,9 @@ Newest session first.
 No feature code may be written until the founder approves: the PRD, the two architecture
 documents, the risks list, the brief split, `AGENTS.md` and the scaffold.
 
+The founder merged the step 0 work into `main` (pull request #1). **Whether that merge
+is the checkpoint approval has not been confirmed**, so it is not recorded as one.
+
 ## Next, after the checkpoint is approved
 
 In this order (brief section 32, Stage 1):
@@ -49,19 +52,55 @@ Nothing is blocked for step 0. See "Founder tasks" for what the rest of Stage 1 
 Unticked items in `docs/founder-checklist.md` that block the next part of Stage 1 or
 have long lead times. Each is listed once.
 
-| Task                                                                                                                                                                         | Blocks                                              | Needed by                        |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------- |
-| Approve the project documents, brief split, risks list, `AGENTS.md` and scaffold                                                                                             | All feature code                                    | Now                              |
-| Create the GitHub repository (part of "create accounts the build needs") and give agents limited access                                                                      | CI has never run; nothing can be pushed             | Stage 1                          |
-| Create and own the accounts the build needs: hosting, Cloudflare, Sentry, PostHog, the AI provider, Resend or SES. Give agents limited keys, never your own logins           | Staging deploy; observability                       | Stage 1                          |
-| Open the Paystack business account (test keys are enough to start); set the category to education or software                                                                | The Paystack spike on dedicated accounts and splits | Stage 1 spike                    |
-| Start the slow approvals now: Paystack KYC and go-live, the written confirmation of split behaviour, Termii DND sender ID, Meta Business verification and WhatsApp templates | Live payments, SMS and WhatsApp. They take weeks    | Stages 4 and 5; start in Stage 1 |
-| Register the company (CAC), get a TIN, open a corporate bank account                                                                                                         | Paystack live mode, legal templates                 | Stage 4                          |
-| Register the domains, starting with `akoso.ng`                                                                                                                               | Staging addresses, email sending domain             | Stage 1                          |
+| Task                                                                                                                                                                                          | Blocks                                              | Needed by                        |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------- |
+| Approve the project documents, brief split, risks list, `AGENTS.md` and scaffold                                                                                                              | All feature code                                    | Now                              |
+| Create and own the remaining accounts the build needs (GitHub is done): hosting, Cloudflare, Sentry, PostHog, the AI provider, Resend or SES. Give agents limited keys, never your own logins | Staging deploy; observability                       | Stage 1                          |
+| Open the Paystack business account (test keys are enough to start); set the category to education or software                                                                                 | The Paystack spike on dedicated accounts and splits | Stage 1 spike                    |
+| Start the slow approvals now: Paystack KYC and go-live, the written confirmation of split behaviour, Termii DND sender ID, Meta Business verification and WhatsApp templates                  | Live payments, SMS and WhatsApp. They take weeks    | Stages 4 and 5; start in Stage 1 |
+| Register the company (CAC), get a TIN, open a corporate bank account                                                                                                                          | Paystack live mode, legal templates                 | Stage 4                          |
+| Register the domains, starting with `akoso.ng`                                                                                                                                                | Staging addresses, email sending domain             | Stage 1                          |
 
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 11/11/2026: GitHub set-up (Claude)
+
+**Done**
+
+- Installed the GitHub CLI (`gh` 2.103.3, GitHub's official winget package). The
+  founder signed it in as `ShedrackAudu`.
+- Connected the repository to https://github.com/ShedrackAudu/akoso and pushed. `main`
+  was created at `2a2d24e`; the founder then merged pull request #1 (the step 0 work).
+- CI ran for the first time. On pull request #1 the **Secret scan** job failed: the
+  workflow could not read the pull request's commits (a permissions bug, not a found
+  secret). Fixed in pull request #2 by giving that one job `pull-requests: read`; the
+  founder merged it.
+- The founder made the repository **public**, because GitHub's free plan cannot protect
+  branches on a private repository.
+- `main` is protected by the ruleset `protect-main` (id 27035069): no deletion, no force
+  pushes, changes only through pull requests (0 approvals, as the founder works alone),
+  and both CI checks must pass on an up-to-date branch. Nobody can bypass it.
+
+**Verified**
+
+- GitHub reports all four rules in force on `main`.
+- CI passed on `main` after both merges (`dc5c2b0` and `46a864d`), and the secret scan
+  passed on pull request #2.
+
+**Not verified**
+
+- No direct push to `main` has actually been tried, so GitHub rejecting one is not yet
+  observed.
+
+**Notes**
+
+- Everything in the repository is now publicly readable, including `docs/` (the brief,
+  decisions, risks and founder checklist). No secret has been committed, and
+  `akoso-refs/` never was.
+- The merged branches `chore/stage-1-step-0-docs-and-scaffold` and
+  `fix/ci-secret-scan-permissions` still exist on GitHub and locally.
 
 ### 11/11/2026: Stage 1, step 0 (Claude)
 
@@ -116,12 +155,10 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 **Not done or not verified**
 
-- CI has never run (no GitHub repository).
 - `docker compose up` was not run: Docker Desktop was not running. The Compose file
   passes `docker compose config` only, so the three services and their health checks are
   unproven.
 - The admin app was built but not opened in a browser.
-- Nothing is pushed (no remote).
 - The patterns in `ARCHITECTURE-ESSENTIALS.md` are intended shapes, not yet used by code.
 - The voice-guide examples and the proposed role keys and code names in the glossary
   are drafts.
