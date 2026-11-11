@@ -5,7 +5,7 @@ What we are building and why, in product language. The full brief is
 brief disagree, the brief wins and the difference is a bug. Section numbers below refer
 to the brief.
 
-**Status:** draft for founder review at the section 3.2 checkpoint.
+**Status:** Approved by the founder on 11/11/2026 (section 3.2 checkpoint).
 
 ## 1. The problem
 

@@ -1,6 +1,6 @@
 # ADR 0002: Design system from shadcn preset `b4bg87xLw8`
 
-- **Status:** Proposed (accepted when the section 3.2 checkpoint is approved)
+- **Status:** Accepted (founder, 11/11/2026, at the section 3.2 checkpoint)
 - **Date:** 11/11/2026
 - **Brief:** sections 4.1, 4.2
 
