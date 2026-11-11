@@ -65,13 +65,12 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 - Spec approved by the founder, with `pg` as the Postgres driver (D-6).
 - Built PgBouncer in transaction mode, three least-privilege roles, `withTenant()` and
-  40 database tests, plus a CI job for them. All pass locally; **the CI job has not run
-  yet** (nothing pushed).
+  40 database tests, plus a CI job for them. All pass locally; the CI job first runs on this spike's pull request.
 - Result: the pattern works. R16 closed. D-OPEN-5 tested both ways; the founder chose
   option (a), published figures with no RLS bypass (D-7), which also closes R12. Full write-up: `docs/spikes/01-rls-with-tenant.md`.
 - Found: a local PostgreSQL 18 service holds port 5432, so the Docker Postgres moved to 5433. Docker Desktop was started for the first time; the Compose services for
   Postgres and PgBouncer now run. Gotenberg and MinIO are still unproven.
-- Nothing committed. Spike work is on branch `spike/01-rls-with-tenant`.
+- Committed on branch `spike/01-rls-with-tenant` and opened as a pull request.
 
 ### 11/11/2026: Checkpoint approved, branches tidied (Claude)
 
