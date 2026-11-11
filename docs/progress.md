@@ -71,6 +71,8 @@ Not blocking yet: golden files and design-partner schools (before Stage 3).
   the input-hash cache served a repeat run in 6.8 s. R15 closed. Result:
   `docs/spikes/03-report-card-pdfs.md`.
 - The founder judged the sample card readable in black and white.
+- Opened as pull request #8; all four CI checks passed. **No cross-model review** (D-12, the
+  founder's choice).
 - Found: brand fonts triple a card's size (to about 207 KB); Gotenberg 9 moved merging to
   `/forms/pdf/merge`.
 
