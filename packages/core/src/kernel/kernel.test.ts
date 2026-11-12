@@ -49,12 +49,12 @@ describe("toProblem", () => {
 
   it("reveals nothing about unexpected errors", () => {
     const mapped = toProblem(
-      new Error('relation "secret_table" does not exist at /srv/app.js:42'),
+      new Error('relation "internal_ledger" does not exist at /srv/app.js:42'),
       "r"
     )
     expect(mapped.status).toBe(500)
     expect(mapped.unexpected).toBe(true)
-    expect(JSON.stringify(mapped.body)).not.toMatch(/secret_table|app\.js/)
+    expect(JSON.stringify(mapped.body)).not.toMatch(/internal_ledger|app\.js/)
   })
 })
 
