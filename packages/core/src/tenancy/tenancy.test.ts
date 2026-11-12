@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest"
 import { schoolSlugSchema, type SchoolSummary } from "@akoso/schemas/tenancy"
 
 import { assertSchoolAllows } from "../kernel/index"
-import { createSchoolCache } from "./cache"
-import { findSchoolBySlug } from "./lookup"
+import { createSchoolCache, SchoolLookupBusyError } from "./cache"
+import { findSchoolByHost, findSchoolBySlug } from "./lookup"
 import { classifyHost } from "./host"
 
 const BASE = "akoso.ng"
@@ -126,6 +126,22 @@ describe("assertSchoolAllows", () => {
     }
   })
 
+  it("never asks the database about a hostname that cannot exist", async () => {
+    const db = {
+      execute: () => Promise.reject(new Error("should not be called")),
+    } as unknown as Parameters<typeof findSchoolByHost>[0]
+    for (const host of [
+      "",
+      "localhost",
+      "no_underscores.example",
+      "-dash.example",
+      "space here.example",
+      `${"a".repeat(250)}.example`,
+    ]) {
+      expect(await findSchoolByHost(db, host)).toBeNull()
+    }
+  })
+
   it("reserves the names Akoso may need for itself", () => {
     for (const slug of [
       "platform",
@@ -219,7 +235,7 @@ describe("createSchoolCache", () => {
     expect(loads).toBe(1)
   })
 
-  it("answers 'not found' without the database once the per-second budget is spent", async () => {
+  it("says 'busy', never 'not found', once the per-second budget is spent", async () => {
     let clock = 0
     let loads = 0
     const cache = createSchoolCache({ maxLoadsPerSecond: 3, now: () => clock })
@@ -227,12 +243,53 @@ describe("createSchoolCache", () => {
       loads++
       return Promise.resolve(null)
     }
-    for (let i = 0; i < 10; i++)
-      await cache.get(`host:x${String(i)}.example`, load)
+    const outcomes: string[] = []
+    for (let i = 0; i < 10; i++) {
+      outcomes.push(
+        await cache.get(`host:x${String(i)}.example`, load).then(
+          (value) => (value === null ? "not found" : "found"),
+          (error: unknown) =>
+            error instanceof SchoolLookupBusyError ? "busy" : "error"
+        )
+      )
+    }
     expect(loads).toBe(3)
+    expect(outcomes).toEqual([
+      ...Array<string>(3).fill("not found"),
+      ...Array<string>(7).fill("busy"),
+    ])
     clock = 1_000
     await cache.get("host:y.example", load)
     expect(loads).toBe(4)
+  })
+
+  it("keeps serving a real school from its last known details while the budget is spent", async () => {
+    let clock = 0
+    const cache = createSchoolCache({ maxLoadsPerSecond: 1, now: () => clock })
+    await cache.get("slug:greenfield", () => Promise.resolve(school("active")))
+    clock = 61_500 // expired, and a flood has used this second's budget
+    await cache.get("slug:bogus", () => Promise.resolve(null))
+    const served = await cache.get("slug:greenfield", () =>
+      Promise.reject(new Error("should not be asked"))
+    )
+    expect(served?.slug).toBe("greenfield")
+  })
+
+  it("serves the last known details if the database fails, but not forever", async () => {
+    let clock = 0
+    const cache = createSchoolCache({ now: () => clock })
+    await cache.get("slug:greenfield", () => Promise.resolve(school("active")))
+    clock = 120_000
+    const fallback = await cache.get("slug:greenfield", () =>
+      Promise.reject(new Error("database down"))
+    )
+    expect(fallback?.slug).toBe("greenfield")
+    clock = 60_000 + 10 * 60_000 + 1
+    await expect(
+      cache.get("slug:greenfield", () =>
+        Promise.reject(new Error("database down"))
+      )
+    ).rejects.toThrow("database down")
   })
 
   it("refreshing an expired school does not evict another one", async () => {

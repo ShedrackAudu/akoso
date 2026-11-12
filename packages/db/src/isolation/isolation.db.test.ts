@@ -161,9 +161,15 @@ async function crossSchoolFailures(
         )
       )
     )
+    // Any success fails: school B owns a row here (checked above), so the only right
+    // answer is an RLS refusal (PR #17 review, finding 2).
     if ((await countA()) > aBefore) {
       failures.push(`${name}: school B moved a row to A`)
-    } else if (moved !== "ok" && !RLS_REFUSAL.test(moved)) {
+    } else if (moved === "ok") {
+      failures.push(
+        `${name}: moving a row to A succeeded without an RLS refusal`
+      )
+    } else if (!RLS_REFUSAL.test(moved)) {
       failures.push(
         `${name}: moving a row to A failed, but not because of RLS: ${moved}`
       )
