@@ -343,6 +343,9 @@ importers:
       '@akoso/db':
         specifier: workspace:*
         version: link:../db
+      '@akoso/providers':
+        specifier: workspace:*
+        version: link:../providers
       '@akoso/schemas':
         specifier: workspace:*
         version: link:../schemas
