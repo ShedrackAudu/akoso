@@ -16,18 +16,45 @@ import {
   type RouteParams,
 } from "@akoso/core/kernel"
 import { loadEnv } from "@akoso/core/config"
-import type { ActionKey, Contract } from "@akoso/schemas/api"
+import { resolveSignedIn } from "@akoso/core/identity"
+import {
+  SCHOOL_HEADER,
+  type ActionKey,
+  type Contract,
+} from "@akoso/schemas/api"
+import { headers } from "next/headers"
 import type { z } from "zod"
 
 const log = createLogger()
 
 /**
- * Nobody is signed in until sign-in exists (Stage 1, item 5). This is the single
- * place sign-in will plug in: read the session or bearer token, check the school in
- * the X-Akoso-School header against the user's memberships, and build the context.
+ * The signed-in context for an /api/v1 request (spec: stage-1-sign-in.md, section 5):
+ * the session cookie or bearer token gives the person, and the X-Akoso-School header
+ * (a school ID) is checked against their memberships. No header: no school.
  */
-function resolveContext(): Promise<RequestContext | null> {
-  return Promise.resolve(null)
+function resolveContext(
+  request: Request,
+  base: PublicContext
+): Promise<RequestContext | null> {
+  const schoolId = request.headers.get(SCHOOL_HEADER)
+  return resolveSignedIn(
+    request.headers,
+    base,
+    schoolId === null ? null : { id: schoolId }
+  )
+}
+
+/** The same for a server action, from the incoming request's headers. */
+async function resolveActionContext(
+  base: PublicContext
+): Promise<RequestContext | null> {
+  const incoming = new Headers(await headers())
+  const schoolId = incoming.get(SCHOOL_HEADER)
+  return resolveSignedIn(
+    incoming,
+    base,
+    schoolId === null ? null : { id: schoolId }
+  )
 }
 
 /** Only Akoso's own app address may write with a cookie. */
@@ -119,6 +146,6 @@ export function serverAction<Input extends z.ZodObject, Output>(
       db: getDatabase,
       log,
       now: () => new Date(),
-      resolveContext,
+      resolveContext: resolveActionContext,
     })
 }

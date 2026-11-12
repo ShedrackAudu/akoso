@@ -47,6 +47,162 @@
           }
         }
       }
+    },
+    "/api/v1/me": {
+      "get": {
+        "operationId": "getMe",
+        "summary": "The signed-in person",
+        "x-akoso-permission": "identity.profile.read",
+        "x-akoso-rate-limit": "standard",
+        "parameters": [
+          {
+            "name": "X-Akoso-School",
+            "in": "header",
+            "required": false,
+            "description": "The school this request is for. Checked against the caller's memberships.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "mfaEnabled": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "mfaEnabled"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
+    },
+    "/api/v1/me/schools": {
+      "get": {
+        "operationId": "listMySchools",
+        "summary": "The signed-in person's schools and roles",
+        "x-akoso-permission": "identity.membership.list_own",
+        "x-akoso-rate-limit": "standard",
+        "parameters": [
+          {
+            "name": "X-Akoso-School",
+            "in": "header",
+            "required": false,
+            "description": "The school this request is for. Checked against the caller's memberships.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "onboarding",
+                              "active",
+                              "suspended",
+                              "read_only",
+                              "closed"
+                            ]
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "enum": [
+                                "group_owner",
+                                "proprietor",
+                                "school_admin",
+                                "bursar",
+                                "head_teacher",
+                                "vice_principal",
+                                "safeguarding_lead",
+                                "nurse",
+                                "accountant",
+                                "teacher",
+                                "gate_staff",
+                                "guardian"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "slug",
+                          "name",
+                          "status",
+                          "roles"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "nextCursor": {
+                      "type": "null"
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "nextCursor"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/Problem"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -81,6 +237,7 @@
               "validation",
               "unauthenticated",
               "forbidden",
+              "mfa_required",
               "not_found",
               "conflict",
               "idempotency_mismatch",

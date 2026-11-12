@@ -6,6 +6,7 @@ const valid = {
   NODE_ENV: "development",
   APP_BASE_DOMAIN: "akoso.localhost",
   DATABASE_URL: "postgres://user:not-a-real-password@localhost:5432/akoso_dev",
+  BETTER_AUTH_SECRET: "test-only-not-a-real-secret-00000000000",
 }
 
 describe("core/config loadEnv", () => {

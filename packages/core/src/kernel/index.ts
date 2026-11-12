@@ -19,6 +19,7 @@ export {
   ConflictError,
   ForbiddenError,
   IdempotencyMismatchError,
+  MfaRequiredError,
   NotFoundError,
   PayloadTooLargeError,
   RateLimitedError,
@@ -46,4 +47,4 @@ export {
 } from "./logger"
 export { decodeCursor, encodeCursor, toPage, type Page } from "./paging"
 export { toProblem } from "./problem"
-export { RATE_LIMITS } from "./rate-limit"
+export { consumeLimits, RATE_LIMITS, type LimitCheck } from "./rate-limit"

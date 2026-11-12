@@ -29,6 +29,27 @@
       "when": 1794477383271,
       "tag": "0003_tenancy_security",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794488544265,
+      "tag": "0004_identity_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794488546973,
+      "tag": "0005_identity_security",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794488703206,
+      "tag": "0006_rate_limit_day_windows",
+      "breakpoints": true
     }
   ]
 }
