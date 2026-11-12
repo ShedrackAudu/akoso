@@ -73,11 +73,10 @@ These are repository settings, so they are yours to change. I can make them with
    **Done 12/11/2026.**
 2. Once the new scans pass, add them to the **required checks** in the `protect-main`
    ruleset, and add **code scanning results** as a rule so a high CodeQL or Semgrep
-   finding blocks merging. **Required checks done 12/11/2026;** the code-scanning rule
-   is still to do.
+   finding blocks merging. **Both done 12/11/2026.**
 3. **Signed commits** (brief 28.3): set up a signing key on your computer, which I can
    walk you through. Then turn on "require signed commits" in the ruleset. Merges done in
-   GitHub's web page are signed by GitHub automatically.
+   GitHub's web page are signed by GitHub automatically. **Done 12/11/2026.**
 
 ## Part B: staging and deploys (after your decisions)
 

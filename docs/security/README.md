@@ -23,9 +23,12 @@ written as the platform is built.
 - Security scans on every pull request, every push to `main` and weekly: Semgrep,
   CodeQL, `pnpm audit` and OSV-Scanner, Trivy (configuration and images) and zizmor,
   with an SBOM on each merge (`scans.md`).
-- The six Security jobs are required checks on `main`, alongside CI (12/11/2026).
+- The six Security jobs are required checks on `main`, alongside CI, and high CodeQL or
+  Semgrep alerts block merging (12/11/2026).
+- Every commit on `main` must be signed (12/11/2026). The founder signs with an SSH key held
+  by the Windows SSH agent; merges made in GitHub are signed by GitHub.
   Dependabot alerts are on; Renovate opens the update pull requests.
-- Renovate configuration, `SECURITY.md` and `/.well-known/security.txt`.
+- Renovate configuration (it starts once the Renovate app is installed), `SECURITY.md` and `/.well-known/security.txt`.
 
 Everything else in section 28 is still to be built. Akoso is designed to be
 tamper-resistant and tamper-evident; it is never described as tamper-proof.

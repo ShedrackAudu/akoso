@@ -6,17 +6,17 @@ run on every pull request, on every push to `main` and weekly on Monday mornings
 
 ## What runs, and what fails the build
 
-| Check             | Tool                                                                                       | Fails on                                                                                           | Results also go to                                    |
-| ----------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| Static analysis   | Semgrep 1.184 (OWASP Top 10, TypeScript, JavaScript, React, nodejsscan, secrets rule sets) | Any ERROR-severity finding                                                                         | GitHub code scanning                                  |
-| Static analysis   | CodeQL (`security-extended`, JavaScript/TypeScript)                                        | High findings, **once the "code scanning results" rule is on** in `protect-main` (founder setting) | GitHub code scanning                                  |
-| Dependencies      | `pnpm audit`                                                                               | High or critical, development tools included                                                       | Job log                                               |
-| Dependencies      | OSV-Scanner 2.7 on `pnpm-lock.yaml`                                                        | Nothing by itself (a second opinion; `pnpm audit` is the gate)                                     | GitHub code scanning                                  |
-| Configuration     | Trivy 0.76 config scan (Dockerfiles, Compose)                                              | High or critical                                                                                   | Job log                                               |
-| Workflows         | zizmor 1.32                                                                                | Medium and above                                                                                   | Job log                                               |
-| Container images  | Trivy 0.76 image scan                                                                      | **Our own images** (Part B): high or critical. **Compose images:** reported only, see below        | Job summary                                           |
-| Secrets           | gitleaks                                                                                   | Any secret                                                                                         | Job log                                               |
-| Bill of materials | Syft (CycloneDX JSON)                                                                      | n/a                                                                                                | Artifact `akoso-sbom.cdx.json` on each push to `main` |
+| Check             | Tool                                                                                       | Fails on                                                                                                                           | Results also go to                                    |
+| ----------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Static analysis   | Semgrep 1.184 (OWASP Top 10, TypeScript, JavaScript, React, nodejsscan, secrets rule sets) | Any ERROR-severity finding                                                                                                         | GitHub code scanning                                  |
+| Static analysis   | CodeQL (`security-extended`, JavaScript/TypeScript)                                        | High security alerts or errors: the "code scanning results" rule in `protect-main` (on since 12/11/2026), which covers Semgrep too | GitHub code scanning                                  |
+| Dependencies      | `pnpm audit`                                                                               | High or critical, development tools included                                                                                       | Job log                                               |
+| Dependencies      | OSV-Scanner 2.7 on `pnpm-lock.yaml`                                                        | Nothing by itself (a second opinion; `pnpm audit` is the gate)                                                                     | GitHub code scanning                                  |
+| Configuration     | Trivy 0.76 config scan (Dockerfiles, Compose)                                              | High or critical                                                                                                                   | Job log                                               |
+| Workflows         | zizmor 1.32                                                                                | Medium and above                                                                                                                   | Job log                                               |
+| Container images  | Trivy 0.76 image scan                                                                      | **Our own images** (Part B): high or critical. **Compose images:** reported only, see below                                        | Job summary                                           |
+| Secrets           | gitleaks                                                                                   | Any secret                                                                                                                         | Job log                                               |
+| Bill of materials | Syft (CycloneDX JSON)                                                                      | n/a                                                                                                                                | Artifact `akoso-sbom.cdx.json` on each push to `main` |
 
 Every tool runs from an image pinned by digest, or from an Action pinned to a commit SHA.
 Renovate proposes the updates.
@@ -43,7 +43,7 @@ the same pinned images as CI:
 | Workflow on `pull_request_target` that checks out the pull request and puts its title in a shell command | zizmor (`dangerous-triggers`, `template-injection`, `unpinned-uses`), and Semgrep | 14   |
 | A vulnerable dependency                                                                                  | `pnpm audit`: the real Zod finding below                                          | 1    |
 
-CodeQL is proven when the code-scanning rule is switched on.
+CodeQL blocks through the "code scanning results" rule, switched on 12/11/2026; a planted CodeQL finding is still to be shown blocking a pull request.
 
 ## Results
 
