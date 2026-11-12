@@ -23,8 +23,8 @@ In this order (brief section 32, Stage 1):
    dedicated accounts and subaccounts to a Starter business, so the split scenarios wait
    for the founder's registered-business upgrade; see `docs/spikes/04-paystack.md`).
 2. CI/CD and environments: the remaining security scans (T3; **Part A built**: scans,
-   Renovate, `SECURITY.md`, latency measurement), staging deploy (Part B, waiting for the
-   hosting decision). Spec: `docs/specs/stage-1-ci-cd-and-environments.md`.
+   Renovate, `SECURITY.md`, latency measurement), staging deploy (Part B: Render, Frankfurt, D-18; delayed until there is something
+   to show, D-19). Spec: `docs/specs/stage-1-ci-cd-and-environments.md`.
 3. Service-layer and `/api/v1` conventions (section 5.1): **built** (contracts, the
    request pipeline, errors, idempotency, rate limits, OpenAPI, the typed client and
    the first migration). Signed-in endpoints confirm the rest with sign-in (item 5).
@@ -40,7 +40,6 @@ founder's approval and a threat model before code.
 
 Full text and recommendations in `docs/decisions.md`.
 
-- **D-OPEN-1** Hosting region (needed for the Stage 1 checkpoint decision log).
 - **D-OPEN-3** Node 24 or another version.
 - **D-OPEN-7** Whether apps may import providers directly.
 - D-OPEN-2 (AI provider), D-OPEN-4 (update section 4.0 for the brand kit) and D-OPEN-6

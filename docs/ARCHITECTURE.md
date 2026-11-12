@@ -437,7 +437,8 @@ Threat models, the ASVS checklist and the pre-launch checklist live in `docs/sec
 - Backups: point-in-time recovery, a nightly encrypted export to a second region,
   object-storage versioning. Recovery point 15 minutes, recovery time 4 hours, a restore
   drill every term.
-- The hosting region is an open decision, to be chosen from measured latency.
+- Hosting: Render, Frankfurt region (D-18). Postgres is Render Postgres with its built-in
+  PgBouncer in transaction mode; Gotenberg is a private service on Render's private network.
 
 ## 14. Hard questions
 
