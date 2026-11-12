@@ -23,6 +23,8 @@ written as the platform is built.
 - Security scans on every pull request, every push to `main` and weekly: Semgrep,
   CodeQL, `pnpm audit` and OSV-Scanner, Trivy (configuration and images) and zizmor,
   with an SBOM on each merge (`scans.md`).
+- The six Security jobs are required checks on `main`, alongside CI (12/11/2026).
+  Dependabot alerts are on; Renovate opens the update pull requests.
 - Renovate configuration, `SECURITY.md` and `/.well-known/security.txt`.
 
 Everything else in section 28 is still to be built. Akoso is designed to be
