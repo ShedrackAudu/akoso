@@ -39,7 +39,6 @@ founder's approval and a threat model before code.
 
 Full text and recommendations in `docs/decisions.md`.
 
-- **D-OPEN-1** Hosting region (needed for the Stage 1 checkpoint decision log).
 - **D-OPEN-3** Node 24 or another version.
 - **D-OPEN-7** Whether apps may import providers directly.
 - D-OPEN-2 (AI provider), D-OPEN-4 (update section 4.0 for the brand kit) and D-OPEN-6

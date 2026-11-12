@@ -55,6 +55,8 @@ Items are grouped by the stage that needs them, not by date. "Blocks" says what 
   - [x] set up a commit-signing key (done 12/11/2026: an SSH signing key, unlocked through the Windows SSH agent)
   - [x] turn on "require signed commits" in `protect-main` (done 12/11/2026; rebase merging removed, since GitHub cannot sign it)
 - [ ] **Register `akoso.ng`** and put its DNS on Cloudflare. Then forward `security@akoso.ng` to your inbox: `SECURITY.md` already gives that address. *Blocks: school addresses on staging, and Cloudflare in front of it.*
+- [ ] **Render** (D-18): create the account yourself, with 2FA on, in the Frankfurt region. Start on the Hobby workspace; approve the staging estimate (about $67 a month, CI/CD spec Part B) before anything is created. Then create an API key limited to what deploys need, for the agent. *Blocks: CI/CD Part B (staging).*
+- [ ] **Cross-border transfer basis:** Akoso's data will be held in Germany (EU). Record the basis for transferring Nigerian personal data there under the NDPA in the DPIA, and list Render as a sub-processor (Render offers a GDPR DPA). *Blocks: real data on production.*
 - [ ] Create accounts the build needs and own them yourself: hosting, Cloudflare, Sentry, PostHog, GitHub, Resend or SES, the AI provider. Give agents limited keys, never your own logins.
 
 ---
