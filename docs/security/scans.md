@@ -64,6 +64,13 @@ Semgrep flagged one ERROR finding that the local run missed, because the local r
 skipped test files: `njsscan.generic.hardcoded_secrets.node_secret` on the made-up
 webhook secret in `webhook-signature.test.ts`. Suppressed (below). Every other job passed.
 
+### 12/11/2026, Stage 1 item 3 (API conventions)
+
+Adding `drizzle-kit` (approved in D-6) brought one moderate `pnpm audit` finding: `esbuild`
+0.18 under `@esbuild-kit`, whose development server could be read by any website. Below
+the gate; `drizzle-kit` only generates migration files and never starts that server.
+Left for Renovate.
+
 ## Suppressions
 
 | Date       | Tool and rule                                           | Where                                                                                                   | Reason                                                                                              |

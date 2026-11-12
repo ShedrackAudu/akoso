@@ -10,6 +10,14 @@ action-by-action matrix is **not written yet**: each slice adds its actions here
 spec, for the founder's approval, because any change to what a role can see or do is the
 founder's decision (section 3.3). Nothing below is enforced by code yet.
 
+## How action keys work
+
+- Named `<module>.<thing>.<verb>`, e.g. `fees.statement.read`, `results.sheet.submit`.
+- Listed in `KNOWN_ACTIONS` (`packages/schemas/src/contracts/index.ts`) and in this file.
+  A test fails if a contract names a key that is not listed.
+- Checked by `authorize(ctx, key)` in every use case, and again by the route handler from
+  the contract's `permission`. Until roles exist (Stage 1, item 5) every check denies.
+
 ## School roles (section 6)
 
 | Role                     | Key                 | Scope                                                                    |

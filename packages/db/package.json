@@ -12,7 +12,8 @@
   },
   "devDependencies": {
     "@akoso/typescript-config": "workspace:*",
-    "@types/pg": "^8.23.1"
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "0.31.11"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.4",

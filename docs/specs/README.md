@@ -60,10 +60,11 @@ Testable statements, including the brief's own acceptance lines for this feature
 
 ## Specs
 
-| Spec                                                                    | Status                                              |
-| ----------------------------------------------------------------------- | --------------------------------------------------- |
-| [Spike 01: RLS and `withTenant()`](stage-1-spike-01-rls-with-tenant.md) | Built                                               |
-| [Spike 02: offline queue](stage-1-spike-02-offline-queue.md)            | Built                                               |
-| [Spike 03: report-card PDFs](stage-1-spike-03-report-card-pdfs.md)      | Built                                               |
-| [Spike 04: Paystack in test mode](stage-1-spike-04-paystack.md)         | Partly built; blocked on the Paystack account tier  |
-| [CI/CD and environments](stage-1-ci-cd-and-environments.md)             | Part A built; Part B waits for the hosting decision |
+| Spec                                                                              | Status                                              |
+| --------------------------------------------------------------------------------- | --------------------------------------------------- |
+| [Spike 01: RLS and `withTenant()`](stage-1-spike-01-rls-with-tenant.md)           | Built                                               |
+| [Spike 02: offline queue](stage-1-spike-02-offline-queue.md)                      | Built                                               |
+| [Spike 03: report-card PDFs](stage-1-spike-03-report-card-pdfs.md)                | Built                                               |
+| [Spike 04: Paystack in test mode](stage-1-spike-04-paystack.md)                   | Partly built; blocked on the Paystack account tier  |
+| [CI/CD and environments](stage-1-ci-cd-and-environments.md)                       | Part A built; Part B waits for the hosting decision |
+| [Service layer and `/api/v1` conventions](stage-1-api-and-service-conventions.md) | Built                                               |

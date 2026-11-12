@@ -19,6 +19,7 @@ estimate, items are deferred from the cut-line (brief section 32.3).
 | Spike 03: report-card PDFs with Gotenberg                                             | 10            | one session                       |                            | n/a   | Agent time not measured to the hour, so no ratio. Result in `docs/spikes/03-report-card-pdfs.md`                                 |
 | Spike 04: Paystack in test mode                                                       | 12            | one session (partly run)          |                            | n/a   | Stopped early: split scenarios blocked by the Starter account tier. Result in `docs/spikes/04-paystack.md`                       |
 | CI/CD and environments, Part A                                                        | 10            | one session                       |                            | n/a   | Part B waits for the hosting decision                                                                                            |
+| Service layer and `/api/v1` conventions                                               | 14            | one session                       |                            | n/a   | Includes the first migration and drizzle-kit                                                                                     |
 
 ## Cut-line (brief section 32.3)
 

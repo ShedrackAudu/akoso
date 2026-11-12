@@ -5,6 +5,7 @@ import { defineConfig } from "vitest/config"
 export default defineConfig({
   test: {
     include: ["packages/*/src/**/*.db.test.ts"],
+    globalSetup: ["./packages/db/scripts/vitest-global-setup.mjs"],
     exclude: ["**/node_modules/**", "**/.next/**", "**/dist/**"],
     // The files share one database, so they run one at a time.
     fileParallelism: false,

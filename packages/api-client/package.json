@@ -11,5 +11,9 @@
   },
   "devDependencies": {
     "@akoso/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "@akoso/schemas": "workspace:*",
+    "zod": "^4.6.7"
   }
 }

@@ -149,27 +149,30 @@ invent a new module, package or top-level folder: propose it in `docs/decisions.
 
 ## 9. Commands
 
-| Command                                          | What it does                                                                                |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| `pnpm install`                                   | Install dependencies                                                                        |
-| `docker compose up -d`                           | Start Postgres, PgBouncer and Gotenberg (no local object storage yet, ADR 0005)             |
-| `pnpm dev`                                       | Web app on http://localhost:3000                                                            |
-| `pnpm dev:admin`                                 | Platform admin on http://localhost:3001                                                     |
-| `pnpm typecheck`                                 | TypeScript in every app and package                                                         |
-| `pnpm lint`                                      | ESLint, zero warnings allowed                                                               |
-| `pnpm test`                                      | Vitest                                                                                      |
-| `pnpm test:db`                                   | Database and tenant-isolation tests; needs `docker compose up -d` first                     |
-| `pnpm test:e2e`                                  | Browser tests (Playwright); builds and starts the web app; needs Docker                     |
-| `pnpm spike:offline:setup`                       | Spike 02 only: recreate the offline spike tables                                            |
-| `pnpm --filter @akoso/worker spike:report-cards` | Spike 03 only: render the made-up report cards (Docker running; `--preview`, `--breakdown`) |
-| `pnpm spike:paystack:setup`                      | Spike 04 only: recreate the Paystack webhook inbox tables                                   |
-| `pnpm latency:regions`                           | Time connections to candidate hosting regions (D-OPEN-1)                                    |
-| `pnpm boundaries`                                | Import-boundary and circular-dependency check                                               |
-| `pnpm unused`                                    | Unused files, exports and dependencies (knip)                                               |
-| `pnpm format` / `pnpm format:check`              | Prettier                                                                                    |
-| `pnpm check`                                     | All of the checks above                                                                     |
-| `pnpm build`                                     | Build every app                                                                             |
-| `pnpm brief:split`                               | Regenerate `docs/brief/` from `docs/MASTER_PROMPT.md`                                       |
+| Command                                          | What it does                                                                                                                       |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install`                                   | Install dependencies                                                                                                               |
+| `docker compose up -d`                           | Start Postgres, PgBouncer and Gotenberg (no local object storage yet, ADR 0005)                                                    |
+| `pnpm dev`                                       | Web app on http://localhost:3000                                                                                                   |
+| `pnpm dev:admin`                                 | Platform admin on http://localhost:3001                                                                                            |
+| `pnpm typecheck`                                 | TypeScript in every app and package                                                                                                |
+| `pnpm lint`                                      | ESLint, zero warnings allowed                                                                                                      |
+| `pnpm test`                                      | Vitest                                                                                                                             |
+| `pnpm db:migrate`                                | Apply migrations as the migration role (straight to Postgres, port 5433)                                                           |
+| `pnpm db:generate`                               | Write a migration from changed `packages/db/src/schema/` files; RLS, grants and functions go in a hand-written migration beside it |
+| `pnpm api:openapi`                               | Rewrite `packages/api-client/openapi.json` after changing a contract; CI fails if it is stale                                      |
+| `pnpm test:db`                                   | Database and tenant-isolation tests; needs `docker compose up -d` first, and applies migrations itself                             |
+| `pnpm test:e2e`                                  | Browser tests (Playwright); builds and starts the web app; needs Docker                                                            |
+| `pnpm spike:offline:setup`                       | Spike 02 only: recreate the offline spike tables                                                                                   |
+| `pnpm --filter @akoso/worker spike:report-cards` | Spike 03 only: render the made-up report cards (Docker running; `--preview`, `--breakdown`)                                        |
+| `pnpm spike:paystack:setup`                      | Spike 04 only: recreate the Paystack webhook inbox tables                                                                          |
+| `pnpm latency:regions`                           | Time connections to candidate hosting regions (D-OPEN-1)                                                                           |
+| `pnpm boundaries`                                | Import-boundary and circular-dependency check                                                                                      |
+| `pnpm unused`                                    | Unused files, exports and dependencies (knip)                                                                                      |
+| `pnpm format` / `pnpm format:check`              | Prettier                                                                                                                           |
+| `pnpm check`                                     | All of the checks above                                                                                                            |
+| `pnpm build`                                     | Build every app                                                                                                                    |
+| `pnpm brief:split`                               | Regenerate `docs/brief/` from `docs/MASTER_PROMPT.md`                                                                              |
 
 How to run each test suite: `docs/testing.md`.
 
@@ -223,9 +226,13 @@ word seems to mean something else, or two words seem to mean the same thing, sto
 
 ### Errors and logging
 
-- Typed application errors (`ValidationError`, `NotFoundError`, `ForbiddenError`,
-  `ConflictError`). Domain code returns results for expected failures. Never swallow an
-  error.
+- Typed application errors from `@akoso/core/kernel` (`ValidationError`,
+  `NotFoundError`, `ForbiddenError`, `ConflictError` and a few more), mapped by one
+  function to Problem Details (RFC 9457). Domain code returns results for expected
+  failures. Never swallow an error.
+- Every `/api/v1` endpoint is a contract in `packages/schemas/src/contracts/` and a
+  one-line route (`apiRoute` or `publicRoute`); every write needs an `Idempotency-Key`.
+  See `ARCHITECTURE-ESSENTIALS.md`, Standard patterns.
 - Structured JSON logs with tenant ID, user ID, request ID and job ID. No personal data,
   tokens, OTPs or health details in logs, ever.
 

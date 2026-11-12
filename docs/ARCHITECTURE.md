@@ -375,7 +375,10 @@ The worker runs pg-boss on Postgres. Long or heavy work never runs in a web requ
   input and output, a consistent error format, pagination (cursor-based for large
   tables), idempotency keys on writes and rate limits. Published versions never break;
   breaking changes go to `/api/v2`.
-- An OpenAPI spec is generated from the Zod schemas, and `packages/api-client` from it.
+- An OpenAPI document is generated from the contracts (`pnpm api:openapi`), and
+  `packages/api-client` is a typed client built from the same contracts.
+- Built in Stage 1 item 3: see `docs/specs/stage-1-api-and-service-conventions.md` and
+  `packages/core/src/kernel/`.
 
 ## 11. Errors and logging
 
