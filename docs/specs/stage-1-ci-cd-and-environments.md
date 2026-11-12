@@ -1,6 +1,6 @@
 # CI/CD and environments: security scans, then staging
 
-- **Status:** Approved (founder, 12/11/2026). Part A is being built; Part B is on Render, Frankfurt (D-18), waiting for the Render account and your approval of the cost
+- **Status:** Approved (founder, 12/11/2026). Part A is being built; Part B is on Render, Frankfurt (D-18), and delayed (D-19): images and the Blueprint first, deploys when there is something to show
 - **Module:** `.github/workflows`, Dockerfiles, `docs/security`, `docs/runbooks` · **Brief:** sections 2, 28.2, 28.3, 31, 32 · **Stage:** 1
 - **Estimate:** Part A 10 hours of agent time. Part B 14 hours, once your hosting decisions are made. About 1 hour of yours on GitHub and Renovate settings, plus account sign-ups for Part B
 - **Closes:** T3 (missing scans), T6 (no Renovate), T7 (no `SECURITY.md`), T10 (unpinned images). Starts on D-OPEN-1 (hosting region) and D-OPEN-3 (Node version)
