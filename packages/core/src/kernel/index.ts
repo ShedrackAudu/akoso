@@ -22,6 +22,7 @@ export {
   NotFoundError,
   PayloadTooLargeError,
   RateLimitedError,
+  SchoolClosedError,
   SchoolReadOnlyError,
   SchoolUnavailableError,
   UnauthenticatedError,

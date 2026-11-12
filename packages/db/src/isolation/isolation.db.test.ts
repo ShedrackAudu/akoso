@@ -51,25 +51,42 @@ async function outcome(work: Promise<unknown>): Promise<string> {
   )
 }
 
-/** Rows affected, or 0 when the app role has no grant for that command at all. */
-async function affected(
-  work: Promise<{ rowCount: number | null }>
-): Promise<number> {
+/**
+ * Grants the app role whatever it lacks on a table for the length of `work`, then takes
+ * it back. Write isolation must be proven by the table's row-level security rules, not
+ * by a missing grant that a later pull request could add (review of PR #16, finding 2).
+ */
+async function withTemporaryGrants<T>(
+  name: string,
+  work: () => Promise<T>
+): Promise<T> {
+  const missing: string[] = []
+  for (const privilege of ["SELECT", "INSERT", "UPDATE", "DELETE"]) {
+    const result = await owner.db.execute(
+      sql`select has_table_privilege('akoso_app', ${name}, ${privilege}) as granted`
+    )
+    if (result.rows[0]?.granted !== true) missing.push(privilege)
+  }
+  const t = sql.raw(name)
+  const list = sql.raw(missing.join(", "))
+  if (missing.length > 0) {
+    await owner.db.execute(sql`grant ${list} on ${t} to akoso_app`)
+  }
   try {
-    return (await work).rowCount ?? 0
-  } catch (error) {
-    const text =
-      error instanceof Error
-        ? `${error.message} ${error.cause instanceof Error ? error.cause.message : ""}`
-        : String(error)
-    if (/permission denied/.test(text)) return 0
-    throw error
+    return await work()
+  } finally {
+    if (missing.length > 0) {
+      await owner.db.execute(sql`revoke ${list} on ${t} from akoso_app`)
+    }
   }
 }
 
+const RLS_REFUSAL = /row-level security/
+
 /**
  * Tries every way school B could reach school A's rows in one table, as the app role
- * through the pooler. Returns what got through; empty when the table is sound.
+ * through the pooler, with every table privilege granted, so only row-level security
+ * stands in the way. Returns what got through; empty when the table is sound.
  */
 async function crossSchoolFailures(
   name: string,
@@ -80,42 +97,8 @@ async function crossSchoolFailures(
   await owner.db.execute(fixture(SCHOOL_A, `${marker}-a`))
   await owner.db.execute(fixture(SCHOOL_B, `${marker}-b`))
   const t = sql.raw(name)
-
   const asB = <T>(work: Parameters<typeof withTenant<T>>[2]) =>
     withTenant(app.db, SCHOOL_B, work)
-
-  const read = await outcome(
-    asB(async (tx) => {
-      const rows = await tx.execute(
-        sql`select 1 from ${t} where tenant_id = ${SCHOOL_A}`
-      )
-      if (rows.rows.length > 0) throw new Error("LEAK: read school A's rows")
-    })
-  )
-  if (read !== "ok" && !/permission denied/.test(read))
-    failures.push(`${name} read: ${read}`)
-
-  const updated = await affected(
-    asB((tx) =>
-      tx.execute(
-        sql`update ${t} set tenant_id = tenant_id where tenant_id = ${SCHOOL_A}`
-      )
-    )
-  )
-  if (updated > 0)
-    failures.push(`${name}: school B updated ${String(updated)} of A's rows`)
-
-  const deleted = await affected(
-    asB((tx) => tx.execute(sql`delete from ${t} where tenant_id = ${SCHOOL_A}`))
-  )
-  if (deleted > 0)
-    failures.push(`${name}: school B deleted ${String(deleted)} of A's rows`)
-
-  const inserted = await outcome(
-    asB((tx) => tx.execute(fixture(SCHOOL_A, `${marker}-x`)))
-  )
-  if (inserted === "ok") failures.push(`${name}: school B inserted a row for A`)
-
   const countA = async () =>
     Number(
       (
@@ -124,34 +107,76 @@ async function crossSchoolFailures(
         )
       ).rows[0]?.n
     )
-  const aBefore = await countA()
-  await outcome(
-    asB((tx) =>
+
+  await withTemporaryGrants(name, async () => {
+    // School B sees its own row: the rules are not simply "deny everything".
+    const own = await asB((tx) =>
+      tx.execute(sql`select 1 from ${t} where tenant_id = ${SCHOOL_B}`)
+    )
+    if (own.rows.length === 0)
+      failures.push(`${name}: school B cannot see its own row`)
+
+    const read = await asB((tx) =>
+      tx.execute(sql`select 1 from ${t} where tenant_id = ${SCHOOL_A}`)
+    )
+    if (read.rows.length > 0)
+      failures.push(`${name} read: LEAK, school B read A's rows`)
+
+    const updated = await asB((tx) =>
       tx.execute(
-        sql`update ${t} set tenant_id = ${SCHOOL_A} where tenant_id = ${SCHOOL_B}`
+        sql`update ${t} set tenant_id = tenant_id where tenant_id = ${SCHOOL_A}`
       )
     )
-  )
-  if ((await countA()) > aBefore)
-    failures.push(`${name}: school B moved a row to A`)
+    if ((updated.rowCount ?? 0) > 0) {
+      failures.push(
+        `${name}: school B updated ${String(updated.rowCount)} of A's rows`
+      )
+    }
 
-  const unscoped = await outcome(
-    (async () => {
-      const rows = await app.db.execute(sql`select 1 from ${t} limit 1`)
-      if (rows.rows.length > 0)
-        throw new Error("LEAK: rows visible with no school set")
-    })()
-  )
-  if (unscoped !== "ok" && !/permission denied/.test(unscoped)) {
-    failures.push(`${name} with no school: ${unscoped}`)
-  }
+    const deleted = await asB((tx) =>
+      tx.execute(sql`delete from ${t} where tenant_id = ${SCHOOL_A}`)
+    )
+    if ((deleted.rowCount ?? 0) > 0) {
+      failures.push(
+        `${name}: school B deleted ${String(deleted.rowCount)} of A's rows`
+      )
+    }
 
-  const ownRows = await owner.db.execute(
-    sql`select count(*)::int as n from ${t} where tenant_id = ${SCHOOL_A}`
-  )
-  if (Number(ownRows.rows[0]?.n) < 1)
+    const inserted = await outcome(
+      asB((tx) => tx.execute(fixture(SCHOOL_A, `${marker}-x`)))
+    )
+    if (inserted === "ok") {
+      failures.push(`${name}: school B inserted a row for A`)
+    } else if (!RLS_REFUSAL.test(inserted)) {
+      failures.push(
+        `${name}: inserting for A failed, but not because of RLS: ${inserted}`
+      )
+    }
+
+    const aBefore = await countA()
+    const moved = await outcome(
+      asB((tx) =>
+        tx.execute(
+          sql`update ${t} set tenant_id = ${SCHOOL_A} where tenant_id = ${SCHOOL_B}`
+        )
+      )
+    )
+    if ((await countA()) > aBefore) {
+      failures.push(`${name}: school B moved a row to A`)
+    } else if (moved !== "ok" && !RLS_REFUSAL.test(moved)) {
+      failures.push(
+        `${name}: moving a row to A failed, but not because of RLS: ${moved}`
+      )
+    }
+
+    const unscoped = await app.db.execute(sql`select 1 from ${t} limit 1`)
+    if (unscoped.rows.length > 0) {
+      failures.push(`${name} with no school: LEAK, rows visible`)
+    }
+  })
+
+  if ((await countA()) < 1)
     failures.push(`${name}: school A's row went missing`)
-
   await owner.db.execute(
     sql`delete from ${t} where tenant_id in (${SCHOOL_A}, ${SCHOOL_B})`
   )
@@ -201,7 +226,7 @@ describe("tenant isolation", () => {
       create table public.isolation_planted (
         id uuid primary key default gen_random_uuid(),
         tenant_id uuid not null,
-        note text,
+        admission_number text unique,
         created_at timestamptz not null default now()
       );
       create index isolation_planted_created_tenant_idx
@@ -212,15 +237,34 @@ describe("tenant isolation", () => {
       )
       expect(planted).toBeDefined()
       const problems = planted ? await findTableProblems(owner.db, planted) : []
-      expect(problems).toEqual([
-        "RLS is not enabled",
-        "RLS is not forced",
-        "no policy for the app role with both USING and WITH CHECK on tenant_id",
-        "multi-column index isolation_planted_created_tenant_idx does not start with tenant_id",
-        "tenant_id does not reference platform.tenants",
-      ])
+      // The single-column primary key is fine; everything else planted is caught.
+      expect([...problems].sort()).toEqual(
+        [
+          "RLS is not enabled",
+          "RLS is not forced",
+          "no policy for the app role with both USING and WITH CHECK on tenant_id",
+          "multi-column index isolation_planted_created_tenant_idx does not start with tenant_id",
+          "unique rule isolation_planted_admission_number_key does not start with tenant_id",
+          "tenant_id does not reference platform.tenants",
+        ].sort()
+      )
     } finally {
       await owner.db.execute(sql`drop table if exists public.isolation_planted`)
+    }
+  })
+
+  it("finds tenant tables in any application schema, not just two", async () => {
+    await owner.db.execute(sql`
+      create schema if not exists isolation_probe;
+      create table if not exists isolation_probe.records (
+        id uuid primary key default gen_random_uuid(),
+        tenant_id uuid not null
+      )`)
+    try {
+      const names = (await findTenantTables(owner.db)).map((t) => t.name)
+      expect(names).toContain("isolation_probe.records")
+    } finally {
+      await owner.db.execute(sql`drop schema if exists isolation_probe cascade`)
     }
   })
 
@@ -244,11 +288,11 @@ describe("tenant isolation", () => {
           sql`insert into public.isolation_leaky (tenant_id, note) values (${tenantId}, ${marker})`
       )
       const report = failures.join("\n")
-      expect(report).toMatch(/read: .*LEAK/)
+      expect(report).toMatch(/read: LEAK/)
       expect(report).toMatch(/updated \d+ of A's rows/)
       expect(report).toMatch(/inserted a row for A/)
       expect(report).toMatch(/moved a row to A/)
-      expect(report).toMatch(/with no school: .*LEAK/)
+      expect(report).toMatch(/with no school: LEAK/)
     } finally {
       await owner.db.execute(sql`drop table if exists public.isolation_leaky`)
     }

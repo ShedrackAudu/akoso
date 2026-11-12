@@ -194,8 +194,11 @@ One school must never see or change another school's data. This is the top risk.
 - **The isolation suite** (`packages/db/src/isolation/`) finds every table with a
   `tenant_id` from the database catalog. For each, it checks forced RLS, a `USING` +
   `WITH CHECK` policy, `tenant_id` first in multi-column indexes and a foreign key to
-  `platform.tenants`. It then proves school B cannot read, insert, update, delete or move
-  school A's rows. A table without a row fixture in `isolation/fixtures.ts` fails it.
+  `platform.tenants`, and every unique rule except the row ID starting with `tenant_id`
+  (deliberate exceptions, such as domain hostnames, are listed with a reason). It searches
+  every schema but Postgres's own. It then grants the app role every table privilege for
+  the test and proves school B cannot read, insert, update, delete or move school A's
+  rows, so row-level security, not a missing grant, is what holds. A table without a row fixture in `isolation/fixtures.ts` fails it.
   Runs on every pull request.
 - Files follow the same rule: object keys are prefixed with the tenant ID and every
   download goes through an authorised signed URL valid for 15 minutes at most.

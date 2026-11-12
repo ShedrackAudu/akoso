@@ -5,6 +5,15 @@ import { sql } from "drizzle-orm"
 
 import type { Database } from "../client"
 
+/**
+ * Unique rules on tenant tables that are meant to hold across every school. Each needs
+ * a reason; anything not listed must start with tenant_id.
+ */
+const GLOBALLY_UNIQUE: Record<string, readonly string[]> = {
+  // A hostname can point at only one school, anywhere on the platform.
+  "platform.tenant_domains": ["tenant_domains_hostname_unique"],
+}
+
 export interface TenantTable {
   /** "schema.table" */
   name: string
@@ -20,8 +29,11 @@ export async function findTenantTables(db: Database): Promise<TenantTable[]> {
     join pg_namespace n on n.oid = c.relnamespace
     where a.attname = 'tenant_id' and not a.attisdropped
       and c.relkind in ('r', 'p')
-      -- Application schemas; spike-only tables are skipped by name.
-      and n.nspname in ('public', 'platform')
+      -- Every schema but Postgres's own, so a module's new schema is never missed.
+      -- Spike-only tables and schemas are skipped by name; they never reach a migration.
+      and n.nspname not in ('pg_catalog', 'information_schema')
+      and n.nspname not like 'pg\\_%'
+      and n.nspname not like 'spike\\_%'
       and c.relname not like 'spike\\_%'
     order by 1`)
   return result.rows.map((row) => ({
@@ -65,15 +77,28 @@ export async function findTableProblems(
     )
   }
 
+  // Every multi-column index, and every unique rule other than the single-column
+  // primary key, must start with tenant_id. A unique rule on a business key alone
+  // (say, admission number) would let one school block another from using the same
+  // value.
   const indexes = await db.execute(sql`
-    select ic.relname as name, i.indkey[0]::int as first_column
+    select ic.relname as name, i.indkey[0]::int as first_column, i.indnatts as width,
+           i.indisunique as is_unique, i.indisprimary as is_primary
     from pg_index i join pg_class ic on ic.oid = i.indexrelid
-    where i.indrelid = ${table.oid} and i.indnatts > 1`)
+    where i.indrelid = ${table.oid}`)
   for (const index of indexes.rows) {
-    if (Number(index.first_column) !== table.tenantColumn) {
-      problems.push(
-        `multi-column index ${String(index.name)} does not start with tenant_id`
-      )
+    const name = String(index.name)
+    const startsWithTenant = Number(index.first_column) === table.tenantColumn
+    const width = Number(index.width)
+    if (startsWithTenant) continue
+    if (index.is_unique === true) {
+      const rowId = index.is_primary === true && width === 1
+      const allowed = GLOBALLY_UNIQUE[table.name]?.includes(name) === true
+      if (!rowId && !allowed) {
+        problems.push(`unique rule ${name} does not start with tenant_id`)
+      }
+    } else if (width > 1) {
+      problems.push(`multi-column index ${name} does not start with tenant_id`)
     }
   }
 

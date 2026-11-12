@@ -4,6 +4,7 @@ import { schoolSlugSchema, type SchoolSummary } from "@akoso/schemas/tenancy"
 
 import { assertSchoolAllows } from "../kernel/index"
 import { createSchoolCache } from "./cache"
+import { findSchoolBySlug } from "./lookup"
 import { classifyHost } from "./host"
 
 const BASE = "akoso.ng"
@@ -100,11 +101,40 @@ describe("assertSchoolAllows", () => {
     }
   })
 
-  it("refuses everything for suspended and closed schools", () => {
-    for (const status of ["suspended", "closed"] as const) {
-      expect(() => {
-        assertSchoolAllows(school(status), false)
-      }).toThrow(/unavailable/)
+  it("refuses everything for suspended and closed schools, each with its own reason", () => {
+    expect(() => {
+      assertSchoolAllows(school("suspended"), false)
+    }).toThrow(/unavailable/)
+    expect(() => {
+      assertSchoolAllows(school("closed"), false)
+    }).toThrow(/closed/)
+  })
+
+  it("never asks the database about a slug that cannot exist", async () => {
+    const db = {
+      execute: () => Promise.reject(new Error("should not be called")),
+    } as unknown as Parameters<typeof findSchoolBySlug>[0]
+    for (const slug of [
+      "",
+      "ab",
+      "has space",
+      "bad--slug",
+      "x".repeat(41),
+      "../etc",
+    ]) {
+      expect(await findSchoolBySlug(db, slug)).toBeNull()
+    }
+  })
+
+  it("reserves the names Akoso may need for itself", () => {
+    for (const slug of [
+      "platform",
+      "webhooks",
+      "health",
+      "internal",
+      "branches",
+    ]) {
+      expect(schoolSlugSchema.safeParse(slug).success).toBe(false)
     }
   })
 
@@ -145,7 +175,7 @@ describe("createSchoolCache", () => {
 
   it("never grows past its limit", async () => {
     let loads = 0
-    const cache = createSchoolCache({ maxEntries: 2 })
+    const cache = createSchoolCache({ maxMisses: 2 })
     const load = () => {
       loads++
       return Promise.resolve(null)
@@ -155,5 +185,70 @@ describe("createSchoolCache", () => {
     await cache.get("c", load)
     await cache.get("a", load)
     expect(loads).toBe(4)
+  })
+
+  it("never lets a flood of misses push out a real school", async () => {
+    let schoolLoads = 0
+    const cache = createSchoolCache({ maxHits: 10, maxMisses: 10 })
+    const real = () => {
+      schoolLoads++
+      return Promise.resolve(school("active"))
+    }
+    await cache.get("slug:greenfield", real)
+    for (let i = 0; i < 40; i++) {
+      await cache.get(`host:attacker-${String(i)}.example`, () =>
+        Promise.resolve(null)
+      )
+    }
+    await cache.get("slug:greenfield", real)
+    expect(schoolLoads).toBe(1)
+  })
+
+  it("shares one database lookup between identical requests in flight", async () => {
+    let loads = 0
+    let release: (value: SchoolSummary | null) => void = () => undefined
+    const cache = createSchoolCache()
+    const load = () => {
+      loads++
+      return new Promise<SchoolSummary | null>((resolve) => (release = resolve))
+    }
+    const first = cache.get("slug:greenfield", load)
+    const second = cache.get("slug:greenfield", load)
+    release(school("active"))
+    expect(await first).toEqual(await second)
+    expect(loads).toBe(1)
+  })
+
+  it("answers 'not found' without the database once the per-second budget is spent", async () => {
+    let clock = 0
+    let loads = 0
+    const cache = createSchoolCache({ maxLoadsPerSecond: 3, now: () => clock })
+    const load = () => {
+      loads++
+      return Promise.resolve(null)
+    }
+    for (let i = 0; i < 10; i++)
+      await cache.get(`host:x${String(i)}.example`, load)
+    expect(loads).toBe(3)
+    clock = 1_000
+    await cache.get("host:y.example", load)
+    expect(loads).toBe(4)
+  })
+
+  it("refreshing an expired school does not evict another one", async () => {
+    let clock = 0
+    let loads = 0
+    const cache = createSchoolCache({ maxHits: 2, now: () => clock })
+    const load = () => {
+      loads++
+      return Promise.resolve(school("active"))
+    }
+    await cache.get("a", load)
+    clock = 30_000
+    await cache.get("b", load)
+    clock = 61_000 // a has expired, b has not
+    await cache.get("a", load)
+    await cache.get("b", load)
+    expect(loads).toBe(3)
   })
 })

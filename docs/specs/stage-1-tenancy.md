@@ -41,13 +41,13 @@ table").
   (brief 23), but the link exists from day one.
 - **School status** controls what the app allows:
 
-| Status       | Meaning                                            | Effect on requests for that school                                                     |
-| ------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `onboarding` | Created, being set up                              | Normal (setup screens)                                                                 |
-| `active`     | In use                                             | Normal                                                                                 |
-| `suspended`  | Paused by Akoso (e.g. unpaid platform fee, abuse)  | Every request refused with a calm message; public pages show "temporarily unavailable" |
-| `read_only`  | Leaving (brief 26.7, "read-only for a set period") | Reads allowed; every write refused                                                     |
-| `closed`     | Gone; data kept only for the retention period      | Like `suspended`; the public address returns 404                                       |
+| Status       | Meaning                                            | Effect on requests for that school                                                                                                            |
+| ------------ | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onboarding` | Created, being set up                              | Normal (setup screens)                                                                                                                        |
+| `active`     | In use                                             | Normal                                                                                                                                        |
+| `suspended`  | Paused by Akoso (e.g. unpaid platform fee, abuse)  | Every request refused with a calm message; public pages show "temporarily unavailable"                                                        |
+| `read_only`  | Leaving (brief 26.7, "read-only for a set period") | Reads allowed; every write refused                                                                                                            |
+| `closed`     | Gone; data kept only for the retention period      | Every request refused; members are told "This school's account has closed. Please contact the school office."; the public address returns 404 |
 
 - **The slug** is the school's address name, as in `greenfield` in
   `greenfield.akoso.ng`.
@@ -124,6 +124,10 @@ Next.js's request proxy runs before every page and route. It does four things.
    - The app role cannot read `platform.tenants` directly. It calls two small
      `SECURITY DEFINER` functions: by slug, and by custom host.
    - Each returns only the school's ID, slug, name, status and time zone.
+   - Found schools and misses are kept apart, so made-up addresses can never push a real
+     school out; identical lookups in flight share one query; and database lookups not
+     answered from memory are capped at 50 a second per instance (over the cap the answer
+     is 404). Added after the cross-model review (D-22).
    - Answers are cached in memory for 60 seconds per web instance, so most requests
      need no database call. A status change takes effect within a minute.
 
