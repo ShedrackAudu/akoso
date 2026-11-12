@@ -48,8 +48,9 @@ Items are grouped by the stage that needs them, not by date. "Blocks" says what 
 
 ### Hosting and tools
 - [ ] **GitHub settings for the security scans** (CI/CD spec, Part A). I can make the first two with your OK:
-  - [ ] turn on Dependabot alerts
-  - [ ] once the Security workflow passes on `main`, add its jobs to the required checks in `protect-main`, and add the "code scanning results" rule so a high CodeQL or Semgrep finding blocks merging
+  - [x] turn on Dependabot alerts (done 12/11/2026)
+  - [x] add the Security jobs to the required checks in `protect-main` (done 12/11/2026)
+  - [ ] add the "code scanning results" rule to `protect-main`, so a high CodeQL or Semgrep finding blocks merging
   - [ ] install the **Renovate** GitHub App on the `akoso` repository only
   - [ ] set up a commit-signing key, then turn on "require signed commits"
 - [ ] **Register `akoso.ng`** and put its DNS on Cloudflare. Then forward `security@akoso.ng` to your inbox: `SECURITY.md` already gives that address. *Blocks: school addresses on staging, and Cloudflare in front of it.*
