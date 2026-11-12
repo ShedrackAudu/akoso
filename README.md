@@ -27,7 +27,7 @@ About 15 minutes on Windows, macOS or Linux.
 
 - **Node.js 24** (`.nvmrc` pins it)
 - **pnpm**, through corepack, which ships with Node
-- **Docker** (Docker Desktop on Windows and macOS) for Postgres, Gotenberg and MinIO
+- **Docker** (Docker Desktop on Windows and macOS) for Postgres, PgBouncer and Gotenberg
 - **Git**
 
 ### Steps
@@ -74,12 +74,11 @@ The platform admin runs with `pnpm dev:admin` on http://localhost:3001.
 
 ### Local services
 
-| Service     | Address                                 | Purpose                                                                          |
-| ----------- | --------------------------------------- | -------------------------------------------------------------------------------- |
-| Postgres 16 | `localhost:5433`                        | The database. Port 5433, because a locally installed PostgreSQL often takes 5432 |
-| PgBouncer   | `localhost:6432`                        | Connection pooler in transaction mode. The app connects here                     |
-| Gotenberg   | http://localhost:3100                   | HTML to PDF (9.4.0, JavaScript off, no outbound requests)                        |
-| MinIO       | http://localhost:9000 (console on 9001) | Local S3-compatible storage                                                      |
+| Service     | Address               | Purpose                                                                          |
+| ----------- | --------------------- | -------------------------------------------------------------------------------- |
+| Postgres 16 | `localhost:5433`      | The database. Port 5433, because a locally installed PostgreSQL often takes 5432 |
+| PgBouncer   | `localhost:6432`      | Connection pooler in transaction mode. The app connects here                     |
+| Gotenberg   | http://localhost:3100 | HTML to PDF (9.4.0, JavaScript off, no outbound requests)                        |
 
 Their credentials are local defaults in `docker-compose.yml`, not secrets. Never point
 local tools at real data.

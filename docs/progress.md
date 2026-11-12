@@ -22,7 +22,9 @@ In this order (brief section 32, Stage 1):
    signed webhooks work end to end and repeats are recognised, but Paystack refuses
    dedicated accounts and subaccounts to a Starter business, so the split scenarios wait
    for the founder's registered-business upgrade; see `docs/spikes/04-paystack.md`).
-2. CI/CD and environments: the remaining security scans (T3), staging deploy.
+2. CI/CD and environments: the remaining security scans (T3; **Part A built**: scans,
+   Renovate, `SECURITY.md`, latency measurement), staging deploy (Part B, waiting for the
+   hosting decision). Spec: `docs/specs/stage-1-ci-cd-and-environments.md`.
 3. Service-layer and `/api/v1` conventions (section 5.1): confirm the patterns in
    `ARCHITECTURE-ESSENTIALS.md` with the first real use case.
 4. Tenancy with RLS and the isolation test suite; the single app address.

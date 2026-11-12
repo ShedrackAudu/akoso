@@ -12,7 +12,7 @@ Every external service behind an interface, so swapping a provider never touches
 | `pdf/`      | PdfRenderer: HTML to PDF through the Gotenberg container, called only from the worker.                                                                               | 12         |
 | `ai/`       | AiDrafts: comment and lesson-note drafts. No names or identifiers ever leave Akoso.                                                                                  | 11, 19, 29 |
 | `domains/`  | DomainProvider: custom hostname verification and certificates through Cloudflare for SaaS.                                                                           | 7.1        |
-| `storage/`  | ObjectStorage: tenant-prefixed keys and short-lived signed URLs on S3-compatible storage (R2, MinIO locally).                                                        | 7, 28      |
+| `storage/`  | ObjectStorage: tenant-prefixed keys and short-lived signed URLs on S3-compatible storage (R2; the local service is chosen in the file-storage spec, ADR 0005).       | 7, 28      |
 
 Each folder has `port.ts` (the interface), `fake.ts` (the adapter used in tests and local development) and, later, one file per real adapter. Real adapters read their keys from validated environment variables; no key is ever hard-coded.
 

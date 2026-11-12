@@ -152,7 +152,7 @@ invent a new module, package or top-level folder: propose it in `docs/decisions.
 | Command                                          | What it does                                                                                |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
 | `pnpm install`                                   | Install dependencies                                                                        |
-| `docker compose up -d`                           | Start Postgres, Gotenberg and MinIO                                                         |
+| `docker compose up -d`                           | Start Postgres, PgBouncer and Gotenberg (no local object storage yet, ADR 0005)             |
 | `pnpm dev`                                       | Web app on http://localhost:3000                                                            |
 | `pnpm dev:admin`                                 | Platform admin on http://localhost:3001                                                     |
 | `pnpm typecheck`                                 | TypeScript in every app and package                                                         |
@@ -163,6 +163,7 @@ invent a new module, package or top-level folder: propose it in `docs/decisions.
 | `pnpm spike:offline:setup`                       | Spike 02 only: recreate the offline spike tables                                            |
 | `pnpm --filter @akoso/worker spike:report-cards` | Spike 03 only: render the made-up report cards (Docker running; `--preview`, `--breakdown`) |
 | `pnpm spike:paystack:setup`                      | Spike 04 only: recreate the Paystack webhook inbox tables                                   |
+| `pnpm latency:regions`                           | Time connections to candidate hosting regions (D-OPEN-1)                                    |
 | `pnpm boundaries`                                | Import-boundary and circular-dependency check                                               |
 | `pnpm unused`                                    | Unused files, exports and dependencies (knip)                                               |
 | `pnpm format` / `pnpm format:check`              | Prettier                                                                                    |

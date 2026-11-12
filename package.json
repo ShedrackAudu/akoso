@@ -19,6 +19,7 @@
     "spike:paystack:setup": "docker compose exec -T postgres psql -q -U akoso_owner -d akoso_dev -f - < packages/db/src/spike/paystack-schema.sql",
     "boundaries": "depcruise apps packages --config .dependency-cruiser.cjs",
     "unused": "knip",
+    "latency:regions": "node scripts/measure-region-latency.mjs",
     "brief:split": "node scripts/split-brief.mjs docs/MASTER_PROMPT.md docs/brief",
     "check": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm boundaries && pnpm unused",
     "prepare": "husky"

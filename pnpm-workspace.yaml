@@ -13,3 +13,9 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - knip@6.45.1
+
+# Security fixes for transitive dependencies whose parents pin a vulnerable version.
+# Each entry names the advisory; remove it once the parent package ships the fix.
+overrides:
+  # GHSA-mrhx-c7xc-m3w5 (high): @serwist/turbopack 9.5.13 pins zod 4.6.5.
+  "zod@<4.6.6": "^4.6.7"

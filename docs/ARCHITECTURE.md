@@ -33,7 +33,7 @@ flowchart LR
     DOM[packages/domain<br/>pure logic]
     DB[(PostgreSQL 16<br/>RLS forced)]
     GOT[Gotenberg<br/>HTML to PDF]
-    R2[(Object storage<br/>R2 / MinIO)]
+    R2[(Object storage<br/>R2)]
   end
   EXT[Paystack, Monnify, Termii,<br/>WhatsApp, email, AI,<br/>Cloudflare for SaaS]
   P & T & S & M --> CF --> WEB
@@ -353,7 +353,7 @@ test modes, log-only adapters and a clearly labelled development payment adapter
 | PDF            | Gotenberg container                                                        |                                       | Local container                                                 |
 | AI drafts      | Claude or Gemini (open decision)                                           |                                       | Fake adapter; no names or identifiers ever sent                 |
 | Custom domains | Cloudflare for SaaS                                                        |                                       | Fake adapter                                                    |
-| Storage        | Cloudflare R2                                                              |                                       | MinIO                                                           |
+| Storage        | Cloudflare R2                                                              |                                       | none yet (ADR 0005)                                             |
 
 ## 9. Background jobs
 
@@ -418,11 +418,11 @@ Threat models, the ASVS checklist and the pre-launch checklist live in `docs/sec
 
 ## 13. Environments and deployment (section 31)
 
-| Environment | Where                                                                                               | Data                           |
-| ----------- | --------------------------------------------------------------------------------------------------- | ------------------------------ |
-| dev         | Local Docker Compose: Postgres 16, Gotenberg, MinIO (in place)                                      | Synthetic seed data            |
-| staging     | Production-like containers and managed Postgres                                                     | Synthetic only                 |
-| production  | Containers on a managed platform, managed Postgres with point-in-time recovery, Cloudflare in front | Real; agents never have access |
+| Environment | Where                                                                                                      | Data                           |
+| ----------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| dev         | Local Docker Compose: Postgres 16, PgBouncer, Gotenberg (in place); object storage chosen later (ADR 0005) | Synthetic seed data            |
+| staging     | Production-like containers and managed Postgres                                                            | Synthetic only                 |
+| production  | Containers on a managed platform, managed Postgres with point-in-time recovery, Cloudflare in front        | Real; agents never have access |
 
 - Web, admin and worker are stateless; sessions, files, jobs and caches live in
   Postgres, object storage or a cache service.

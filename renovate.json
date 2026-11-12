@@ -1,0 +1,66 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Akoso dependency updates (T6; brief section 28.3). Nothing merges itself: every update is a pull request a person reviews, after CI and the security scans pass.",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    "docker:pinDigests"
+  ],
+  "timezone": "Africa/Lagos",
+  "schedule": ["before 6am on monday"],
+  "automerge": false,
+  "minimumReleaseAge": "14 days",
+  "internalChecksFilter": "strict",
+  "prConcurrentLimit": 5,
+  "labels": ["dependencies"],
+  "dependencyDashboard": true,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "schedule": ["at any time"],
+    "minimumReleaseAge": null,
+    "labels": ["dependencies", "security"]
+  },
+  "packageRules": [
+    {
+      "description": "One weekly pull request for minor and patch updates of development tools.",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "development tools"
+    },
+    {
+      "description": "One weekly pull request for GitHub Actions, kept pinned to commit SHAs.",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    },
+    {
+      "description": "Security tools used by the Security workflow, in one pull request.",
+      "matchManagers": ["custom.regex"],
+      "groupName": "security tools"
+    },
+    {
+      "description": "Postgres stays on major version 16 until a decision says otherwise (brief section 2).",
+      "matchPackageNames": ["postgres"],
+      "allowedVersions": "/^16\\./"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Tool images pinned by digest in the Security workflow's env block.",
+      "managerFilePatterns": ["/^\\.github/workflows/security\\.yml$/"],
+      "matchStrings": [
+        "_IMAGE: (?<depName>[^:\\s]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "The exact Renovate version used to validate this file.",
+      "managerFilePatterns": ["/^\\.github/workflows/security\\.yml$/"],
+      "matchStrings": [
+        "--package (?<depName>renovate)@(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "npm"
+    }
+  ]
+}
