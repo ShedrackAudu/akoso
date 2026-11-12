@@ -5,7 +5,8 @@ name: akoso
 
 services:
   postgres:
-    image: postgres:16-alpine
+    # Exact version and digest (T10). Renovate proposes updates.
+    image: postgres:16.15-alpine3.24@sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139
     environment:
       POSTGRES_USER: akoso_owner
       POSTGRES_PASSWORD: akoso_local_only
@@ -27,7 +28,7 @@ services:
   # Connection pooler in transaction mode, as managed Postgres is usually pooled in
   # production. The app connects here (port 6432), never straight to Postgres.
   pgbouncer:
-    image: edoburu/pgbouncer:v1.26.1-p0
+    image: edoburu/pgbouncer:v1.26.1-p0@sha256:488422e38cff912895d0d65d8963fcd306e6ac589a724398b6eb8e294e94d624
     depends_on:
       postgres:
         condition: service_healthy
@@ -42,7 +43,7 @@ services:
   # Locked down: no JavaScript in templates, and Chromium may not fetch anything from
   # any network, public or private. Every asset is uploaded with the HTML.
   gotenberg:
-    image: gotenberg/gotenberg:9.4.0-chromium
+    image: gotenberg/gotenberg:9.4.0-chromium@sha256:ad6dbcf5923f0888fb25462adc4c3a8580ef163cae07acc8e45d0703ff10cad7
     command:
       - gotenberg
       - --chromium-disable-javascript=true
@@ -57,24 +58,8 @@ services:
       timeout: 5s
       retries: 10
 
-  # Local S3-compatible storage standing in for Cloudflare R2.
-  minio:
-    image: minio/minio:latest
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: akoso_local
-      MINIO_ROOT_PASSWORD: akoso_local_only
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - minio-data:/data
-    healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+  # No local object storage yet: MinIO stopped publishing images (ADR 0005). A
+  # replacement standing in for Cloudflare R2 is chosen in the file-storage spec.
 
 volumes:
   postgres-data:
-  minio-data:

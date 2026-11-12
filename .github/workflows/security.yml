@@ -1,0 +1,190 @@
+name: Security
+
+# Security scans (brief section 28.2; CI/CD spec, Part A). They run on every pull
+# request, on every push to main, and weekly, so a vulnerability published for code that
+# has not changed is still caught. High or critical findings fail the job. A false
+# positive is suppressed only in the tool's ignore file, with a reason and a date, and is
+# listed in docs/security/scans.md. Never disable a check to make a build pass.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Mondays 05:00 UTC (06:00 in Nigeria), before the working week starts.
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+# Least privilege: jobs only read the repository unless they say otherwise.
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+# Tools run from images pinned by digest, and Actions are pinned to commit SHAs.
+# Renovate proposes updates to both.
+env:
+  SEMGREP_IMAGE: semgrep/semgrep:1.184.0@sha256:cc1b68266f267878b39739373ea9985b9a78e5d64497dd875c8de100b22695ed
+  TRIVY_IMAGE: aquasec/trivy:0.76.2@sha256:8f6bb947dbc528902e11f2f5be52f7b519f6a39d5d148f41166f2040499768fb
+  OSV_IMAGE: ghcr.io/google/osv-scanner:v2.7.1@sha256:a70ffffc2bfd33482953e5d6b64c6fcdb30239717a07b0f0d3ab2859ce3e4cde
+  ZIZMOR_IMAGE: ghcr.io/zizmorcore/zizmor:1.32.0@sha256:3014cc8f68f663935f69b3c3e0e41f5ce102b268d97db13db0f62208747f860d
+
+jobs:
+  semgrep:
+    name: Static analysis (Semgrep)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Fails on ERROR-severity findings (Semgrep's equivalent of high).
+      - name: Scan
+        run: >-
+          docker run --rm -v "$PWD:/src" -w /src "$SEMGREP_IMAGE"
+          semgrep scan --metrics=off --error --severity ERROR
+          --config p/owasp-top-ten --config p/typescript --config p/javascript
+          --config p/react --config p/nodejsscan --config p/secrets
+          --sarif-output=semgrep.sarif
+      - name: Upload results to code scanning
+        if: always() && hashFiles('semgrep.sarif') != ''
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep
+
+  codeql:
+    name: Static analysis (CodeQL)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          languages: javascript-typescript
+          build-mode: none
+          queries: security-extended
+      # Results go to code scanning. A high finding blocks merging once the
+      # "code scanning results" rule is on in the protect-main ruleset.
+      - uses: github/codeql-action/analyze@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          category: codeql
+
+  dependencies:
+    name: Dependency vulnerabilities
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@9bbca1e9dc2902adb87e8780fe5c98796985a62d # v6.1.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      # The gate: fails on any high or critical advisory, development tools included,
+      # since they run in CI with the repository checked out.
+      - name: pnpm audit (high and above)
+        run: pnpm audit --audit-level high
+      # A second database (OSV). Its findings of every severity go to code scanning;
+      # exit code 1 only means "something was found", so it does not fail the job.
+      - name: OSV-Scanner
+        run: |
+          set +e
+          docker run --rm -v "$PWD:/src" -w /src "$OSV_IMAGE" \
+            scan source --lockfile pnpm-lock.yaml --format sarif --output osv.sarif
+          code=$?
+          if [ "$code" -gt 1 ]; then exit "$code"; fi
+      - name: Upload results to code scanning
+        if: always() && hashFiles('osv.sarif') != ''
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: osv.sarif
+          category: osv-scanner
+
+  configuration:
+    name: Configuration (Trivy, zizmor)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Dockerfiles, Compose and other configuration: fails on high or critical.
+      - name: Trivy config scan
+        run: >-
+          docker run --rm -v "$PWD:/src:ro" "$TRIVY_IMAGE"
+          config --exit-code 1 --severity HIGH,CRITICAL /src
+      # GitHub Actions workflows: fails on medium and above (token leaks, injection,
+      # untrusted code running with secrets).
+      - name: zizmor
+        run: >-
+          docker run --rm -v "$PWD/.github:/src/.github:ro" "$ZIZMOR_IMAGE"
+          --offline --min-severity medium /src/.github/workflows
+
+  images:
+    name: Container images (Trivy)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The images in docker-compose.yml run only on developers' computers and in CI,
+      # never in staging or production, and are maintained upstream. Their findings are
+      # reported (in the job summary) but do not fail the build; docs/security/scans.md
+      # explains why. Akoso's own images (Part B) fail on high or critical.
+      - name: Scan Compose images
+        run: |
+          for image in $(grep -oE '^\s+image: \S+' docker-compose.yml | awk '{print $2}'); do
+            {
+              echo "### $image"
+              echo '```'
+              docker run --rm "$TRIVY_IMAGE" image --quiet --ignore-unfixed \
+                --severity HIGH,CRITICAL --format table "$image"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          done
+
+  sbom:
+    name: Software bill of materials
+    # One per merge to main; release SBOMs follow once releases exist (Part B).
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: anchore/sbom-action@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
+        with:
+          path: .
+          format: cyclonedx-json
+          artifact-name: akoso-sbom.cdx.json
+          upload-release-assets: false
+
+  renovate:
+    name: Renovate configuration
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      # An exact Renovate version, run once without installing it into the project.
+      - run: npx --yes --package renovate@44.192.2 -- renovate-config-validator --strict

@@ -1,0 +1,5 @@
+# Akoso vulnerability disclosure (RFC 9116). See SECURITY.md in the repository.
+Contact: mailto:security@akoso.ng
+Expires: 2027-11-12T00:00:00.000Z
+Preferred-Languages: en
+Policy: https://github.com/ShedrackAudu/akoso/blob/main/SECURITY.md

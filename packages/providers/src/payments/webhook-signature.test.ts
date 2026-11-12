@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest"
 
 import { checkPaystackSignature, signLikePaystack } from "./webhook-signature"
 
+// A made-up signing secret for the test only; it signs nothing real (docs/security/scans.md).
+// nosemgrep: ajinabraham.njsscan.generic.hardcoded_secrets.node_secret
 const SECRET = "whsec_test_only_not_a_real_secret"
 const NOW = 1_794_400_000
 const body = new TextEncoder().encode(

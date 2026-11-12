@@ -127,7 +127,7 @@ states, status and small sizes.
 
 ```
 pnpm install                 install (pnpm via corepack; Node 24)
-docker compose up -d         Postgres (5433), PgBouncer (6432), Gotenberg, MinIO
+docker compose up -d         Postgres (5433), PgBouncer (6432), Gotenberg
 pnpm dev                     web app on http://localhost:3000
 pnpm dev:admin               platform admin on http://localhost:3001
 pnpm check                   everything CI runs except the build and database tests

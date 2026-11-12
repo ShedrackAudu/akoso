@@ -1,7 +1,7 @@
 # Security Documents
 
-Kept up to date as the platform is built (brief section 28). **Only this index exists
-so far.**
+Kept up to date as the platform is built (brief section 28). `scans.md` exists; the rest is
+written as the platform is built.
 
 | Document                  | What it holds                                                                                                                                                                                                                                                                      | Stage                                         |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
@@ -20,6 +20,10 @@ so far.**
   with read-only repository permissions.
 - Only three packages may run install scripts (`pnpm-workspace.yaml`).
 - Environment validation never prints a variable's value.
+- Security scans on every pull request, every push to `main` and weekly: Semgrep,
+  CodeQL, `pnpm audit` and OSV-Scanner, Trivy (configuration and images) and zizmor,
+  with an SBOM on each merge (`scans.md`).
+- Renovate configuration, `SECURITY.md` and `/.well-known/security.txt`.
 
 Everything else in section 28 is still to be built. Akoso is designed to be
 tamper-resistant and tamper-evident; it is never described as tamper-proof.
