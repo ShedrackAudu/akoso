@@ -159,6 +159,7 @@ invent a new module, package or top-level folder: propose it in `docs/decisions.
 | `pnpm lint`                                      | ESLint, zero warnings allowed                                                                                                      |
 | `pnpm test`                                      | Vitest                                                                                                                             |
 | `pnpm db:migrate`                                | Apply migrations as the migration role (straight to Postgres, port 5433)                                                           |
+| `pnpm db:seed`                                   | Fake schools for local work and tests (`greenfield.akoso.localhost:3000` shows Greenfield's public page); never in production      |
 | `pnpm db:generate`                               | Write a migration from changed `packages/db/src/schema/` files; RLS, grants and functions go in a hand-written migration beside it |
 | `pnpm api:openapi`                               | Rewrite `packages/api-client/openapi.json` after changing a contract; CI fails if it is stale                                      |
 | `pnpm test:db`                                   | Database and tenant-isolation tests; needs `docker compose up -d` first, and applies migrations itself                             |
@@ -219,6 +220,10 @@ word seems to mean something else, or two words seem to mean the same thing, sto
 - All queries go through module services using `withTenant()`. No raw database calls
   from UI code or route handlers.
 - Paginate every list endpoint. Avoid N+1 queries. Indexes led by `tenant_id`.
+- A new tenant table needs, in the same pull request: forced RLS with a `USING` and
+  `WITH CHECK` policy on `tenant_id`, a foreign key to `platform.tenants`, and a row
+  fixture in `packages/db/src/isolation/fixtures.ts`. The isolation suite enforces all
+  of it.
 - Store moments as `timestamptz` in UTC and date-only values as dates. Compute every
   "today", deadline and report period in the school's time zone.
 - Migrations are backward compatible: expand, migrate, contract.

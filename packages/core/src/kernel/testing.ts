@@ -25,9 +25,21 @@ export function testContext(
   }
 ): RequestContext {
   const { userId = "user_test", permissions = [], ...rest } = overrides
+  const tenantId = rest.tenantId ?? null
   return {
     requestId: "req_test",
-    tenantId: null,
+    tenantId,
+    // An active test school matching tenantId, unless the test gives its own.
+    school:
+      tenantId === null
+        ? null
+        : {
+            id: tenantId,
+            slug: "test-school",
+            name: "Test School",
+            status: "active",
+            timeZone: "Africa/Lagos",
+          },
     now: () => new Date("2026-11-12T09:00:00Z"),
     log: createLogger({}, () => undefined),
     ...rest,

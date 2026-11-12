@@ -68,3 +68,4 @@ Testable statements, including the brief's own acceptance lines for this feature
 | [Spike 04: Paystack in test mode](stage-1-spike-04-paystack.md)                   | Partly built; blocked on the Paystack account tier |
 | [CI/CD and environments](stage-1-ci-cd-and-environments.md)                       | Part A built; Part B on Render, delayed (D-19)     |
 | [Service layer and `/api/v1` conventions](stage-1-api-and-service-conventions.md) | Built                                              |
+| [Tenancy](stage-1-tenancy.md)                                                     | Built; memberships come with sign-in               |

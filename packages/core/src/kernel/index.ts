@@ -22,11 +22,14 @@ export {
   NotFoundError,
   PayloadTooLargeError,
   RateLimitedError,
+  SchoolReadOnlyError,
+  SchoolUnavailableError,
   UnauthenticatedError,
   UnsupportedMediaTypeError,
   ValidationError,
 } from "./errors"
 export { getHealth } from "./health"
+export { assertSchoolAllows } from "./school-status"
 export {
   handleRequest,
   type HttpDeps,

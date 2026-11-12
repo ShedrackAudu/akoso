@@ -36,6 +36,7 @@ import {
 } from "./idempotency"
 import type { Logger } from "./logger"
 import { toProblem } from "./problem"
+import { assertSchoolAllows } from "./school-status"
 import { consumeRateLimit } from "./rate-limit"
 
 /** What a route needs from the app around it. Injected, so tests can supply fakes. */
@@ -142,6 +143,7 @@ export async function handleRequest<
     let ctx: RequestContext | PublicContext = base
     let userId: string | null = null
     let tenantId: string | null = null
+    const write = isWrite(contract.method)
     if (contract.public !== true) {
       const resolved = await deps.resolveContext(request, base)
       if (resolved === null) throw new UnauthenticatedError()
@@ -149,9 +151,9 @@ export async function handleRequest<
       userId = resolved.actor.kind === "user" ? resolved.actor.userId : null
       log = log.child({ tenantId, userId })
       ctx = { ...resolved, log }
+      assertSchoolAllows(resolved.school, write)
     }
 
-    const write = isWrite(contract.method)
     const origin = request.headers.get("origin")
     if (
       write &&

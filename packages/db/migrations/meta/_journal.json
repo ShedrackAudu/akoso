@@ -15,6 +15,20 @@
       "when": 1794474268758,
       "tag": "0001_kernel_security",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794477374031,
+      "tag": "0002_tenancy_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794477383271,
+      "tag": "0003_tenancy_security",
+      "breakpoints": true
     }
   ]
 }
