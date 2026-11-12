@@ -12,6 +12,10 @@ const envSchema = z.object({
       /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/,
       "must be a bare hostname such as akoso.ng, with no scheme, port or path"
     ),
+  /** Signs sessions and keys the hashes of sign-in codes. At least 32 random characters; never shared between environments. */
+  BETTER_AUTH_SECRET: z
+    .string()
+    .min(32, "must be at least 32 characters of random text"),
   DATABASE_URL: z
     .string()
     .regex(/^postgres(ql)?:\/\/.+/, "must be a postgres:// connection string"),

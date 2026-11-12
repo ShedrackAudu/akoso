@@ -15,6 +15,15 @@ export const ISOLATION_FIXTURES: Record<string, IsolationFixture> = {
     insert into platform.idempotency_keys (tenant_id, user_id, key, request_hash, state)
     values (${tenantId}, 'isolation', ${marker}, 'hash', 'done')`,
 
+  "platform.memberships": (tenantId, marker) => sql`
+    with person as (
+      insert into platform.users (id, name, email)
+      values (gen_random_uuid(), 'Isolation Test Person', ${`${marker}@isolation.invalid`})
+      returning id
+    )
+    insert into platform.memberships (tenant_id, user_id, roles)
+    select ${tenantId}, id, array['teacher'] from person`,
+
   "platform.tenant_domains": (tenantId, marker) => sql`
     insert into platform.tenant_domains (tenant_id, hostname, status)
     values (${tenantId}, ${`${marker}.isolation.example`}, 'pending_dns')`,

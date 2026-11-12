@@ -12,6 +12,8 @@ const TITLES: Record<ErrorCode, string> = {
   unauthenticated: "Please sign in to continue.",
   forbidden:
     "You don't have access to this. Ask your school administrator if you need it.",
+  mfa_required:
+    "Your role needs a second sign-in step. Please set it up to continue.",
   not_found: "We couldn't find that. It may have been moved or removed.",
   conflict:
     "This was changed by someone else a moment ago. Please refresh and try again.",

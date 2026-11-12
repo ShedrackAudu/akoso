@@ -98,6 +98,7 @@ export const ERROR_CODES = [
   "validation",
   "unauthenticated",
   "forbidden",
+  "mfa_required",
   "not_found",
   "conflict",
   "idempotency_mismatch",

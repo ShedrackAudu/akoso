@@ -4,10 +4,10 @@ Sign-in (phone OTP, email and password, MFA), users, memberships, roles, custom 
 
 - **Product name:** Platform
 - **Brief:** sections 6, 26.2 (`docs/brief/`)
-- **Main entities:** users, memberships, sessions, roles, role_permissions, devices, contact_change_requests
-- **Public interface:** `index.ts` (nothing exported yet)
+- **Main entities:** users, user_credentials, sessions, verifications, two_factors, memberships (tenant table), security_events (built); custom roles, devices, contact_change_requests (later)
+- **Public interface:** `index.ts`: `getAuth()` (Better Auth), `resolveSignedIn()` (the signed-in context for every request), `accessFor()`, `getMe`, `listMySchools`, `getSecurityStatus`, `normalisePhone`
 - **Jobs and events:** none yet
-- **Specs:** none yet (`docs/specs/`)
+- **Specs:** `docs/specs/stage-1-sign-in.md` (part A, built); part B next
 
 ## Where this module lives
 
@@ -17,4 +17,4 @@ Sign-in (phone OTP, email and password, MFA), users, memberships, roles, custom 
 | Tables and RLS | `packages/db/src/schema/identity.ts` |
 | Zod schemas    | `packages/schemas/src/identity.ts`   |
 
-**Status:** placeholder. Nothing is implemented yet.
+**Status:** part A built: parent code sign-in, staff password and authenticator sign-in, sessions, memberships, the school picker and the permission check.

@@ -32,7 +32,10 @@ In this order (brief section 32, Stage 1):
    (schools and groups, the request proxy, school pages, the catalog-driven isolation
    suite). Memberships and the school picker come with sign-in.
 5. Auth with Better Auth: phone OTP, password and MFA; roles, custom roles and Akoso
-   team roles; the permission check and its generated tests.
+   team roles; the permission check and its generated tests. **Part A built** (parent
+   code sign-in, staff password and MFA, sessions, memberships, school picker, the
+   permission check). Part B next: custom roles, the security log screen, account
+   deletion, phone-number change, Akoso team sign-in.
 6. Time-zone handling, the audit log, feature flags.
 
 Each begins with a spec in `docs/specs/`. Tenancy, auth and audit specs need the

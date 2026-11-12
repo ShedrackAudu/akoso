@@ -33,9 +33,8 @@ export interface RateLimitSubject {
   ip?: string | null
 }
 
-// Buckets are hashes, so the counts table holds no user IDs or IP addresses.
-const bucketFor = (cls: RateLimitClass, scope: Scope, id: string): string =>
-  createHash("sha256").update(`${cls}:${scope}:${id}`).digest("hex")
+// Buckets are hashes, so the counts table holds no user IDs, phone numbers or IP
+// addresses.
 
 /**
  * Counts one request and throws when any limit for it is exceeded.
@@ -48,7 +47,7 @@ export async function consumeRateLimit(
   subject: RateLimitSubject,
   now: () => Date
 ): Promise<void> {
-  const checks: { bucket: string; limit: number }[] = []
+  const checks: LimitCheck[] = []
   for (const [scope, limit] of Object.entries(RATE_LIMITS[cls]) as [
     Scope,
     number,
@@ -59,24 +58,64 @@ export async function consumeRateLimit(
         : scope === "tenant"
           ? subject.tenantId
           : subject.ip
-    if (id) checks.push({ bucket: bucketFor(cls, scope, id), limit })
+    if (id) {
+      checks.push({
+        key: `${cls}:${scope}:${id}`,
+        limit,
+        windowSeconds: WINDOW_SECONDS,
+      })
+    }
   }
-  if (checks.length === 0) return
+  await consumeLimits(db, checks, now)
+}
 
+/** One limit to count against: at most `limit` hits per `windowSeconds`. */
+export interface LimitCheck {
+  /** What is being counted, e.g. "sign-in-code:phone:+234...". Hashed before storing. */
+  key: string
+  limit: number
+  /** 1 to 86,400 seconds. */
+  windowSeconds: number
+}
+
+/**
+ * Counts one hit against each limit and throws when any is exceeded. For limits that
+ * are not a request class, such as sign-in codes per phone number per day.
+ *
+ * @throws RateLimitedError with the seconds left in the longest exceeded window.
+ */
+export async function consumeLimits(
+  db: Database,
+  checks: readonly LimitCheck[],
+  now: () => Date
+): Promise<void> {
+  if (checks.length === 0) return
+  // The window is part of the bucket, so a 15-minute and a daily count of the same
+  // thing never share (and so never clear) each other's rows.
+  const buckets = checks.map((check) =>
+    createHash("sha256")
+      .update(`${check.key}:${String(check.windowSeconds)}`)
+      .digest("hex")
+  )
   const counts = sql.join(
     checks.map(
       (check, index) =>
-        sql`platform.hit_rate_limit(${check.bucket}, ${WINDOW_SECONDS}) as ${sql.raw(`c${String(index)}`)}`
+        sql`platform.hit_rate_limit(${buckets[index]}, ${check.windowSeconds}) as ${sql.raw(`c${String(index)}`)}`
     ),
     sql`, `
   )
   const result = await db.execute(sql`select ${counts}`)
   const row = result.rows[0] ?? {}
-  const exceeded = checks.some(
+  const exceeded = checks.filter(
     (check, index) => Number(row[`c${String(index)}`]) > check.limit
   )
-  if (exceeded) {
+  if (exceeded.length > 0) {
     const seconds = Math.floor(now().getTime() / 1000)
-    throw new RateLimitedError(WINDOW_SECONDS - (seconds % WINDOW_SECONDS))
+    const wait = Math.max(
+      ...exceeded.map(
+        (check) => check.windowSeconds - (seconds % check.windowSeconds)
+      )
+    )
+    throw new RateLimitedError(wait)
   }
 }

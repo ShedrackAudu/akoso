@@ -18,6 +18,20 @@ founder's decision (section 3.3). Nothing below is enforced by code yet.
 - Checked by `authorize(ctx, key)` in every use case, and again by the route handler from
   the contract's `permission`. Until roles exist (Stage 1, item 5) every check denies.
 
+## Actions in use (Stage 1, item 5)
+
+| Action key                     | Roles             |
+| ------------------------------ | ----------------- |
+| `identity.profile.read`        | Every school role |
+| `identity.membership.list_own` | Every school role |
+
+The code table is `packages/schemas/src/permissions.ts`; a test checks it grants only
+known actions.
+
+**A second sign-in step is required** for `proprietor`, `school_admin` and `bursar`
+(brief section 6). Until it is set up, every request except setting it up answers `403`
+(`mfa_required`). People with a second step cannot sign in by SMS code.
+
 ## School roles (section 6)
 
 | Role                     | Key                 | Scope                                                                    |

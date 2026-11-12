@@ -40,6 +40,7 @@ jobs:
           NODE_ENV: production
           APP_BASE_DOMAIN: akoso.example
           DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+          BETTER_AUTH_SECRET: ci-build-only-not-a-real-secret-0000000
 
   database:
     name: Database tests (tenant isolation)

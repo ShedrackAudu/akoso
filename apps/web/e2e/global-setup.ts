@@ -59,6 +59,9 @@ export default function globalSetup(): void {
   // Separate processes: the web app's code never imports the database package.
   execFileSync("pnpm", ["-s", "db:migrate"], { stdio: "inherit", shell: true })
   execFileSync("pnpm", ["-s", "db:seed"], { stdio: "inherit", shell: true })
+  // Sign-in tests send codes and passwords repeatedly; start every run with fresh
+  // limit counters so a rerun within 15 minutes is not refused.
+  runSqlAsOwner("delete from platform.rate_limit_windows;")
   runSqlAsOwner(
     readFileSync(
       join(process.cwd(), "packages/db/src/spike/offline-schema.sql"),

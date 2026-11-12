@@ -68,6 +68,19 @@ export class ForbiddenError extends AppError {
 }
 
 /**
+ * Signed in, but the person's roles require a second step they have not set up.
+ * Everything except setting it up is refused until they do (brief section 6).
+ */
+export class MfaRequiredError extends AppError {
+  readonly code = "mfa_required"
+  readonly status = 403
+  constructor() {
+    super("MFA setup required")
+    this.name = "MfaRequiredError"
+  }
+}
+
+/**
  * Missing, or belongs to another school or family. Both get the same answer, so
  * nobody can learn what exists elsewhere by trying IDs.
  */

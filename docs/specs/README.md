@@ -69,3 +69,4 @@ Testable statements, including the brief's own acceptance lines for this feature
 | [CI/CD and environments](stage-1-ci-cd-and-environments.md)                       | Part A built; Part B on Render, delayed (D-19)     |
 | [Service layer and `/api/v1` conventions](stage-1-api-and-service-conventions.md) | Built                                              |
 | [Tenancy](stage-1-tenancy.md)                                                     | Built; memberships come with sign-in               |
+| [Sign-in, part A](stage-1-sign-in.md)                                             | Built; part B next                                 |

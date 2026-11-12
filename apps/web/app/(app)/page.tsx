@@ -1,7 +1,9 @@
 import Image from "next/image"
+import Link from "next/link"
 import type { JSX } from "react"
 
 import { BRAND_LINES, BRAND_NAME } from "@akoso/core/config"
+import { buttonVariants } from "@akoso/ui/components/button"
 
 const MARK_SIZE = 96
 
@@ -33,6 +35,16 @@ export default function Page(): JSX.Element {
         />
         <h1 className="font-heading text-3xl font-bold">{BRAND_NAME}</h1>
         <p className="text-base text-muted-foreground">{BRAND_LINES.lead}</p>
+        <Link
+          href="/sign-in"
+          className={buttonVariants({
+            size: "lg",
+            // 44 px: the minimum tap target (brief section 4).
+            className: "h-11 px-6 text-base",
+          })}
+        >
+          Sign in
+        </Link>
       </div>
     </main>
   )
