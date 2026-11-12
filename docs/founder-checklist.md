@@ -52,7 +52,8 @@ Items are grouped by the stage that needs them, not by date. "Blocks" says what 
   - [x] add the Security jobs to the required checks in `protect-main` (done 12/11/2026)
   - [ ] add the "code scanning results" rule to `protect-main`, so a high CodeQL or Semgrep finding blocks merging
   - [ ] install the **Renovate** GitHub App on the `akoso` repository only
-  - [ ] set up a commit-signing key, then turn on "require signed commits"
+  - [x] set up a commit-signing key (done 12/11/2026: an SSH signing key, unlocked through the Windows SSH agent)
+  - [ ] turn on "require signed commits" in `protect-main`
 - [ ] **Register `akoso.ng`** and put its DNS on Cloudflare. Then forward `security@akoso.ng` to your inbox: `SECURITY.md` already gives that address. *Blocks: school addresses on staging, and Cloudflare in front of it.*
 - [ ] Create accounts the build needs and own them yourself: hosting, Cloudflare, Sentry, PostHog, GitHub, Resend or SES, the AI provider. Give agents limited keys, never your own logins.
 
