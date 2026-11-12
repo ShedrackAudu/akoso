@@ -16,7 +16,7 @@ const handle = createDatabase(APP_URL, 2)
 afterAll(() => handle.close())
 const db = handle.db
 
-const SECRET = "test-only-not-a-real-secret-00000000000"
+const HASH_KEY = "test-only-hash-key-000000000000000000000"
 const TEACHER = "7a000000-0000-4000-8000-000000000003"
 const PROPRIETOR = "7a000000-0000-4000-8000-000000000001"
 const TWO_SCHOOL_PARENT = "7a000000-0000-4000-8000-000000000012"
@@ -25,7 +25,7 @@ async function storeCode(identifier: string, code: string, minutes = 5) {
   await db.execute(sql`
     insert into platform.verifications (id, identifier, value, expires_at)
     values (${randomUUID()}, ${identifier},
-            ${protectStoredCode(SECRET, identifier, `${code}:0`)},
+            ${protectStoredCode(HASH_KEY, identifier, `${code}:0`)},
             now() + make_interval(mins => ${minutes}))`)
 }
 
@@ -39,9 +39,9 @@ describe("stored sign-in codes", () => {
       sql`select value from platform.verifications where identifier = ${identifier}`
     )
     expect(String(stored.rows[0]?.value)).not.toContain("482913")
-    expect(await checkStoredCode(db, SECRET, identifier, "482913", now())).toBe(
-      true
-    )
+    expect(
+      await checkStoredCode(db, HASH_KEY, identifier, "482913", now())
+    ).toBe(true)
   })
 
   it("counts wrong attempts and removes the code on the third", async () => {
@@ -49,21 +49,21 @@ describe("stored sign-in codes", () => {
     await storeCode(identifier, "111222")
     for (let attempt = 0; attempt < 3; attempt++) {
       expect(
-        await checkStoredCode(db, SECRET, identifier, "999999", now())
+        await checkStoredCode(db, HASH_KEY, identifier, "999999", now())
       ).toBe(false)
     }
     // Even the right code is now refused: it is gone.
-    expect(await checkStoredCode(db, SECRET, identifier, "111222", now())).toBe(
-      false
-    )
+    expect(
+      await checkStoredCode(db, HASH_KEY, identifier, "111222", now())
+    ).toBe(false)
   })
 
   it("refuses an expired code", async () => {
     const identifier = `+23490${String(Date.now()).slice(-8)}`
     await storeCode(identifier, "333444", -1)
-    expect(await checkStoredCode(db, SECRET, identifier, "333444", now())).toBe(
-      false
-    )
+    expect(
+      await checkStoredCode(db, HASH_KEY, identifier, "333444", now())
+    ).toBe(false)
   })
 })
 

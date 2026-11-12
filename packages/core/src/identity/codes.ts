@@ -10,21 +10,21 @@ import { sql, type Database } from "@akoso/db"
 const PHONE_CODE_IDENTIFIER = /^\+[1-9][0-9]{6,14}(-request-password-reset)?$/
 const PLAIN_CODE_VALUE = /^(\d{4,8}):(\d+)$/
 
-const keyedHash = (secret: string, identifier: string, code: string): string =>
-  createHmac("sha256", secret).update(`${identifier}\n${code}`).digest("hex")
+const keyedHash = (hashKey: string, identifier: string, code: string): string =>
+  createHmac("sha256", hashKey).update(`${identifier}\n${code}`).digest("hex")
 
 /**
  * The value to store for a new verification row: the code replaced by its keyed hash.
  * Rows that are not phone codes pass through unchanged.
  */
 export function protectStoredCode(
-  secret: string,
+  hashKey: string,
   identifier: string,
   value: string
 ): string {
   const match = PLAIN_CODE_VALUE.exec(value)
   if (!PHONE_CODE_IDENTIFIER.test(identifier) || match === null) return value
-  return `${keyedHash(secret, identifier, match[1] ?? "")}:${match[2] ?? "0"}`
+  return `${keyedHash(hashKey, identifier, match[1] ?? "")}:${match[2] ?? "0"}`
 }
 
 /**
@@ -34,7 +34,7 @@ export function protectStoredCode(
  */
 export async function checkStoredCode(
   db: Database,
-  secret: string,
+  hashKey: string,
   identifier: string,
   code: string,
   now: Date,
@@ -54,7 +54,7 @@ export async function checkStoredCode(
     await db.execute(sql`delete from platform.verifications where id = ${id}`)
     return false
   }
-  const typed = Buffer.from(keyedHash(secret, identifier, code.trim()), "hex")
+  const typed = Buffer.from(keyedHash(hashKey, identifier, code.trim()), "hex")
   const stored = Buffer.from(storedHash, "hex")
   if (stored.length === typed.length && timingSafeEqual(stored, typed)) {
     return true

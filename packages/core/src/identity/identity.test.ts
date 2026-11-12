@@ -34,17 +34,17 @@ describe("normalisePhone", () => {
 })
 
 describe("protectStoredCode", () => {
-  const secret = "test-only-not-a-real-secret-00000000000"
+  const hashKey = "test-only-hash-key-000000000000000000000"
 
   it("replaces a phone code with a keyed hash, keeping the attempt count", () => {
-    const stored = protectStoredCode(secret, "+2348031234567", "123456:0")
+    const stored = protectStoredCode(hashKey, "+2348031234567", "123456:0")
     expect(stored).not.toContain("123456")
     expect(stored).toMatch(/^[0-9a-f]{64}:0$/)
   })
 
   it("covers password-reset codes too", () => {
     const stored = protectStoredCode(
-      secret,
+      hashKey,
       "+2348031234567-request-password-reset",
       "654321:0"
     )
@@ -52,15 +52,15 @@ describe("protectStoredCode", () => {
   })
 
   it("gives different hashes for the same code on different numbers", () => {
-    expect(protectStoredCode(secret, "+2348031234567", "123456:0")).not.toBe(
-      protectStoredCode(secret, "+2348031234568", "123456:0")
+    expect(protectStoredCode(hashKey, "+2348031234567", "123456:0")).not.toBe(
+      protectStoredCode(hashKey, "+2348031234568", "123456:0")
     )
   })
 
   it("leaves other verification rows alone", () => {
-    expect(protectStoredCode(secret, "reset-password:abc", "token-value")).toBe(
-      "token-value"
-    )
+    expect(
+      protectStoredCode(hashKey, "reset-password:abc", "token-value")
+    ).toBe("token-value")
   })
 })
 
