@@ -26,6 +26,12 @@ REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 GRANT USAGE, CREATE ON SCHEMA public TO akoso_migrator;
 GRANT USAGE ON SCHEMA public TO akoso_app, akoso_platform_reader;
 
+-- The migrator may create schemas (new modules may need one, and the migration tool
+-- checks for its own schema on every run). It still cannot bypass row-level security.
+DO $$ BEGIN
+  EXECUTE format('GRANT CREATE ON DATABASE %I TO akoso_migrator', current_database());
+END $$;
+
 -- Platform-wide tables live in their own schema, apart from tenant tables.
 CREATE SCHEMA platform AUTHORIZATION akoso_migrator;
 GRANT USAGE ON SCHEMA platform TO akoso_app, akoso_platform_reader;

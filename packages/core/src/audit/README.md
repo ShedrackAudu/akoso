@@ -4,7 +4,7 @@ The append-only, hash-chained audit log, security events and the approval reques
 
 - **Product name:** Platform
 - **Brief:** sections 27, 28.3 (`docs/brief/`)
-- **Main entities:** audit_events, approval_requests, domain_events (outbox), idempotency_keys
+- **Main entities:** audit_events, approval_requests, domain_events (outbox). (Idempotency keys live in `kernel`.)
 - **Public interface:** `index.ts` (nothing exported yet)
 - **Jobs and events:** none yet
 - **Specs:** none yet (`docs/specs/`)

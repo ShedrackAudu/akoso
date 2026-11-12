@@ -68,32 +68,51 @@ Dependencies point one way: **apps → core → domain, db, providers → schema
 
 ## Standard patterns
 
-These show the intended shape. Each is confirmed, and this file updated, by the first
-slice that uses it.
+Confirmed by Stage 1 item 3 (`docs/specs/stage-1-api-and-service-conventions.md`). The
+shared plumbing lives in `packages/core/src/kernel/`.
 
-**Service (use case)** in `packages/core/src/<module>/`: takes an authenticated context,
-checks permission, then works inside `withTenant()`.
+**Service (use case)** in `packages/core/src/<module>/`: takes the context, checks
+permission, then works inside `withTenant()`. Never builds its own context.
 
 ```ts
 export async function getFamilyBalance(
-  ctx: AuthContext,
+  ctx: RequestContext,
   input: GetFamilyBalanceInput
 ): Promise<FamilyBalance> {
-  authorize(ctx, "fees.statement.read", { familyId: input.familyId })
-  return withTenant(ctx.db, ctx.tenantId, (tx) =>
+  authorize(ctx, "fees.statement.read")
+  return withTenant(ctx.db, requireTenant(ctx), (tx) =>
     readFamilyBalance(tx, input.familyId)
   )
 }
 ```
 
-**API handler and server action:** a thin wrapper. Parse with the Zod schema, call the
-service, return the output schema's shape.
+**Contract** in `packages/schemas/src/contracts/<module>.ts`, listed in
+`contracts/index.ts`: method, path, input, output, permission (or `public: true`) and
+rate-limit class. It drives the route, the OpenAPI document and the typed client.
+Inputs are strict (unknown fields rejected); outputs drop undeclared fields.
 
 ```ts
-export const POST = apiHandler(submitScoreSheetInput, (ctx, input) =>
-  submitScoreSheet(ctx, input)
-)
+export const getFamilyBalance = defineContract({
+  method: "GET",
+  path: "/api/v1/families/{familyId}/balance",
+  summary: "A family's balance across its children",
+  permission: "fees.statement.read",
+  rateLimit: "standard",
+  input: z.object({ familyId: z.uuid() }),
+  output: familyBalance,
+})
 ```
+
+**API route and server action:** one line each, in `apps/web`.
+
+```ts
+export const GET = apiRoute(contracts.getFamilyBalance, getFamilyBalance)
+const submit = serverAction({ input, permission }, submitScoreSheet)
+```
+
+The pipeline (`handleRequest`) does sign-in and school, origin, rate limit, input,
+permission, idempotency (an `Idempotency-Key` header on every write), the use case,
+the output, errors and one log line. Run `pnpm api:openapi` after changing a contract.
 
 **Pure domain function** in `packages/domain`: no I/O; expected failures return a result.
 
@@ -103,6 +122,9 @@ export function allocatePayment(
   lines: OpenLine[]
 ): Result<Allocation, AllocationError>
 ```
+
+**Lists:** cursor pagination, `{ data, nextCursor }`, `limit` at most 100. Spread
+`pageQuery` into the input; build the page with `toPage()`.
 
 **Form:** React Hook Form with the same Zod schema the server uses.
 
@@ -115,7 +137,12 @@ defineJob("receipt.send", receiptSendPayload, async (ctx, payload) =>
 ```
 
 **Errors:** throw `ValidationError`, `NotFoundError`, `ForbiddenError` or
-`ConflictError`; one mapper turns them into API responses and friendly messages.
+`ConflictError` (from `@akoso/core/kernel`). `toProblem()` turns them into Problem
+Details (RFC 9457) with a calm title. Anything else is a 500 that reveals nothing.
+A record in another school is `NotFoundError`, never `ForbiddenError`.
+
+**Logs:** `ctx.log`, one JSON line, fixed fields only. Never log bodies, tokens, phone
+numbers or names.
 
 **Icons:** Phosphor only, through `Icon` from `@akoso/ui/akoso/icon`
 (`<Icon icon={HouseIcon} filled={isActive} />`). Outline by default, filled for active
@@ -131,7 +158,10 @@ docker compose up -d         Postgres (5433), PgBouncer (6432), Gotenberg
 pnpm dev                     web app on http://localhost:3000
 pnpm dev:admin               platform admin on http://localhost:3001
 pnpm check                   everything CI runs except the build and database tests
-pnpm test:db                 database and tenant-isolation tests (needs Docker)
+pnpm db:migrate              apply migrations as the migration role (needs Docker)
+pnpm db:generate             write a migration from changed schema files
+pnpm api:openapi             rewrite packages/api-client/openapi.json
+pnpm test:db                 database and tenant-isolation tests (needs Docker; migrates first)
 pnpm test:e2e                browser tests with Playwright (needs Docker)
 pnpm --filter @akoso/worker build   bundle the worker with esbuild
 pnpm typecheck | lint | test | boundaries | unused | format:check

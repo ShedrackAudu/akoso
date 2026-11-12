@@ -1,5 +1,5 @@
 {
   "extends": "@akoso/typescript-config/base.json",
-  "include": ["src"],
+  "include": ["src", "drizzle.config.ts"],
   "exclude": ["node_modules"]
 }

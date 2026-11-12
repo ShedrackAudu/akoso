@@ -25,8 +25,9 @@ In this order (brief section 32, Stage 1):
 2. CI/CD and environments: the remaining security scans (T3; **Part A built**: scans,
    Renovate, `SECURITY.md`, latency measurement), staging deploy (Part B: Render, Frankfurt, D-18; delayed until there is something
    to show, D-19). Spec: `docs/specs/stage-1-ci-cd-and-environments.md`.
-3. Service-layer and `/api/v1` conventions (section 5.1): confirm the patterns in
-   `ARCHITECTURE-ESSENTIALS.md` with the first real use case.
+3. Service-layer and `/api/v1` conventions (section 5.1): **built** (contracts, the
+   request pipeline, errors, idempotency, rate limits, OpenAPI, the typed client and
+   the first migration). Signed-in endpoints confirm the rest with sign-in (item 5).
 4. Tenancy with RLS and the isolation test suite; the single app address.
 5. Auth with Better Auth: phone OTP, password and MFA; roles, custom roles and Akoso
    team roles; the permission check and its generated tests.
