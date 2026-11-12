@@ -191,11 +191,20 @@ One school must never see or change another school's data. This is the top risk.
   role. Further roles for the worker and read-only reporting follow least privilege.
 - Server-side authorisation runs in every server action and route **in addition to**
   RLS. RLS is the last line of defence, not the only one.
-- An automated test creates two tenants and proves, for every table, that tenant A
-  cannot read, insert, update or delete tenant B's rows. It runs on every pull request.
+- **The isolation suite** (`packages/db/src/isolation/`) finds every table with a
+  `tenant_id` from the database catalog. For each, it checks forced RLS, a `USING` +
+  `WITH CHECK` policy, `tenant_id` first in multi-column indexes and a foreign key to
+  `platform.tenants`. It then proves school B cannot read, insert, update, delete or move
+  school A's rows. A table without a row fixture in `isolation/fixtures.ts` fails it.
+  Runs on every pull request.
 - Files follow the same rule: object keys are prefixed with the tenant ID and every
   download goes through an authorised signed URL valid for 15 minutes at most.
-- A **group** sits above schools so one owner can run several branches.
+- A **group** sits above schools so one owner can run several branches. A branch is a
+  school in a group; there is no separate branches table (D-21).
+- Schools (`platform.tenants`) and groups are platform tables the app role cannot read.
+  It reaches them only through `platform.tenant_by_slug/_id/_host()`, which return the
+  public fields. A school's `status` (onboarding, active, suspended, read_only, closed)
+  is applied to every request by the pipeline.
 
 ### Addresses
 
@@ -205,10 +214,13 @@ One school must never see or change another school's data. This is the top risk.
 | `admin.<domain>`                     | The platform admin (`apps/admin`)                                                             | Its own, on this host only |
 | `<slug>.<domain>` or a custom domain | A school's public pages: admissions form, document and receipt verification, a sign-in button | Never                      |
 
-After sign-in the person picks a school; the selected school travels with every request
-and is checked against their memberships. Middleware resolves a school from the host for
-public pages, validates the Host header against known domains, and returns 404 for an
-unknown host, never a default school. The base domain comes from `APP_BASE_DOMAIN`.
+After sign-in the person picks a school, and **the school travels in the address**:
+`app.<domain>/<slug>/...` (D-21), or the `X-Akoso-School` header for the mobile app. It
+is checked against the user's memberships on every request; a non-member gets 404. The
+request proxy (`apps/web/proxy.ts`) classifies the Host header, serves a school's public
+pages on its own address (no cookies, no service worker, no app routes), and returns 404
+for an unknown host, never a default school. The base domain comes from
+`APP_BASE_DOMAIN`.
 
 ## 6. Data model overview (section 27)
 

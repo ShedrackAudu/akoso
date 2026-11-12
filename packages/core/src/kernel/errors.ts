@@ -118,6 +118,26 @@ export class UnsupportedMediaTypeError extends AppError {
   }
 }
 
+/** The school is suspended or closed: nothing may be done for it. */
+export class SchoolUnavailableError extends AppError {
+  readonly code = "school_unavailable"
+  readonly status = 403
+  constructor() {
+    super("School unavailable")
+    this.name = "SchoolUnavailableError"
+  }
+}
+
+/** The school is leaving: it may be read, not changed (brief 26.7). */
+export class SchoolReadOnlyError extends AppError {
+  readonly code = "school_read_only"
+  readonly status = 409
+  constructor() {
+    super("School is read-only")
+    this.name = "SchoolReadOnlyError"
+  }
+}
+
 export class RateLimitedError extends AppError {
   readonly code = "rate_limited"
   readonly status = 429

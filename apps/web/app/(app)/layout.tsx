@@ -1,33 +1,13 @@
 import { SerwistProvider } from "@serwist/turbopack/react"
 import type { Metadata, Viewport } from "next"
-import { Figtree, Geist_Mono, Merriweather } from "next/font/google"
 import type { JSX, ReactNode } from "react"
 
 import { BRAND_LINES, BRAND_NAME } from "@akoso/core/config"
 import "@akoso/ui/globals.css"
 import { cn } from "@akoso/ui/lib/utils"
 
+import { geistMono, figtree, merriweather } from "@/app/fonts"
 import { ThemeProvider } from "@/components/theme-provider"
-
-// Fonts come from the shadcn preset: Figtree for body text, Merriweather for headings.
-// next/font self-hosts them at build time, so no request goes to Google from a parent's phone.
-const figtree = Figtree({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-})
-
-const merriweather = Merriweather({
-  subsets: ["latin"],
-  variable: "--font-heading",
-  display: "swap",
-})
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-})
 
 export const metadata: Metadata = {
   title: { default: BRAND_NAME, template: `%s · ${BRAND_NAME}` },
@@ -46,6 +26,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+// The signed-in app's root layout, on app.{domain} only: it registers the offline
+// service worker. School addresses use app/(school-site)/layout.tsx, which does not.
 export default function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>): JSX.Element {

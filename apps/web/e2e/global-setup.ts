@@ -53,8 +53,12 @@ export function querySqlAsOwner(sqlText: string): string[][] {
     .map((line) => line.split("\t"))
 }
 
-// Spike 02: start every run from an empty offline schema.
+// The current schema and the seeded schools (the address tests use them), then,
+// for spike 02, an empty offline schema.
 export default function globalSetup(): void {
+  // Separate processes: the web app's code never imports the database package.
+  execFileSync("pnpm", ["-s", "db:migrate"], { stdio: "inherit", shell: true })
+  execFileSync("pnpm", ["-s", "db:seed"], { stdio: "inherit", shell: true })
   runSqlAsOwner(
     readFileSync(
       join(process.cwd(), "packages/db/src/spike/offline-schema.sql"),

@@ -1,2 +1,8 @@
 // Public interface of the tenancy module. Other modules import only from here.
-export * from "./service"
+export {
+  createSchoolCache,
+  type SchoolCache,
+  type SchoolCacheOptions,
+} from "./cache"
+export { classifyHost, normaliseHost, type HostKind } from "./host"
+export { findSchoolByHost, findSchoolById, findSchoolBySlug } from "./lookup"

@@ -28,7 +28,9 @@ In this order (brief section 32, Stage 1):
 3. Service-layer and `/api/v1` conventions (section 5.1): **built** (contracts, the
    request pipeline, errors, idempotency, rate limits, OpenAPI, the typed client and
    the first migration). Signed-in endpoints confirm the rest with sign-in (item 5).
-4. Tenancy with RLS and the isolation test suite; the single app address.
+4. Tenancy with RLS and the isolation test suite; the single app address: **built**
+   (schools and groups, the request proxy, school pages, the catalog-driven isolation
+   suite). Memberships and the school picker come with sign-in.
 5. Auth with Better Auth: phone OTP, password and MFA; roles, custom roles and Akoso
    team roles; the permission check and its generated tests.
 6. Time-zone handling, the audit log, feature flags.

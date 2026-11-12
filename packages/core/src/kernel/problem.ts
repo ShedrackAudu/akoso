@@ -20,6 +20,10 @@ const TITLES: Record<ErrorCode, string> = {
   payload_too_large: "This is too large to send in one go.",
   unsupported_media_type:
     "This request is in a form we can't read. Please update the app and try again.",
+  school_unavailable:
+    "This school's account is paused. Please contact the school office.",
+  school_read_only:
+    "This school's account is read-only, so changes can't be saved. Please contact the school office.",
   rate_limited:
     "Too many attempts in a short time. Please wait a minute and try again.",
   internal: "Something went wrong on our side. Please try again in a moment.",

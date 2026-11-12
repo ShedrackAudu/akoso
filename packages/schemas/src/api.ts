@@ -104,6 +104,8 @@ export const ERROR_CODES = [
   "payload_too_large",
   "unsupported_media_type",
   "rate_limited",
+  "school_unavailable",
+  "school_read_only",
   "internal",
 ] as const
 export type ErrorCode = (typeof ERROR_CODES)[number]

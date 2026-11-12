@@ -1,13 +1,13 @@
 # tenancy
 
-Schools (tenants), groups and branches, school addresses and custom domains, per-school feature flags and platform settings.
+Schools (tenants) and groups (a branch is a school in a group), school addresses and custom domains, per-school feature flags and platform settings.
 
 - **Product name:** Platform
 - **Brief:** sections 7, 7.1 (`docs/brief/`)
-- **Main entities:** groups, tenants, branches, tenant_domains, feature_flags, platform_settings
-- **Public interface:** `index.ts` (nothing exported yet)
+- **Main entities:** groups, tenants, tenant_domains (built); feature_flags, platform_settings (item 6)
+- **Public interface:** `index.ts`: host classification, school lookups (by slug, ID or custom host) and a small cache
 - **Jobs and events:** none yet
-- **Specs:** none yet (`docs/specs/`)
+- **Specs:** `docs/specs/stage-1-tenancy.md`
 
 ## Where this module lives
 
@@ -17,4 +17,6 @@ Schools (tenants), groups and branches, school addresses and custom domains, per
 | Tables and RLS | `packages/db/src/schema/tenancy.ts` |
 | Zod schemas    | `packages/schemas/src/tenancy.ts`   |
 
-**Status:** placeholder. Nothing is implemented yet.
+**Status:** schools, groups, the lookups and the address rules are built. Creating and
+changing schools are platform-admin screens (Stage 5); custom-domain verification is its
+own slice.

@@ -33,7 +33,8 @@ Dependencies point one way: **apps → core → domain, db, providers → schema
 
 1. **Tenant safety.** Every database access goes through `withTenant(tx, tenantId)`.
    Never a plain `SET`. Never bypass RLS. Every tenant table has `tenant_id` first in its
-   indexes and RLS enabled and forced.
+   indexes, RLS enabled and forced, a foreign key to `platform.tenants`, and a row
+   fixture in `packages/db/src/isolation/fixtures.ts`, or the isolation suite fails.
 2. **Money is integer kobo.** Never floating point. Payments are never edited or deleted.
 3. **Results come from snapshots.** Published report cards render only from the
    immutable snapshot written at approval.
@@ -159,6 +160,7 @@ pnpm dev                     web app on http://localhost:3000
 pnpm dev:admin               platform admin on http://localhost:3001
 pnpm check                   everything CI runs except the build and database tests
 pnpm db:migrate              apply migrations as the migration role (needs Docker)
+pnpm db:seed                 the fake schools (greenfield.akoso.localhost and others)
 pnpm db:generate             write a migration from changed schema files
 pnpm api:openapi             rewrite packages/api-client/openapi.json
 pnpm test:db                 database and tenant-isolation tests (needs Docker; migrates first)

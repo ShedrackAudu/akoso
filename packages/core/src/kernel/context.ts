@@ -4,6 +4,7 @@
 import { randomBytes } from "node:crypto"
 
 import type { ActionKey } from "@akoso/schemas/api"
+import type { SchoolSummary } from "@akoso/schemas/tenancy"
 
 import type { Database } from "@akoso/db"
 
@@ -36,6 +37,8 @@ export interface RequestContext {
    * `withTenant(ctx.db, ctx.tenantId, ...)`.
    */
   tenantId: string | null
+  /** The same school's public details and status; null exactly when tenantId is. */
+  school: SchoolSummary | null
   db: Database
   /** The server's clock. Never a phone's (brief section 3.1). */
   now: () => Date

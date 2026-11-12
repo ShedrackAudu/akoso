@@ -15,6 +15,7 @@ import { UnauthenticatedError, ValidationError } from "./errors"
 import type { HttpDeps, UseCase } from "./http"
 import { toProblem } from "./problem"
 import { consumeRateLimit } from "./rate-limit"
+import { assertSchoolAllows } from "./school-status"
 
 export type ActionResult<Data> =
   { ok: true; data: Data } | { ok: false; error: ProblemDetails }
@@ -45,6 +46,8 @@ export async function runServerAction<Input extends z.ZodObject, Output>(
   try {
     const ctx = await deps.resolveContext(base)
     if (ctx === null) throw new UnauthenticatedError()
+    // Server actions change things, so a read-only school refuses them too.
+    assertSchoolAllows(ctx.school, true)
     await consumeRateLimit(
       base.db,
       "write",

@@ -20,6 +20,7 @@
     "api:openapi": "vitest run -u packages/api-client/src/openapi.test.ts",
     "db:generate": "pnpm --filter @akoso/db exec drizzle-kit generate",
     "db:migrate": "node packages/db/scripts/migrate.mjs",
+    "db:seed": "node packages/db/scripts/seed.mjs",
     "boundaries": "depcruise apps packages --config .dependency-cruiser.cjs",
     "unused": "knip",
     "latency:regions": "node scripts/measure-region-latency.mjs",
