@@ -58,10 +58,18 @@ CodeQL is proven when the code-scanning rule is switched on.
 | zizmor                | 4 medium: `actions/checkout` kept the token on disk (`artipacked`)                                                                                                                  | **Fixed:** `persist-credentials: false` on every checkout                                                                                   |
 | Trivy, Compose images | `postgres:16.15-alpine3.24`: 18 high, `pgbouncer:v1.26.1-p0`: 3 high (musl, zlib, krb5 and others), all fixed in newer Alpine packages. Gotenberg 9.4.0: none                       | Reported only (see above). Renovate picks up the rebuilt images                                                                             |
 
+### 12/11/2026, first run in CI (pull request #10)
+
+Semgrep flagged one ERROR finding that the local run missed, because the local run had
+skipped test files: `njsscan.generic.hardcoded_secrets.node_secret` on the made-up
+webhook secret in `webhook-signature.test.ts`. Suppressed (below). Every other job passed.
+
 ## Suppressions
 
-None.
+| Date       | Tool and rule                                           | Where                                                                                                   | Reason                                                                                              |
+| ---------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| 12/11/2026 | Semgrep `njsscan.generic.hardcoded_secrets.node_secret` | `packages/providers/src/payments/webhook-signature.test.ts`, the `SECRET` constant (inline `nosemgrep`) | A made-up value used only to sign test payloads. It is not a Paystack secret and signs nothing real |
 
-Any future suppression goes in the tool's own ignore file (`.semgrepignore`,
-`.trivyignore`, a `# zizmor: ignore[...]` comment or a pnpm override), with a reason and a
-date. It is listed here too.
+A suppression goes in the tool's own mechanism (an inline `nosemgrep` comment,
+`.trivyignore`, a `# zizmor: ignore[...]` comment or a pnpm override), for one rule at
+one place, with a reason and a date. It is listed here too.
