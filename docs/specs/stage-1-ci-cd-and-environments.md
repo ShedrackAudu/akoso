@@ -1,6 +1,6 @@
 # CI/CD and environments: security scans, then staging
 
-- **Status:** Approved (founder, 12/11/2026). Part A is being built; Part B waits for the hosting decision (D-16)
+- **Status:** Approved (founder, 12/11/2026). Part A is being built; Part B is on Render, Frankfurt (D-18), and delayed (D-19): images and the Blueprint first, deploys when there is something to show
 - **Module:** `.github/workflows`, Dockerfiles, `docs/security`, `docs/runbooks` · **Brief:** sections 2, 28.2, 28.3, 31, 32 · **Stage:** 1
 - **Estimate:** Part A 10 hours of agent time. Part B 14 hours, once your hosting decisions are made. About 1 hour of yours on GitHub and Renovate settings, plus account sign-ups for Part B
 - **Closes:** T3 (missing scans), T6 (no Renovate), T7 (no `SECURITY.md`), T10 (unpinned images). Starts on D-OPEN-1 (hosting region) and D-OPEN-3 (Node version)
@@ -109,15 +109,37 @@ These are repository settings, so they are yours to change. I can make them with
    through the pooler). The deploy is marked failed, and rolled back, if it does not
    pass.
 
-### What staging needs (shape depends on the host)
+### Staging on Render, Frankfurt (D-18)
 
-| Piece              | Staging                                                                                               |
-| ------------------ | ----------------------------------------------------------------------------------------------------- |
-| Web, admin, worker | 1 small container each                                                                                |
-| Postgres 16+       | Managed, with point-in-time recovery, the same three roles as local, and a pooler in transaction mode |
-| Gotenberg          | 1 private container, the same locked-down settings as local, reachable only by the worker             |
-| Object storage     | A Cloudflare R2 bucket for staging only                                                               |
-| DNS and TLS        | Cloudflare, for example `staging.akoso.ng` and `*.staging.akoso.ng`                                   |
+Prices from render.com/pricing on 12/11/2026, in US dollars a month. Billing is per
+second, so a service that is switched off costs nothing while it is off.
+
+| Piece          | Render service                                                                                                       | Plan                                    | Per month     |
+| -------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------- |
+| Web app        | Web service (Docker)                                                                                                 | 0.5 CPU, 512 MB                         | $7            |
+| Platform admin | Web service (Docker)                                                                                                 | 0.5 CPU, 512 MB                         | $7            |
+| Worker         | Background worker (Docker)                                                                                           | 0.5 CPU, 512 MB                         | $7            |
+| Gotenberg      | Private service, reachable only inside Render's private network                                                      | 1 CPU, 2 GB (Chromium needs the memory) | $25           |
+| Postgres 16+   | Render Postgres, with its built-in PgBouncer in transaction mode on port 6432, as locally                            | 0.5 CPU, 1 GB, about 5 GB of storage    | $19 + $1.50   |
+| Object storage | A Cloudflare R2 bucket for staging only                                                                              | Free tier                               | $0            |
+| DNS and TLS    | Cloudflare in front of `staging.akoso.ng` and `*.staging.akoso.ng`; until then Render's own `onrender.com` addresses | Free                                    | $0            |
+| **Total**      |                                                                                                                      |                                         | **about $67** |
+
+Plus the workspace plan:
+
+- **Hobby ($0):** 1 seat, a 3-day point-in-time recovery window, 5 GB of bandwidth a
+  month and 500 build minutes. Enough for staging.
+- **Pro ($25):** a 7-day recovery window and more seats. Needed before real schools' data
+  is on production.
+
+Images are built in GitHub Actions and pulled by Render, so Render's build minutes are
+barely used. Migrations run as Render's pre-deploy command, using the migration role on
+the direct port 5432; the app uses the pooled port 6432. Render's instant rollback (5
+builds kept) is the one-click rollback, and the GitHub workflow keeps the image digests
+too.
+
+Production adds larger plans, a second web instance and the Pro workspace. Its estimate
+comes before launch, from staging's real usage.
 
 The restore drill (brief 31: a restore into staging in under 2 hours) is a later item,
 not part of this spec.
@@ -187,17 +209,9 @@ Part B:
 
 1. **Security contact (answered):** `security@akoso.ng`. It cannot receive mail until the domain is registered and forwarding is set up, which must happen before staging is reachable by anyone else.
 2. **Domain (answered in part):** `akoso.ng` is not registered yet. Part A does not need it. Part B can start on the host's own address (for example `akoso-staging.<host>.app`), protected by a password in the app. Two things wait for the domain: school addresses (`<slug>.staging...`), which need a wildcard on a domain you own, and Cloudflare in front.
-3. **Hosting platform (Part B):** the brief allows Fly.io, Render or AWS. I recommend
-   measuring before choosing, against at least these candidates. Each platform's current
-   region list and managed-Postgres features are checked at decision time:
-   - **Fly.io**, Johannesburg and a European region
-   - **AWS**, Cape Town (`af-south-1`) and London or Frankfurt
-   - **Render**, Frankfurt (it has no African region that I know of)
-
-   Africa-based regions are not always faster from Nigeria, because traffic is often
-   routed through Europe. That is why the brief says to measure.
+3. **Hosting platform (answered, D-18):** Render, Frankfurt.
 
 4. **Node version (D-OPEN-3):** the images pin an exact Node version. Keep Node 24 if
    your chosen host supports it as LTS.
-5. **Cost:** staging runs around the clock. Once the host is chosen I give a monthly
-   estimate before anything is created; you approve it and create the accounts yourself.
+5. **Cost:** about $67 a month on the Hobby workspace (table above). You approve it and
+   create the Render account yourself before anything is created.
