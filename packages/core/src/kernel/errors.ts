@@ -118,7 +118,17 @@ export class UnsupportedMediaTypeError extends AppError {
   }
 }
 
-/** The school is suspended or closed: nothing may be done for it. */
+/** The school has closed: nothing may be done for it, and its members are told so. */
+export class SchoolClosedError extends AppError {
+  readonly code = "school_closed"
+  readonly status = 403
+  constructor() {
+    super("School closed")
+    this.name = "SchoolClosedError"
+  }
+}
+
+/** The school is suspended: nothing may be done for it until Akoso lifts the pause. */
 export class SchoolUnavailableError extends AppError {
   readonly code = "school_unavailable"
   readonly status = 403

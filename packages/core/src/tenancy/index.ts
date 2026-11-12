@@ -1,6 +1,7 @@
 // Public interface of the tenancy module. Other modules import only from here.
 export {
   createSchoolCache,
+  SchoolLookupBusyError,
   type SchoolCache,
   type SchoolCacheOptions,
 } from "./cache"

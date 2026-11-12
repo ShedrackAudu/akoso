@@ -5,7 +5,8 @@
 import { NextResponse, type NextRequest } from "next/server"
 
 import { loadEnv } from "@akoso/core/config"
-import { classifyHost } from "@akoso/core/tenancy"
+import { classifyHost, SchoolLookupBusyError } from "@akoso/core/tenancy"
+import type { SchoolSummary } from "@akoso/schemas/tenancy"
 
 import { schoolByHost, schoolBySlug } from "@/server/schools"
 
@@ -16,6 +17,12 @@ const notFound = () =>
   new NextResponse(null, {
     status: 404,
     headers: { "Cache-Control": "no-store" },
+  })
+
+const busy = () =>
+  new NextResponse(null, {
+    status: 503,
+    headers: { "Cache-Control": "no-store", "Retry-After": "1" },
   })
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
@@ -33,10 +40,18 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   }
   if (host.kind === "unknown") return notFound()
 
-  const school =
-    host.kind === "school"
-      ? await schoolBySlug(host.slug)
-      : await schoolByHost(host.hostname)
+  let school: SchoolSummary | null
+  try {
+    school =
+      host.kind === "school"
+        ? await schoolBySlug(host.slug)
+        : await schoolByHost(host.hostname)
+  } catch (error) {
+    // Lookups are over budget and this address is unknown: "try again shortly",
+    // never "not found" (PR #17 review, finding 1).
+    if (error instanceof SchoolLookupBusyError) return busy()
+    throw error
+  }
   if (school === null || school.status === "closed") return notFound()
 
   // A school's address serves its public pages only: no app routes, no /api/v1.

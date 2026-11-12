@@ -221,8 +221,10 @@ word seems to mean something else, or two words seem to mean the same thing, sto
   from UI code or route handlers.
 - Paginate every list endpoint. Avoid N+1 queries. Indexes led by `tenant_id`.
 - A new tenant table needs, in the same pull request: forced RLS with a `USING` and
-  `WITH CHECK` policy on `tenant_id`, a foreign key to `platform.tenants`, and a row
-  fixture in `packages/db/src/isolation/fixtures.ts`. The isolation suite enforces all
+  `WITH CHECK` policy on `tenant_id`, a foreign key to `platform.tenants`, every unique
+  rule starting with `tenant_id` (a deliberate exception is listed in
+  `isolation/catalog.ts` with a reason), and a row fixture in
+  `packages/db/src/isolation/fixtures.ts`. The isolation suite enforces all
   of it.
 - Store moments as `timestamptz` in UTC and date-only values as dates. Compute every
   "today", deadline and report period in the school's time zone.

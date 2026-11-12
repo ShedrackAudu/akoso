@@ -8,16 +8,19 @@ import {
 } from "@akoso/core/tenancy"
 import type { SchoolSummary } from "@akoso/schemas/tenancy"
 
-const cache = createSchoolCache()
+// Two caches, each with its own lookup budget, so a flood of outside domains can never
+// use up the budget for Akoso's own school addresses (PR #17 review, finding 1).
+const bySlug = createSchoolCache()
+const byHost = createSchoolCache()
 
+/** @throws SchoolLookupBusyError when lookups are over budget and the school is unknown. */
 export function schoolBySlug(slug: string): Promise<SchoolSummary | null> {
-  return cache.get(`slug:${slug}`, () => findSchoolBySlug(getDatabase(), slug))
+  return bySlug.get(slug, () => findSchoolBySlug(getDatabase(), slug))
 }
 
+/** @throws SchoolLookupBusyError when lookups are over budget and the host is unknown. */
 export function schoolByHost(hostname: string): Promise<SchoolSummary | null> {
-  return cache.get(`host:${hostname}`, () =>
-    findSchoolByHost(getDatabase(), hostname)
-  )
+  return byHost.get(hostname, () => findSchoolByHost(getDatabase(), hostname))
 }
 
 /**

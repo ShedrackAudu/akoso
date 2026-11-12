@@ -65,7 +65,7 @@ describe("school status in the request pipeline", () => {
     ["greenfield", 200, undefined],
     ["unity-leaving", 200, undefined], // read-only: reads still work
     ["harmony-paused", 403, "school_unavailable"],
-    ["pioneer-closed", 403, "school_unavailable"],
+    ["pioneer-closed", 403, "school_closed"],
   ])("%s answers %i", async (slug, status, code) => {
     expect(await call(slug)).toEqual({ status, code })
   })

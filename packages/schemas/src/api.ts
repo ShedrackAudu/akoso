@@ -105,6 +105,7 @@ export const ERROR_CODES = [
   "unsupported_media_type",
   "rate_limited",
   "school_unavailable",
+  "school_closed",
   "school_read_only",
   "internal",
 ] as const

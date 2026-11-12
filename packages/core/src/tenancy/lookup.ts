@@ -3,6 +3,14 @@
 import { sql, type Database } from "@akoso/db"
 import { schoolSummarySchema, type SchoolSummary } from "@akoso/schemas/tenancy"
 
+// The slug format, as the database checks it. Anything else cannot be a school, so it
+// is answered without a query (review of PR #16, finding 8).
+const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
+
+// The hostname format, as the database checks it for tenant_domains.
+const HOSTNAME =
+  /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/
+
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 function first(rows: Record<string, unknown>[]): SchoolSummary | null {
@@ -21,8 +29,16 @@ export async function findSchoolBySlug(
   db: Database,
   slug: string
 ): Promise<SchoolSummary | null> {
+  const normalised = slug.toLowerCase()
+  if (
+    normalised.length < 3 ||
+    normalised.length > 40 ||
+    !SLUG.test(normalised)
+  ) {
+    return null
+  }
   const result = await db.execute(
-    sql`select * from platform.tenant_by_slug(${slug.toLowerCase()})`
+    sql`select * from platform.tenant_by_slug(${normalised})`
   )
   return first(result.rows)
 }
@@ -43,8 +59,12 @@ export async function findSchoolByHost(
   db: Database,
   hostname: string
 ): Promise<SchoolSummary | null> {
+  // Only a well-formed hostname can be a school's domain; anything else is answered
+  // without a query (PR #17 review, finding 3).
+  const normalised = hostname.toLowerCase()
+  if (normalised.length > 253 || !HOSTNAME.test(normalised)) return null
   const result = await db.execute(
-    sql`select * from platform.tenant_by_host(${hostname.toLowerCase()})`
+    sql`select * from platform.tenant_by_host(${normalised})`
   )
   return first(result.rows)
 }
