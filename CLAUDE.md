@@ -15,6 +15,9 @@ work on Akoso. This file holds only notes specific to Claude Code.
 - **Cross-model review** (working rule 11): for security-, RLS-, money- and
   results-related changes, the diff is reviewed by Gemini (or written by Gemini and
   reviewed here) before the founder approves. Record the review in the pull request.
+  - **When (D-24):** skipped by default, because a run takes too long. For each such
+    pull request, ask the founder whether to run it; if not, record the skip in
+    `docs/decisions.md` and carry on. Run it only when the founder says they are ready.
   - **How (D-23):** with the founder's go-ahead, Claude Code runs the Antigravity CLI
     (`agy`, Google's replacement for Gemini CLI) on the open pull request and posts its
     answer unedited as a comment. `agy` does not read a piped diff, and in print mode it
