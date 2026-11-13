@@ -71,3 +71,4 @@ Testable statements, including the brief's own acceptance lines for this feature
 | [Tenancy](stage-1-tenancy.md)                                                     | Built; memberships come with sign-in               |
 | [Sign-in, part A](stage-1-sign-in.md)                                             | Built; part B next                                 |
 | [Time zones, audit log, flags and settings](stage-1-time-audit-flags.md)          | Built                                              |
+| [Sign-in, part B](stage-1-sign-in-part-b.md)                                      | Approved                                           |
