@@ -5,11 +5,17 @@ Newest session first.
 
 ## Where we are
 
-**Stage 1 (Foundations): step 0 approved; the rest of Stage 1 has not started.**
+**Stage 1 (Foundations): items 1 to 6 built; sign-in part B is next, then the Stage 1
+checkpoint.**
 
-The founder approved the section 3.2 checkpoint on 11/11/2026: the PRD, the two
-architecture documents, the risks list, the brief split, `AGENTS.md` and the scaffold.
-Feature work may now begin, one spec at a time, in the order below.
+- Merged on `main`: spikes 01 to 04 (04 partly blocked), CI/CD Part A, the API
+  conventions, tenancy (with its review fixes) and sign-in part A.
+- **Pull request #19** (time zones, audit log, feature flags, platform settings) is open
+  on `feat/time-audit-flags`, CI green, cross-model review skipped (D-28). It waits for
+  the founder to merge.
+- Staging (CI/CD Part B) is delayed until there is something to show (D-19).
+
+Feature work goes one spec at a time, in the order below.
 
 ## Next
 
@@ -43,6 +49,12 @@ In this order (brief section 32, Stage 1):
 Each begins with a spec in `docs/specs/`. Tenancy, auth and audit specs need the
 founder's approval and a threat model before code.
 
+**Next session:** once pull request #19 is merged (delete its branch only if the founder
+asks), write the spec for sign-in part B: custom roles, the security log screen, account
+deletion, phone-number change, and Akoso team sign-in (passkeys). It needs the founder's
+approval and a threat model before code. Ask whether to run the cross-model review on
+its pull request (D-24). After part B, prepare the Stage 1 checkpoint.
+
 ## Open questions for the founder
 
 Full text and recommendations in `docs/decisions.md`.
@@ -54,7 +66,13 @@ Full text and recommendations in `docs/decisions.md`.
 
 ## Blocked
 
-Nothing is blocked for step 0. See "Founder tasks" for what the rest of Stage 1 needs.
+- **Spike 04 (Paystack, R1):** the dedicated-account and split scenarios wait for the
+  CAC registration and the Paystack upgrade to Registered Business.
+- **Staging (CI/CD Part B):** delayed by choice (D-19); needs `akoso.ng` on Cloudflare
+  and the Render account when it resumes.
+
+Nothing blocks sign-in part B. Its phone-number change uses the existing local SMS
+stand-in; live SMS waits for the Termii sender ID.
 
 ## Founder tasks
 
@@ -68,10 +86,39 @@ have long lead times. Each is listed once.
 | Start the slow approvals now: Paystack KYC and go-live, the written confirmation of split behaviour, Termii DND sender ID, Meta Business verification and WhatsApp templates                  | Live payments, SMS and WhatsApp. They take weeks    | Stages 4 and 5; start in Stage 1 |
 | Register the company (CAC), get a TIN, open a corporate bank account                                                                                                                          | Paystack live mode, legal templates                 | Stage 4                          |
 | Register the domains, starting with `akoso.ng`                                                                                                                                                | Staging addresses, email sending domain             | Stage 1                          |
+| Upgrade Paystack to Registered Business (after CAC) and ask it to enable dedicated accounts, subaccounts and splits                                                                           | The rest of spike 04 (R1)                           | Stage 1 spike                    |
+| Roll the Paystack test secret key and webhook secret (they were pasted into a chat); turn off "pass charges to customers"; clear the old test webhook URL                                     | Safe reuse of the test keys                         | Before the next Paystack work    |
 
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 12/11/2026 to 13/11/2026: Spike 04, CI/CD Part A, Stage 1 items 3 to 6 (Claude)
+
+- **Spike 04, Paystack (R1):** signed webhooks work end to end and repeats are
+  recognised; dedicated accounts and splits are refused to a Starter business, so the
+  rest waits for the CAC registration and the Paystack upgrade
+  (`docs/spikes/04-paystack.md`). The test keys were pasted into a chat: roll them.
+- **CI/CD Part A** (pull request #10): Semgrep, CodeQL, pnpm audit, OSV, Trivy, zizmor,
+  an SBOM and Renovate. Then signed commits and the code-scanning rule on `main`
+  (#11, #13). Hosting is Render, Frankfurt (D-18); staging is delayed (D-19).
+- **Item 3, API conventions** (#15): contracts, the request pipeline, Problem Details
+  errors, idempotency keys, Postgres rate limits, OpenAPI and the typed client.
+- **Item 4, tenancy** (#16, with review fixes in #17): schools and groups, the request
+  proxy, the lookup cache, and the isolation suite that reads the database catalog.
+  The `agy` cross-model review ran on #16 and #17 and its findings were fixed; it takes
+  too long, so reviews are now skipped by default and the founder is asked each time
+  (D-23, D-24).
+- **Item 5, sign-in part A** (#18): parent phone codes (stored as keyed hashes), staff
+  password and MFA (required for proprietor, school admin and bursar), sessions,
+  memberships, the school picker and the permission check.
+- **Item 6** (#19, open, CI green, review skipped, D-28): school-time date helpers and a
+  lint rule against server-local dates; the hash-chained, append-only audit log with
+  `verify_audit_chain`; per-school feature flags; platform settings, which now hold the
+  rate limits (T16 resolved). The audit reader permission goes to proprietor and school
+  admin (D-27). New tech debt T22 (no write-once copy of the audit log yet).
+- Checks at the end: `pnpm check`, 105 database tests and 37 end-to-end tests pass
+  locally; 13 CI checks pass on #19.
 
 ### 11/11/2026: Spike 03, report-card PDFs (Claude)
 
