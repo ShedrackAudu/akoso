@@ -4,6 +4,7 @@ import {
   createHash,
   createHmac,
   randomBytes,
+  randomInt,
   randomUUID,
   timingSafeEqual,
 } from "node:crypto"
@@ -89,11 +90,12 @@ const hashCode = (hashKey: string, userId: string, code: string): string =>
     .update(`${userId}\n${normaliseCode(code)}`)
     .digest("hex")
 
+/** Ten characters, each chosen uniformly (randomInt has no modulo bias). */
 function newRecoveryCode(): string {
-  const bytes = randomBytes(10)
   let code = ""
-  for (const byte of bytes)
-    code += CODE_ALPHABET.charAt(byte % CODE_ALPHABET.length)
+  for (let index = 0; index < 10; index++) {
+    code += CODE_ALPHABET.charAt(randomInt(CODE_ALPHABET.length))
+  }
   return `${code.slice(0, 5)}-${code.slice(5)}`
 }
 

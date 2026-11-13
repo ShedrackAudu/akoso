@@ -37,7 +37,8 @@ const owner = createDatabase(OWNER_URL, 1)
 
 beforeAll(() => {
   // teamSettings() reads these: the key for recovery codes, the address for links.
-  process.env.BETTER_AUTH_SECRET ??= "test-only-hash-key-000000000000000000000"
+  // A fresh random key per run, when none is set.
+  process.env.BETTER_AUTH_SECRET ??= randomBytes(32).toString("hex")
   process.env.APP_BASE_DOMAIN ??= "akoso.localhost"
   process.env.DATABASE_URL ??= APP_URL
 })
