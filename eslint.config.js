@@ -110,6 +110,23 @@ export default tseslint.config(
     },
   },
   {
+    // A <form> with no method submits as GET before the page is ready, putting
+    // passwords and codes in the address bar, history and logs. Screens use SafeForm
+    // from @akoso/ui, or say method="get" on purpose (a search with nothing secret).
+    files: ["apps/**/*.tsx"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "JSXOpeningElement[name.name='form']:not(:has(JSXAttribute[name.name='method']))",
+          message:
+            'Use <SafeForm> from @akoso/ui/components/safe-form, or give a plain search form method="get" on purpose.',
+        },
+      ],
+    },
+  },
+  {
     files: SHADCN_GENERATED,
     rules: {
       "@typescript-eslint/explicit-module-boundary-types": "off",

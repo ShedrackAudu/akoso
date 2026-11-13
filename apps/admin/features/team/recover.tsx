@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useState, type JSX, type SyntheticEvent } from "react"
 
 import { Button } from "@akoso/ui/components/button"
+import { SafeForm } from "@akoso/ui/components/safe-form"
 
 import { startRecoveryAction } from "@/server/actions"
 
@@ -44,7 +45,7 @@ export function Recover(): JSX.Element {
   }
 
   return (
-    <form
+    <SafeForm
       onSubmit={(event) => void recover(event)}
       className="flex flex-col gap-4"
     >
@@ -67,6 +68,6 @@ export function Recover(): JSX.Element {
         Use code and create a new passkey
       </Button>
       <ErrorText error={error ?? action.error} />
-    </form>
+    </SafeForm>
   )
 }

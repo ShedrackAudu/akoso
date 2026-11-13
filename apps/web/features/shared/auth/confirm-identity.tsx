@@ -6,6 +6,7 @@
 import { useState, type JSX, type SyntheticEvent } from "react"
 
 import { Button } from "@akoso/ui/components/button"
+import { SafeForm } from "@akoso/ui/components/safe-form"
 
 import { authPost, fieldText } from "./auth-client"
 import { Field } from "./field"
@@ -121,7 +122,7 @@ export function ConfirmIdentity({
         For your security, sign in again before this change.
       </p>
       {hasPassword && step === "start" && (
-        <form onSubmit={withPassword} className="flex flex-col gap-4">
+        <SafeForm onSubmit={withPassword} className="flex flex-col gap-4">
           <Field
             id="confirm-password"
             name="password"
@@ -133,10 +134,10 @@ export function ConfirmIdentity({
           <Button type="submit" className={BUTTON} disabled={busy}>
             Confirm
           </Button>
-        </form>
+        </SafeForm>
       )}
       {step === "second" && (
-        <form onSubmit={withSecondStep} className="flex flex-col gap-4">
+        <SafeForm onSubmit={withSecondStep} className="flex flex-col gap-4">
           <Field
             id="confirm-second-step"
             name="code"
@@ -148,7 +149,7 @@ export function ConfirmIdentity({
           <Button type="submit" className={BUTTON} disabled={busy}>
             Confirm
           </Button>
-        </form>
+        </SafeForm>
       )}
       {!hasPassword && step === "start" && (
         <Button
@@ -161,7 +162,7 @@ export function ConfirmIdentity({
         </Button>
       )}
       {step === "code" && (
-        <form onSubmit={withCode} className="flex flex-col gap-4">
+        <SafeForm onSubmit={withCode} className="flex flex-col gap-4">
           <Field
             id="confirm-code"
             name="code"
@@ -173,7 +174,7 @@ export function ConfirmIdentity({
           <Button type="submit" className={BUTTON} disabled={busy}>
             Confirm
           </Button>
-        </form>
+        </SafeForm>
       )}
       {error !== null && (
         <p

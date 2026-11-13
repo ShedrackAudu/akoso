@@ -7,6 +7,7 @@ import { useState, type JSX, type SyntheticEvent } from "react"
 
 import { TEAM_ROLE_KEYS, TEAM_ROLE_LABELS } from "@akoso/schemas/permissions"
 import { Button } from "@akoso/ui/components/button"
+import { SafeForm } from "@akoso/ui/components/safe-form"
 
 import { inviteTeamMemberAction } from "@/server/actions"
 
@@ -39,7 +40,7 @@ export function InviteForm(): JSX.Element {
   }
 
   return (
-    <form
+    <SafeForm
       onSubmit={(event) => void invite(event)}
       className="flex flex-col gap-4 rounded-lg border border-border p-4"
     >
@@ -103,6 +104,6 @@ export function InviteForm(): JSX.Element {
           </code>
         </div>
       )}
-    </form>
+    </SafeForm>
   )
 }

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { useState, type SyntheticEvent, type JSX } from "react"
 
 import { Button } from "@akoso/ui/components/button"
+import { SafeForm } from "@akoso/ui/components/safe-form"
 
 import { authPost, fieldText } from "./auth-client"
 import { Field } from "./field"
@@ -187,7 +188,7 @@ export function SignInForm({
       )}
 
       {step.kind === "parent-phone" && (
-        <form className="flex flex-col gap-4" onSubmit={sendCode}>
+        <SafeForm className="flex flex-col gap-4" onSubmit={sendCode}>
           <Field
             id="phone"
             name="phone"
@@ -201,11 +202,11 @@ export function SignInForm({
           <Button type="submit" className={BUTTON} disabled={busy}>
             Send code
           </Button>
-        </form>
+        </SafeForm>
       )}
 
       {step.kind === "parent-code" && (
-        <form className="flex flex-col gap-4" onSubmit={checkCode}>
+        <SafeForm className="flex flex-col gap-4" onSubmit={checkCode}>
           <Field
             id="code"
             name="code"
@@ -229,11 +230,11 @@ export function SignInForm({
           >
             Use a different number
           </Button>
-        </form>
+        </SafeForm>
       )}
 
       {step.kind === "staff-password" && (
-        <form className="flex flex-col gap-4" onSubmit={signInStaff}>
+        <SafeForm className="flex flex-col gap-4" onSubmit={signInStaff}>
           <Field
             id="account"
             name="account"
@@ -252,11 +253,11 @@ export function SignInForm({
           <Button type="submit" className={BUTTON} disabled={busy}>
             Sign in
           </Button>
-        </form>
+        </SafeForm>
       )}
 
       {step.kind === "staff-second-step" && (
-        <form className="flex flex-col gap-4" onSubmit={checkSecondStep}>
+        <SafeForm className="flex flex-col gap-4" onSubmit={checkSecondStep}>
           <Field
             id="code"
             name="code"
@@ -282,7 +283,7 @@ export function SignInForm({
           >
             {step.useBackup ? "Use my authenticator app" : "Use a backup code"}
           </Button>
-        </form>
+        </SafeForm>
       )}
     </div>
   )
