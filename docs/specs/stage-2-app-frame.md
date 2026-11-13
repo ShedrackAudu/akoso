@@ -1,6 +1,6 @@
 # The app frame: layouts and navigation for the school app and the admin app
 
-- **Status:** Draft (13/11/2026), waiting for the founder's approval
+- **Status:** Approved (founder, 13/11/2026), with all four recommendations: parent pages under `/{school}/parent`; a bottom bar on phones; an initials monogram until a logo; the test dependency `@axe-core/playwright`
 - **Module:** `packages/ui` (frame components), `apps/web` (school app layouts, `features/staff`, `features/parent`, `features/shared`), `apps/admin` (admin layout), `packages/core/src/identity` (one read: what the frame shows a person) · **Brief:** sections 4.0, 4.1, 18, 19, 30 · **Stage:** 2, first item (D-34)
 - **Estimate:** 24 hours of agent time
 - **New dependencies:**
