@@ -4,6 +4,8 @@ import { existsSync, readFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
+import { expect, type Page } from "@playwright/test"
+
 const OUTBOX = join(tmpdir(), "akoso-e2e-sms-outbox.json")
 const EMAIL_OUTBOX = join(tmpdir(), "akoso-e2e-email-outbox.json")
 
@@ -92,3 +94,27 @@ export const PEOPLE = {
   parent: { phone: "0803 100 0011", e164: "+2348031000011" },
   parentTwoSchools: { phone: "08031000012", e164: "+2348031000012" },
 } as const
+
+/** Opens the account menu in the app frame's top bar. */
+async function openAccountMenu(page: Page): Promise<void> {
+  await page.getByTestId("account-menu").click()
+  await expect(page.getByRole("menu")).toBeVisible()
+}
+
+/** Checks the role the account menu shows for this school ("Teacher", "Parent"...). */
+export async function expectSignedInAs(
+  page: Page,
+  roles: string
+): Promise<void> {
+  await openAccountMenu(page)
+  await expect(page.getByRole("menu")).toContainText(roles)
+  await page.keyboard.press("Escape")
+  await expect(page.getByRole("menu")).toBeHidden()
+}
+
+/** Signs out from the account menu, in either app. */
+export async function signOutViaMenu(page: Page): Promise<void> {
+  await openAccountMenu(page)
+  await page.getByRole("menuitem", { name: "Sign out" }).click()
+  await expect(page).toHaveURL(/\/sign-in$/)
+}

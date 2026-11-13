@@ -55,4 +55,10 @@ export {
   type DeviceKind,
   type SecurityLogEntry,
 } from "./security-log"
-export { getMe, getSecurityStatus, listMySchools } from "./service"
+export {
+  getFrame,
+  getMe,
+  getSecurityStatus,
+  listMySchools,
+  type FrameInfo,
+} from "./service"

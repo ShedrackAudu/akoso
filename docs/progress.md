@@ -5,8 +5,8 @@ Newest session first.
 
 ## Where we are
 
-**Stage 1 (Foundations): done. The founder approved the Stage 1 checkpoint on
-13/11/2026 (D-32 to D-34). Stage 2 (school structure and people) starts now.**
+**Stage 1 (Foundations): done (checkpoint approved 13/11/2026, D-32 to D-34).
+Stage 2 (school structure and people): the app frame is built and in pull request #38.**
 
 - Merged on `main`: spikes 01 to 04 (04 partly blocked), CI/CD Part A, the API
   conventions, tenancy (with its review fixes), sign-in part A, and time zones, the
@@ -52,12 +52,11 @@ In this order (brief section 32, Stage 1):
 Each begins with a spec in `docs/specs/`. Tenancy, auth and audit specs need the
 founder's approval and a threat model before code.
 
-**Next session:** start Stage 2 with a spec for its first item, **the app frame**
-(D-34): one layout for the school app and one for the admin app, with a header (school
-and person), navigation by role, and a consistent page width and spacing, following
-brief section 4 and the brand kit. It needs the founder's approval before code. Then
-staging (CI/CD Part B), then school setup. Record real hours per pull request in
-`docs/velocity.md` from now on.
+**Next session:** once #38 (the app frame) is merged, write the spec for **staging**
+(CI/CD Part B, delayed by D-19 until now; D-34 puts it early in Stage 2). It needs the
+founder's Render account and `akoso.ng` on Cloudflare (founder tasks). Then school setup
+(the onboarding wizard, academic structure, calendar). Ask the founder for their hours
+on each merged pull request and record them in `docs/velocity.md`.
 
 ## Open questions for the founder
 
@@ -97,6 +96,28 @@ have long lead times. Each is listed once.
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 13/11/2026: Stage 2, the app frame (Claude)
+
+- Spec approved with all four recommendations, then built as pull request #38.
+- Two frames in `packages/ui`: a sidebar frame (staff, admin) and a column frame
+  (parents, personal pages), sharing a navigation list, a More sheet (the browser's own
+  `<dialog>`) and a bottom bar. Navigation by permission from one list.
+- Parent pages under `/{school}/parent`; a person who is staff and parent switches views
+  (a cookie). Every existing page moved into a frame with `PageHeader` and `PageBody`.
+- The new accessibility check found and fixed three real problems: menu buttons whose
+  spoken name didn't contain their visible initials; violet text too dark in dark mode
+  (links and the selected tab now use the normal text colour); the red "Delete" button
+  at 4:1 contrast (now red text on the page background, 4.7:1).
+- Parent budget: the frame adds 5 KiB to a parent's first load (318 KiB against main's
+  313 KiB, measured the same way); the test enforces at most 10 KB more.
+- Closed T5 with an ESLint rule (parent pages can't import staff code).
+- Checks: `pnpm check`; 135 database tests; 52 end-to-end tests. One database test (the
+  school-assisted number change) failed once and passed in three reruns: probably a
+  random test phone number clashing with an earlier run's; watch for it.
+- Five shadcn components appeared in `packages/ui` while the session was paused; only
+  the dropdown menu is used and committed. Avatar, separator, sheet and tooltip are
+  left untracked for the founder to keep or delete.
 
 ### 13/11/2026: Stage 1 checkpoint approved (Claude)
 

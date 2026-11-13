@@ -14,7 +14,10 @@ export default function RecoverPage(): JSX.Element {
         Each code works once. You&apos;ll create a new passkey straight away.
       </p>
       <Recover />
-      <Link href="/sign-in" className="text-base text-primary underline">
+      <Link
+        href="/sign-in"
+        className="text-base text-foreground underline underline-offset-4"
+      >
         Back to sign-in
       </Link>
     </main>

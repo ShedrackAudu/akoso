@@ -8,7 +8,9 @@ import {
   lastCodeSentTo,
   PEOPLE,
   totp,
+  signOutViaMenu,
   waitForCode,
+  expectSignedInAs,
 } from "./sign-in-helpers"
 
 // Sign-in, part A (spec: docs/specs/stage-1-sign-in.md, acceptance criteria 1 to 7).
@@ -52,9 +54,9 @@ test("a parent signs in with a phone code within 60 seconds on slow 3G", async (
   })
   const started = Date.now()
   await parentSignIn(page, PEOPLE.parent.phone, PEOPLE.parent.e164)
-  await expect(page).toHaveURL(/\/greenfield$/, { timeout: 60_000 })
-  await expect(page.getByTestId("signed-in-as")).toHaveText(
-    "Signed in as Parent"
+  await expect(page).toHaveURL(/\/greenfield\/parent$/, { timeout: 60_000 })
+  await expect(page.getByTestId("school-brand")).toContainText(
+    "Greenfield Academy"
   )
   expect(Date.now() - started).toBeLessThan(60_000)
 })
@@ -100,9 +102,11 @@ test("a parent in two schools picks one", async ({ page }) => {
     page.getByRole("link", { name: /Greenfield Academy/ })
   ).toBeVisible()
   await page.getByRole("link", { name: /St Anne's College/ }).click()
-  await expect(
-    page.getByRole("heading", { name: "St Anne's College" })
-  ).toBeVisible()
+  // A parent lands in the parent experience, with a switcher for the other school.
+  await expect(page).toHaveURL(/\/parent$/)
+  await expect(page.getByTestId("school-brand")).toContainText(
+    "St Anne's College"
+  )
 })
 
 test("a teacher signs in with email or phone and a password", async ({
@@ -110,11 +114,8 @@ test("a teacher signs in with email or phone and a password", async ({
 }) => {
   await staffPassword(page, PEOPLE.teacher.email, PEOPLE.teacher.password)
   await expect(page).toHaveURL(/\/greenfield$/)
-  await expect(page.getByTestId("signed-in-as")).toHaveText(
-    "Signed in as Teacher"
-  )
-  await page.getByRole("button", { name: "Sign out" }).click()
-  await expect(page).toHaveURL(/\/sign-in$/)
+  await expectSignedInAs(page, "Teacher")
+  await signOutViaMenu(page)
 
   await staffPassword(page, PEOPLE.teacher.phone, PEOPLE.teacher.password)
   await expect(page).toHaveURL(/\/greenfield$/)
@@ -171,12 +172,10 @@ test("staff whose role needs a second step must set it up, then use it", async (
   const codes = await codeItems.allTextContents()
   await page.getByRole("button", { name: /I have saved them/ }).click()
   await expect(page).toHaveURL(/\/greenfield$/)
-  await expect(page.getByTestId("signed-in-as")).toHaveText(
-    "Signed in as Bursar"
-  )
+  await expectSignedInAs(page, "Bursar")
 
   // Next time: password, then the authenticator code.
-  await page.getByRole("button", { name: "Sign out" }).click()
+  await signOutViaMenu(page)
   await staffPassword(page, PEOPLE.bursar.email, PEOPLE.bursar.password)
   await page
     .getByLabel("The code from your authenticator app")

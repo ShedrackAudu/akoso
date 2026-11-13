@@ -127,6 +127,46 @@ export default tseslint.config(
     },
   },
   {
+    // Parents' phones never download staff code (brief 4.0; app frame spec): parent
+    // pages import only from features/parent and features/shared. ESLint sees the "@/"
+    // imports the boundary checker can't follow (T4).
+    files: [
+      "apps/web/features/parent/**/*.{ts,tsx}",
+      // The parent experience's pages: /{school}/parent/... (no escaping needed).
+      "apps/web/app/**/parent/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/features/staff/**", "**/features/staff/**"],
+              message:
+                "Parent pages never load staff code. Use features/parent or features/shared.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["apps/web/features/staff/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/features/parent/**", "**/features/parent/**"],
+              message: "Staff and parent features never import each other.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: SHADCN_GENERATED,
     rules: {
       "@typescript-eslint/explicit-module-boundary-types": "off",

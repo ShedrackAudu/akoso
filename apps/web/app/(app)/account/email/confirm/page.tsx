@@ -46,7 +46,10 @@ export default async function ConfirmEmailPage({
           ? "You can now sign in with your new email."
           : "It may have been used already, or be more than a day old. Please ask for a new one from My account."}
       </p>
-      <Link href="/account" className="text-base text-primary underline">
+      <Link
+        href="/account"
+        className="text-base text-foreground underline underline-offset-4"
+      >
         Go to My account
       </Link>
     </main>
