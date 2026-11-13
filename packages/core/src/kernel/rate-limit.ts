@@ -6,26 +6,11 @@ import { sql, type Database } from "@akoso/db"
 import type { RateLimitClass } from "@akoso/schemas/api"
 
 import { RateLimitedError } from "./errors"
+import { getSetting } from "./settings"
 
 type Scope = "user" | "tenant" | "ip"
 
 const WINDOW_SECONDS = 60
-
-/**
- * Requests allowed per minute, by limit class and scope. Starting values, to be tuned
- * from staging and pilot traffic. They move to platform settings with feature flags
- * (brief rule 10: limits are data). Sign-in and OTP limits belong to the auth slice.
- */
-export const RATE_LIMITS: Record<
-  RateLimitClass,
-  Partial<Record<Scope, number>>
-> = {
-  standard: { user: 120, tenant: 1200, ip: 300 },
-  write: { user: 60, tenant: 600, ip: 120 },
-  export: { user: 5, tenant: 20, ip: 10 },
-  public: { ip: 60 },
-  none: {},
-}
 
 export interface RateLimitSubject {
   userId?: string | null
@@ -48,10 +33,12 @@ export async function consumeRateLimit(
   now: () => Date
 ): Promise<void> {
   const checks: LimitCheck[] = []
-  for (const [scope, limit] of Object.entries(RATE_LIMITS[cls]) as [
-    Scope,
-    number,
-  ][]) {
+  if (cls === "none") return
+  // Per-minute numbers come from platform settings (limits.api; closes T16).
+  const limits = (await getSetting(db, "limits.api"))[cls] as Partial<
+    Record<Scope, number>
+  >
+  for (const [scope, limit] of Object.entries(limits) as [Scope, number][]) {
     const id =
       scope === "user"
         ? subject.userId

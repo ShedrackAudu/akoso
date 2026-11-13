@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@akoso/db": "workspace:*",
+    "@akoso/domain": "workspace:*",
     "@akoso/providers": "workspace:*",
     "@akoso/schemas": "workspace:*",
     "better-auth": "1.7.14",

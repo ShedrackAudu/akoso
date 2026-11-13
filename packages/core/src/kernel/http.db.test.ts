@@ -11,7 +11,7 @@ import { defineContract, type ActionKey } from "@akoso/schemas/api"
 import type { RequestContext } from "./context"
 import { NotFoundError } from "./errors"
 import { handleRequest, type HttpDeps } from "./http"
-import { memoryLogger, testContext } from "./testing"
+import { memoryLogger, testContext } from "../testing/index"
 
 const APP_URL =
   process.env.TEST_APP_DATABASE_URL ??

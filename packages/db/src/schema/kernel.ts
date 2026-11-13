@@ -54,3 +54,17 @@ export const rateLimitWindows = platform.table(
   },
   (table) => [primaryKey({ columns: [table.bucket, table.windowStart] })]
 )
+
+/**
+ * Platform-wide settings, such as request limits (section 4). Declared with defaults in
+ * code (packages/schemas/src/settings.ts); this table holds only overrides. Read-only
+ * for the app role.
+ */
+export const platformSettings = platform.table("platform_settings", {
+  key: text("key").primaryKey(),
+  value: jsonb("value").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedBy: text("updated_by"),
+})

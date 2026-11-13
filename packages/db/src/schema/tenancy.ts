@@ -1,7 +1,14 @@
 // Schools (tenants), groups and school domains (spec: docs/specs/stage-1-tenancy.md).
 // Grants, checks, RLS and the lookup functions are in the hand-written migration beside
 // the generated one.
-import { index, text, timestamp, uuid } from "drizzle-orm/pg-core"
+import {
+  boolean,
+  index,
+  primaryKey,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core"
 
 import { platform } from "./kernel"
 
@@ -88,4 +95,25 @@ export const tenantDomains = platform.table(
       table.createdAt
     ),
   ]
+)
+
+/**
+ * A feature turned on or off for one school (spec: stage-1-time-audit-flags.md,
+ * section 3). Flags are declared in code (packages/schemas/src/flags.ts); this table
+ * holds only overrides. A tenant table the app role may read, never change.
+ */
+export const tenantFeatureFlags = platform.table(
+  "tenant_feature_flags",
+  {
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id),
+    flagKey: text("flag_key").notNull(),
+    enabled: boolean("enabled").notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedBy: text("updated_by"),
+  },
+  (table) => [primaryKey({ columns: [table.tenantId, table.flagKey] })]
 )

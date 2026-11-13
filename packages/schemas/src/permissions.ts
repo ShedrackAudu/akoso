@@ -37,11 +37,21 @@ const EVERY_ROLE: readonly ActionKey[] = [
 ]
 
 /** What each role may do. Stage 1 item 5 adds only what every role needs. */
+/** Reading a school's audit log (D-27): its page comes later; the right exists now. */
+const AUDIT_READERS: ReadonlySet<RoleKey> = new Set([
+  "proprietor",
+  "school_admin",
+])
+
 export const ROLE_PERMISSIONS: Readonly<Record<RoleKey, readonly ActionKey[]>> =
-  Object.fromEntries(ROLE_KEYS.map((role) => [role, EVERY_ROLE])) as Record<
-    RoleKey,
-    readonly ActionKey[]
-  >
+  Object.fromEntries(
+    ROLE_KEYS.map((role) => [
+      role,
+      AUDIT_READERS.has(role)
+        ? [...EVERY_ROLE, "audit.event.read"]
+        : EVERY_ROLE,
+    ])
+  ) as Record<RoleKey, readonly ActionKey[]>
 
 /** The permissions a set of roles grants together. */
 export function permissionsFor(roles: Iterable<RoleKey>): Set<ActionKey> {

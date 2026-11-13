@@ -15,7 +15,7 @@ import {
 import { createLogger } from "./logger"
 import { decodeCursor, encodeCursor, toPage } from "./paging"
 import { toProblem } from "./problem"
-import { memoryLogger, testContext } from "./testing"
+import { memoryLogger, testContext } from "../testing/index"
 
 const db = {} as Database
 

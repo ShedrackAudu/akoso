@@ -356,6 +356,9 @@ importers:
       '@akoso/db':
         specifier: workspace:*
         version: link:../db
+      '@akoso/domain':
+        specifier: workspace:*
+        version: link:../domain
       '@akoso/providers':
         specifier: workspace:*
         version: link:../providers
@@ -380,7 +383,7 @@ importers:
     dependencies:
       drizzle-orm:
         specifier: ^0.45.4
-        version: 0.45.4(@types/pg@8.23.1)(pg@8.23.1)
+        version: 0.45.4(@types/pg@8.23.1)(kysely@0.29.8)(pg@8.23.1)
       pg:
         specifier: ^8.23.1
         version: 8.23.1
@@ -5821,11 +5824,6 @@ snapshots:
     optionalDependencies:
       '@types/pg': 8.23.1
       kysely: 0.29.8
-      pg: 8.23.1
-
-  drizzle-orm@0.45.4(@types/pg@8.23.1)(pg@8.23.1):
-    optionalDependencies:
-      '@types/pg': 8.23.1
       pg: 8.23.1
 
   electron-to-chromium@1.5.479: {}

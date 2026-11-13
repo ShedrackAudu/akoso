@@ -10,7 +10,7 @@ import { defineContract } from "@akoso/schemas/api"
 
 import { findSchoolBySlug } from "../tenancy/index"
 import { handleRequest } from "./http"
-import { memoryLogger, testContext } from "./testing"
+import { memoryLogger, testContext } from "../testing/index"
 
 const APP_URL =
   process.env.TEST_APP_DATABASE_URL ??

@@ -12,7 +12,7 @@ import { sql, type Database } from "@akoso/db"
 import * as tables from "@akoso/db/schema/identity"
 import type { sms } from "@akoso/providers"
 
-import { consumeLimits, type LimitCheck } from "../kernel/index"
+import { consumeLimits, getSetting, type LimitCheck } from "../kernel/index"
 import { accessFor } from "./access"
 import { checkStoredCode, protectStoredCode } from "./codes"
 import { recordSecurityEvent } from "./events"
@@ -211,6 +211,8 @@ function authConfig(options: AuthOptions) {
     hooks: {
       before: createAuthMiddleware(async (ctx) => {
         const ip = clientIp(ctx.headers) ?? "unknown"
+        // Limits are platform settings (limits.sign_in; closes T16).
+        const limits = await getSetting(db, "limits.sign_in")
         const body = (ctx.body ?? {}) as Record<string, unknown>
 
         // Phone numbers arrive in any form; Better Auth sees only E.164.
@@ -226,21 +228,25 @@ function authConfig(options: AuthOptions) {
             await limit([
               {
                 key: `code:phone:${phone}`,
-                limit: 3,
+                limit: limits.codesPerNumberPer15Minutes,
                 windowSeconds: 15 * MINUTE,
               },
               {
                 key: `code:phone:${phone}`,
-                limit: 10,
+                limit: limits.codesPerNumberPerDay,
                 windowSeconds: 24 * 60 * MINUTE,
               },
-              { key: `code:ip:${ip}`, limit: 20, windowSeconds: 60 * MINUTE },
+              {
+                key: `code:ip:${ip}`,
+                limit: limits.codesPerIpPerHour,
+                windowSeconds: 60 * MINUTE,
+              },
               ...(isNigerianNumber(phone)
                 ? []
                 : [
                     {
                       key: `code:abroad:${phone}`,
-                      limit: 1,
+                      limit: limits.codesPerNumberAbroadPer15Minutes,
                       windowSeconds: 15 * MINUTE,
                     },
                   ]),
@@ -263,12 +269,12 @@ function authConfig(options: AuthOptions) {
               await limit([
                 {
                   key: `password:account:${account}`,
-                  limit: 5,
+                  limit: limits.passwordAttemptsPerAccountPer15Minutes,
                   windowSeconds: 15 * MINUTE,
                 },
                 {
                   key: `password:ip:${ip}`,
-                  limit: 30,
+                  limit: limits.passwordAttemptsPerIpPer15Minutes,
                   windowSeconds: 15 * MINUTE,
                 },
               ])

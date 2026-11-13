@@ -50,6 +50,20 @@
       "when": 1794488703206,
       "tag": "0006_rate_limit_day_windows",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794496259112,
+      "tag": "0007_audit_flags_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1794496265634,
+      "tag": "0008_audit_flags_security",
+      "breakpoints": true
     }
   ]
 }

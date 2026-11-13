@@ -4,10 +4,10 @@ Schools (tenants) and groups (a branch is a school in a group), school addresses
 
 - **Product name:** Platform
 - **Brief:** sections 7, 7.1 (`docs/brief/`)
-- **Main entities:** groups, tenants, tenant_domains (built); feature_flags, platform_settings (item 6)
+- **Main entities:** groups, tenants, tenant_domains, tenant_feature_flags (built). Platform settings live in the kernel
 - **Public interface:** `index.ts`: host classification, school lookups (by slug, ID or custom host) and a small cache
 - **Jobs and events:** none yet
-- **Specs:** `docs/specs/stage-1-tenancy.md`
+- **Specs:** `docs/specs/stage-1-tenancy.md`, `docs/specs/stage-1-time-audit-flags.md` (flags)
 
 ## Where this module lives
 
