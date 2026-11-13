@@ -5,8 +5,8 @@ Newest session first.
 
 ## Where we are
 
-**Stage 1 (Foundations): items 1 to 6 built, including all of sign-in part B. Akoso team
-sign-in is in its pull request; the Stage 1 checkpoint is next.**
+**Stage 1 (Foundations): built. The Stage 1 checkpoint (`docs/checkpoints/stage-1.md`)
+waits for the founder's approval; Stage 2 starts after it.**
 
 - Merged on `main`: spikes 01 to 04 (04 partly blocked), CI/CD Part A, the API
   conventions, tenancy (with its review fixes), sign-in part A, and time zones, the
@@ -52,11 +52,10 @@ In this order (brief section 32, Stage 1):
 Each begins with a spec in `docs/specs/`. Tenancy, auth and audit specs need the
 founder's approval and a threat model before code.
 
-**Next session:** once the team sign-in pull request is merged (delete its branch only if
-the founder asks), prepare the **Stage 1 checkpoint**: a short summary of what Stage 1
-built against the brief's Stage 1 row (section 32), the checks it asks for (tenant
-isolation on every table; sign-in with codes and a second step), and the founder
-decisions still open. The founder approves it before Stage 2 starts.
+**Next session:** if the founder has approved the Stage 1 checkpoint, record the two
+signed decisions (Next.js stays; one dedicated account per billing account, on
+condition), then start Stage 2 with a spec for its first item (the app frame, if the
+founder agreed). If not approved yet, answer the founder's questions on it.
 
 ## Open questions for the founder
 
