@@ -20,6 +20,7 @@ export {
   ForbiddenError,
   IdempotencyMismatchError,
   MfaRequiredError,
+  ReauthRequiredError,
   NotFoundError,
   PayloadTooLargeError,
   RateLimitedError,

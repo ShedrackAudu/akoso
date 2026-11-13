@@ -39,6 +39,41 @@ export const ISOLATION_FIXTURES: Record<string, IsolationFixture> = {
     insert into platform.memberships (tenant_id, user_id, roles)
     select ${tenantId}, id, array['teacher'] from person`,
 
+  // Sign-in part B.
+  "platform.custom_roles": (tenantId, marker) => sql`
+    insert into platform.custom_roles (tenant_id, name, permissions)
+    values (${tenantId}, ${`Isolation ${marker}`}, array['identity.profile.read'])`,
+
+  "platform.membership_custom_roles": (tenantId, marker) => sql`
+    with person as (
+      insert into platform.users (id, name, email)
+      values (gen_random_uuid(), 'Isolation Role Holder', ${`${marker}-holder@isolation.invalid`})
+      returning id
+    ), membership as (
+      insert into platform.memberships (tenant_id, user_id, roles)
+      select ${tenantId}, id, array['teacher'] from person returning id
+    ), role as (
+      insert into platform.custom_roles (tenant_id, name, permissions)
+      values (${tenantId}, ${`Isolation holder ${marker}`}, '{}') returning id
+    )
+    insert into platform.membership_custom_roles (tenant_id, membership_id, custom_role_id)
+    select ${tenantId}, membership.id, role.id from membership, role`,
+
+  "platform.school_settings": (tenantId, marker) => sql`
+    insert into platform.school_settings (tenant_id, key, value)
+    values (${tenantId}, ${`isolation.${marker}`}, '[]'::jsonb)`,
+
+  "platform.contact_changes": (tenantId, marker) => sql`
+    with person as (
+      insert into platform.users (id, name, email)
+      values (gen_random_uuid(), 'Isolation Changed Person', ${`${marker}-changed@isolation.invalid`})
+      returning id
+    )
+    insert into platform.contact_changes
+      (tenant_id, user_id, changed_by, kind, check_method, evidence, reason)
+    select ${tenantId}, id, id, 'phone_number', 'in_person', 'parent_id', 'sim_lost'
+    from person`,
+
   "platform.tenant_domains": (tenantId, marker) => sql`
     insert into platform.tenant_domains (tenant_id, hostname, status)
     values (${tenantId}, ${`${marker}.isolation.example`}, 'pending_dns')`,

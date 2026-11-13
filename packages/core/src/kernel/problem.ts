@@ -14,6 +14,8 @@ const TITLES: Record<ErrorCode, string> = {
     "You don't have access to this. Ask your school administrator if you need it.",
   mfa_required:
     "Your role needs a second sign-in step. Please set it up to continue.",
+  reauth_required:
+    "For your security, please confirm it's you, then try again.",
   not_found: "We couldn't find that. It may have been moved or removed.",
   conflict:
     "This was changed by someone else a moment ago. Please refresh and try again.",

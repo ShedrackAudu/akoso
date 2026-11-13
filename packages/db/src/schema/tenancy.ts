@@ -3,6 +3,7 @@
 // the generated one.
 import {
   boolean,
+  jsonb,
   index,
   primaryKey,
   text,
@@ -116,4 +117,26 @@ export const tenantFeatureFlags = platform.table(
     updatedBy: text("updated_by"),
   },
   (table) => [primaryKey({ columns: [table.tenantId, table.flagKey] })]
+)
+
+/**
+ * A school's own settings, such as which roles must use a second step (spec:
+ * stage-1-sign-in-part-b.md, section 2). Declared with defaults in code
+ * (packages/schemas/src/school-settings.ts); this table holds only overrides. A tenant
+ * table the app role reads and writes through the identity and tenancy use cases.
+ */
+export const schoolSettings = platform.table(
+  "school_settings",
+  {
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id),
+    key: text("key").notNull(),
+    value: jsonb("value").notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedBy: text("updated_by"),
+  },
+  (table) => [primaryKey({ columns: [table.tenantId, table.key] })]
 )

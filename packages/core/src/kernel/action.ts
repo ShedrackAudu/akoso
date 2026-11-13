@@ -21,8 +21,15 @@ export type ActionResult<Data> =
   { ok: true; data: Data } | { ok: false; error: ProblemDetails }
 
 export type ActionDeps = Pick<HttpDeps, "db" | "log" | "now"> & {
-  /** The signed-in context for this action, or null. Supplied by sign-in (item 5). */
-  resolveContext: (base: PublicContext) => Promise<RequestContext | null>
+  /**
+   * The signed-in context for this action, or null. Supplied by sign-in (item 5). It
+   * sees the raw input, so a school-scoped action can name its school there (`school`,
+   * the slug from the address); the school is still checked against memberships.
+   */
+  resolveContext: (
+    base: PublicContext,
+    rawInput: unknown
+  ) => Promise<RequestContext | null>
 }
 
 /**
@@ -44,7 +51,7 @@ export async function runServerAction<Input extends z.ZodObject, Output>(
     log: deps.log.child({ requestId }),
   }
   try {
-    const ctx = await deps.resolveContext(base)
+    const ctx = await deps.resolveContext(base, rawInput)
     if (ctx === null) throw new UnauthenticatedError()
     // Server actions change things, so a read-only school refuses them too.
     assertSchoolAllows(ctx.school, true)

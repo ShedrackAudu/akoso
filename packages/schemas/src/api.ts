@@ -99,6 +99,7 @@ export const ERROR_CODES = [
   "unauthenticated",
   "forbidden",
   "mfa_required",
+  "reauth_required",
   "not_found",
   "conflict",
   "idempotency_mismatch",
