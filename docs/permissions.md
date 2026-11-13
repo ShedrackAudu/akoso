@@ -95,6 +95,22 @@ One person can belong to several schools and hold several roles.
 Akoso staff do not see children's records by default. Access to a school's data happens
 only through a support session the school has agreed to.
 
+Team accounts are separate from school accounts and sign in to the admin app with
+passkeys only (sign-in part B, section 8). Role keys: `owner`, `support`, `onboarding`,
+`finance`, `sales`, `ops` (code table: `TEAM_ROLE_PERMISSIONS`).
+
+| Action key               | Team roles |
+| ------------------------ | ---------- |
+| `team.member.read`       | `owner`    |
+| `team.member.manage`     | `owner`    |
+| `team.security_log.read` | `owner`    |
+
+None of these can go into a school's custom role. The other team roles get their actions
+with the features that need them. Rules: nobody changes their own roles or removes their
+own access; the team keeps at least one Owner; granting or removing the Owner role needs
+the person's email typed in; inviting, changing roles and removing access need a passkey
+sign-in within 5 minutes.
+
 | Role                   | Can do                                                                                                   | Cannot do                                                                                  |
 | ---------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | Owner                  | Everything, including team roles, pricing, platform-fee settings, emergency switches and closing schools |                                                                                            |

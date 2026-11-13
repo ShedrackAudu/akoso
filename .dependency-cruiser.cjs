@@ -139,6 +139,22 @@ module.exports = {
       to: { path: "^packages/db/" },
     },
     {
+      name: "school-app-never-touches-team-sign-in",
+      comment:
+        "Akoso team sign-in (sign-in part B, section 8) belongs to the admin app only. The school app never imports it, so a school session can never reach team code.",
+      severity: "error",
+      from: { path: "^apps/web/" },
+      to: { path: "^packages/core/src/team/" },
+    },
+    {
+      name: "admin-app-never-touches-school-sign-in",
+      comment:
+        "The admin app signs in the Akoso team only. School sign-in and school accounts stay out of it.",
+      severity: "error",
+      from: { path: "^apps/admin/" },
+      to: { path: "^packages/core/src/identity/" },
+    },
+    {
       name: "apps-do-not-import-each-other",
       severity: "error",
       from: { path: "^apps/([^/]+)/" },

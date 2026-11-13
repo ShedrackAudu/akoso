@@ -98,7 +98,13 @@ export const RESTRICTED_ACTIONS: ReadonlySet<ActionKey> = new Set<ActionKey>([])
 
 /** Permissions that can never go into a custom role (part B spec, section 2). */
 export const NEVER_IN_CUSTOM_ROLES: ReadonlySet<ActionKey> = new Set<ActionKey>(
-  ["identity.role.approve_restricted"]
+  [
+    "identity.role.approve_restricted",
+    // Akoso team actions (section 8) never reach a school.
+    "team.member.read",
+    "team.member.manage",
+    "team.security_log.read",
+  ]
 )
 
 /** Permissions a school may put into a custom role: every school action but these. */
@@ -142,4 +148,55 @@ export const ROLE_LABELS: Readonly<Record<RoleKey, string>> = {
   teacher: "Teacher",
   gate_staff: "Gate staff",
   guardian: "Parent",
+}
+
+// Akoso team roles (brief 26.2; sign-in part B, section 8). A separate set of people
+// and permissions from schools': none of these can go into a school's custom role.
+
+export const TEAM_ROLE_KEYS = [
+  "owner",
+  "support",
+  "onboarding",
+  "finance",
+  "sales",
+  "ops",
+] as const
+export type TeamRoleKey = (typeof TEAM_ROLE_KEYS)[number]
+
+export const isTeamRoleKey = (value: string): value is TeamRoleKey =>
+  (TEAM_ROLE_KEYS as readonly string[]).includes(value)
+
+export const TEAM_ROLE_LABELS: Readonly<Record<TeamRoleKey, string>> = {
+  owner: "Owner",
+  support: "Support",
+  onboarding: "Onboarding",
+  finance: "Finance",
+  sales: "Sales",
+  ops: "Ops and engineering",
+}
+
+/**
+ * What each team role may do. Only the Owner has team actions yet; the others get theirs
+ * with the features that need them (support sessions, the fee ledger).
+ */
+export const TEAM_ROLE_PERMISSIONS: Readonly<
+  Record<TeamRoleKey, readonly ActionKey[]>
+> = {
+  owner: ["team.member.read", "team.member.manage", "team.security_log.read"],
+  support: [],
+  onboarding: [],
+  finance: [],
+  sales: [],
+  ops: [],
+}
+
+/** The permissions a set of team roles grants together. */
+export function teamPermissionsFor(
+  roles: Iterable<TeamRoleKey>
+): Set<ActionKey> {
+  const granted = new Set<ActionKey>()
+  for (const role of roles) {
+    for (const action of TEAM_ROLE_PERMISSIONS[role]) granted.add(action)
+  }
+  return granted
 }
