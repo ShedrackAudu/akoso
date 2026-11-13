@@ -25,8 +25,9 @@ About 15 minutes on Windows, macOS or Linux.
 
 ### You need
 
-- **Node.js 24** (`.nvmrc` pins it)
-- **pnpm**, through corepack, which ships with Node
+- **Node.js 26** (`.nvmrc` pins it; D-30)
+- **pnpm 12.18**, installed on its own (`npm install -g pnpm@12.18.0`): Node 26 no longer
+  ships corepack
 - **Docker** (Docker Desktop on Windows and macOS) for Postgres, PgBouncer and Gotenberg
 - **Git**
 

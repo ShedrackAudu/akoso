@@ -115,7 +115,8 @@ PostgreSQL 16 with RLS · Drizzle · Zod · Better Auth · pg-boss · Gotenberg 
 S3-compatible storage · Tailwind and shadcn/ui preset `b4bg87xLw8` · Phosphor icons ·
 TanStack Table · React Hook Form · Serwist and Dexie · Vitest · Playwright · k6.
 
-Requires Node 24 and pnpm (through corepack; the version is pinned in `package.json`).
+Requires Node 26 (D-30) and pnpm 12.18 (the version is pinned in `package.json`). Node 26
+no longer ships corepack, so install pnpm on its own: `npm install -g pnpm@12.18.0`.
 
 Only what the scaffold needs is installed so far. Every other item above is in the
 agreed stack (brief section 2) and is added by the slice that first uses it. Anything
