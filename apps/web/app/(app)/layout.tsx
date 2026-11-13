@@ -7,7 +7,12 @@ import "@akoso/ui/globals.css"
 import { cn } from "@akoso/ui/lib/utils"
 
 import { geistMono, figtree, merriweather } from "@/app/fonts"
+import { DevServiceWorkerCleanup } from "@/components/dev-service-worker-cleanup"
 import { ThemeProvider } from "@/components/theme-provider"
+
+// The offline service worker is for production builds only: under `next dev` it gets
+// in the way of the development server's files (pages load without styles).
+const DEVELOPMENT = process.env.NODE_ENV === "development"
 
 export const metadata: Metadata = {
   title: { default: BRAND_NAME, template: `%s · ${BRAND_NAME}` },
@@ -44,7 +49,12 @@ export default function RootLayout({
     >
       <body>
         {/* No reload on reconnect: it would throw away a teacher's half-typed entry. */}
-        <SerwistProvider swUrl="/serwist/sw.js" reloadOnOnline={false}>
+        <SerwistProvider
+          swUrl="/serwist/sw.js"
+          reloadOnOnline={false}
+          disable={DEVELOPMENT}
+        >
+          {DEVELOPMENT && <DevServiceWorkerCleanup />}
           <ThemeProvider>{children}</ThemeProvider>
         </SerwistProvider>
       </body>
