@@ -143,9 +143,8 @@ test("the Owner invites Support; removing them ends their access at once", async
     .filter({ hasText: email })
     .click()
   await ownerPage.getByRole("button", { name: "Remove access now" }).click()
-  await expect(ownerPage.getByTestId("team-notice")).toContainText(
-    "Access removed"
-  )
+  // The page refreshes into its removed state: check that, not a passing notice.
+  await expect(ownerPage.getByTestId("member-removed")).toBeVisible()
   await support.goto("/")
   await expect(support).toHaveURL(/\/sign-in$/)
   const left = querySqlAsOwner(`

@@ -64,12 +64,21 @@ export function TeamMemberPanel({
     router.refresh()
   }
 
+  // After a removal the page refreshes into this state, so the confirmation stays
+  // here rather than in a notice the refresh would replace.
   if (member.removed) {
     return (
-      <p className="text-base" data-testid="member-removed">
-        This person&apos;s access has been removed. Invite them again to restore
-        it.
-      </p>
+      <div className="flex flex-col gap-2">
+        {notice !== null && (
+          <p role="status" className="text-base" data-testid="team-notice">
+            {notice}
+          </p>
+        )}
+        <p className="text-base" data-testid="member-removed">
+          This person&apos;s access has been removed. Invite them again to
+          restore it.
+        </p>
+      </div>
     )
   }
 
