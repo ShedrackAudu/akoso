@@ -43,7 +43,7 @@ services:
   # Locked down: no JavaScript in templates, and Chromium may not fetch anything from
   # any network, public or private. Every asset is uploaded with the HTML.
   gotenberg:
-    image: gotenberg/gotenberg:9.4.0-chromium@sha256:ad6dbcf5923f0888fb25462adc4c3a8580ef163cae07acc8e45d0703ff10cad7
+    image: gotenberg/gotenberg:9.4.1-chromium@sha256:1a4d2f40757ba7b76eb3c379c683f2f74bcafae72578111909aee18e3cb4b5b8
     command:
       - gotenberg
       - --chromium-disable-javascript=true
