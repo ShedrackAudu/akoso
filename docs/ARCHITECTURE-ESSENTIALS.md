@@ -137,6 +137,11 @@ cookie (`akoso_team`). Boundary rules keep team code out of `apps/web` and schoo
 out of `apps/admin`. Team actions go into one hash-chained team audit log
 (`recordTeamAudit`, `verify_team_audit_chain()`).
 
+**Forms:** every form a screen handles in JavaScript is a `SafeForm`
+(`@akoso/ui/components/safe-form`): it posts, and its controls stay disabled until the
+page is interactive, so an early submission on a slow phone never puts a password or
+code in the address bar. Lint refuses a plain `<form>` without a `method`.
+
 **Audit:** every change to school data calls `recordAudit(tx, ctx, event)` inside the
 same `withTenant()` transaction, with `changes` from `diffForAudit(before, after,
 sensitive)`. Sensitive fields (health, national IDs, bank details, restricted notes,

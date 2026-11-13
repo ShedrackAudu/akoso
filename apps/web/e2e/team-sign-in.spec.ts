@@ -52,7 +52,8 @@ let recoveryCodes: string[] = []
 let ownerLink = ""
 
 test.beforeAll(async ({ browser }) => {
-  // A clean team for this run. Audit records stay: the chain is append-only.
+  // A clean team for this run, and fresh limit counters (recovery codes are limited
+  // per email). Audit records stay: the chain is append-only.
   runSqlAsOwner(`
     delete from platform.team_security_events;
     delete from platform.team_recovery_codes;
@@ -61,7 +62,8 @@ test.beforeAll(async ({ browser }) => {
     delete from platform.team_passkeys;
     delete from platform.team_sessions;
     delete from platform.team_verifications;
-    delete from platform.team_users;`)
+    delete from platform.team_users;
+    delete from platform.rate_limit_windows;`)
   ownerContext = await browser.newContext({ baseURL: ADMIN })
   ownerPage = await ownerContext.newPage()
   await addAuthenticator(ownerPage)

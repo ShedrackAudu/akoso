@@ -19,6 +19,7 @@ import {
   type RoleKey,
 } from "@akoso/schemas/permissions"
 import { Button } from "@akoso/ui/components/button"
+import { SafeForm } from "@akoso/ui/components/safe-form"
 
 import {
   ProblemText,
@@ -245,7 +246,7 @@ export function MemberPanel({
         </p>
       )}
 
-      <form onSubmit={saveRoles} className={SECTION}>
+      <SafeForm onSubmit={saveRoles} className={SECTION}>
         <h2 className="text-lg font-semibold">Roles</h2>
         <fieldset className="flex flex-col" disabled={!canEdit}>
           <legend className="sr-only">Built-in roles</legend>
@@ -288,7 +289,7 @@ export function MemberPanel({
             Save roles
           </Button>
         )}
-      </form>
+      </SafeForm>
 
       {canEdit && (
         <section className={SECTION}>
@@ -329,7 +330,7 @@ export function MemberPanel({
             told.
           </p>
           {change === null ? (
-            <form onSubmit={startChange} className="flex flex-col gap-4">
+            <SafeForm onSubmit={startChange} className="flex flex-col gap-4">
               <IdentityCheckFields prefix="number" />
               <Field
                 id="number-phone"
@@ -342,9 +343,9 @@ export function MemberPanel({
               <Button type="submit" className={BUTTON} disabled={action.busy}>
                 Send a code to the new number
               </Button>
-            </form>
+            </SafeForm>
           ) : (
-            <form onSubmit={confirmChange} className="flex flex-col gap-4">
+            <SafeForm onSubmit={confirmChange} className="flex flex-col gap-4">
               <Field
                 id="number-code"
                 name="code"
@@ -356,13 +357,13 @@ export function MemberPanel({
               <Button type="submit" className={BUTTON} disabled={action.busy}>
                 Change number
               </Button>
-            </form>
+            </SafeForm>
           )}
         </section>
       )}
 
       {may.resetMfa && !isSelf && member.mfaEnabled && (
-        <form onSubmit={resetMfa} className={SECTION}>
+        <SafeForm onSubmit={resetMfa} className={SECTION}>
           <h2 className="text-lg font-semibold">Reset second sign-in step</h2>
           <p className="text-base text-muted-foreground">
             For someone who has lost their authenticator app and backup codes.
@@ -378,7 +379,7 @@ export function MemberPanel({
           >
             Reset second step
           </Button>
-        </form>
+        </SafeForm>
       )}
     </div>
   )

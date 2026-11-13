@@ -8,6 +8,7 @@ import { useState, type JSX, type SyntheticEvent } from "react"
 import type { TeamMemberSummary } from "@akoso/core/team"
 import { TEAM_ROLE_KEYS, TEAM_ROLE_LABELS } from "@akoso/schemas/permissions"
 import { Button } from "@akoso/ui/components/button"
+import { SafeForm } from "@akoso/ui/components/safe-form"
 
 import { changeTeamRolesAction, removeTeamMemberAction } from "@/server/actions"
 
@@ -86,7 +87,7 @@ export function TeamMemberPanel({
         </p>
       )}
 
-      <form onSubmit={(event) => void saveRoles(event)} className={SECTION}>
+      <SafeForm onSubmit={(event) => void saveRoles(event)} className={SECTION}>
         <h2 className="text-lg font-semibold">Roles</h2>
         <fieldset className="flex flex-col" disabled={!editable}>
           <legend className="sr-only">Roles</legend>
@@ -127,10 +128,10 @@ export function TeamMemberPanel({
             Save roles
           </Button>
         )}
-      </form>
+      </SafeForm>
 
       {editable && (
-        <form onSubmit={(event) => void remove(event)} className={SECTION}>
+        <SafeForm onSubmit={(event) => void remove(event)} className={SECTION}>
           <h2 className="text-lg font-semibold">Remove access</h2>
           <p className="text-base text-muted-foreground">
             For someone leaving the team. It takes effect at once: their
@@ -154,7 +155,7 @@ export function TeamMemberPanel({
           >
             Remove access now
           </Button>
-        </form>
+        </SafeForm>
       )}
     </div>
   )
