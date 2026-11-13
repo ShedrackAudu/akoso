@@ -187,4 +187,4 @@ jobs:
         with:
           node-version-file: .nvmrc
       # An exact Renovate version, run once without installing it into the project.
-      - run: npx --yes --package renovate@44.192.2 -- renovate-config-validator --strict
+      - run: npx --yes --package renovate@44.198.0 -- renovate-config-validator --strict
