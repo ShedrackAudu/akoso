@@ -1,6 +1,6 @@
 // Bundles the worker for Node (tech debt T2, settled in spike 03).
 //
-// Node 24 can run TypeScript, but not our workspace packages: they import each other
+// Node can run TypeScript, but not our workspace packages: they import each other
 // without file extensions, which Node's loader refuses. So the worker is bundled with
 // esbuild. Our own packages (@akoso/*) are compiled into the bundle; every other
 // package stays external and loads from node_modules as usual.
@@ -31,7 +31,7 @@ const options = {
   bundle: true,
   platform: "node",
   format: "esm",
-  target: "node24",
+  target: "node26",
   jsx: "automatic",
   sourcemap: true,
   logLevel: "info",

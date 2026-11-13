@@ -175,7 +175,7 @@ states, status and small sizes.
 ## Commands
 
 ```
-pnpm install                 install (pnpm via corepack; Node 24)
+pnpm install                 install (Node 26; pnpm 12.18 installed on its own)
 docker compose up -d         Postgres (5433), PgBouncer (6432), Gotenberg
 pnpm dev                     web app on http://localhost:3000
 pnpm dev:admin               platform admin on http://localhost:3001

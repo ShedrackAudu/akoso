@@ -61,8 +61,8 @@ the cross-model review (D-24). Then prepare the Stage 1 checkpoint.
 
 Full text and recommendations in `docs/decisions.md`.
 
-- **D-OPEN-3** Node 24 or another version.
 - **D-OPEN-7** Whether apps may import providers directly.
+- D-OPEN-3 (Node version) is closed: Node 26 (D-30).
 - D-OPEN-2 (AI provider), D-OPEN-4 (update section 4.0 for the brand kit) and D-OPEN-6
   (changing an assessment scheme after scores exist) are not needed yet.
 
