@@ -10,7 +10,7 @@ export interface SmsMessage {
    * What the message is for. Sign-in codes go on the DND (transactional) route so they
    * still reach numbers on Do Not Disturb.
    */
-  purpose: "sign_in_code"
+  purpose: "sign_in_code" | "security_notice"
 }
 
 export interface SmsProvider {

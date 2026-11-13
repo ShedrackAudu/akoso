@@ -5,6 +5,23 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 const OUTBOX = join(tmpdir(), "akoso-e2e-sms-outbox.json")
+const EMAIL_OUTBOX = join(tmpdir(), "akoso-e2e-email-outbox.json")
+
+/** The newest email to an address, as text, waiting briefly for it. */
+export async function waitForEmail(address: string): Promise<string> {
+  for (let attempt = 0; attempt < 50; attempt++) {
+    if (existsSync(EMAIL_OUTBOX)) {
+      const latest = JSON.parse(readFileSync(EMAIL_OUTBOX, "utf8")) as Record<
+        string,
+        string
+      >
+      const text = latest[address]
+      if (text !== undefined) return text
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
+  throw new Error(`No email was sent to ${address}`)
+}
 
 /** Forgets every message, so a test only sees what it caused. */
 export function clearSmsOutbox(): void {

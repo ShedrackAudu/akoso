@@ -44,16 +44,28 @@ function resolveContext(
   )
 }
 
-/** The same for a server action, from the incoming request's headers. */
+/**
+ * The same for a server action, from the incoming request's headers. A school-scoped
+ * action names its school by slug in its input (`school`), as its page's address does;
+ * otherwise the X-Akoso-School header, or no school.
+ */
 async function resolveActionContext(
-  base: PublicContext
+  base: PublicContext,
+  rawInput: unknown
 ): Promise<RequestContext | null> {
   const incoming = new Headers(await headers())
+  const slug =
+    typeof rawInput === "object" &&
+    rawInput !== null &&
+    "school" in rawInput &&
+    typeof rawInput.school === "string"
+      ? rawInput.school
+      : null
   const schoolId = incoming.get(SCHOOL_HEADER)
   return resolveSignedIn(
     incoming,
     base,
-    schoolId === null ? null : { id: schoolId }
+    slug !== null ? { slug } : schoolId === null ? null : { id: schoolId }
   )
 }
 

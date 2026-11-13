@@ -257,6 +257,9 @@ importers:
       '@akoso/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@akoso/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@akoso/schemas':
         specifier: workspace:*
         version: link:../../packages/schemas

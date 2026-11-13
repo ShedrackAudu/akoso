@@ -5,14 +5,15 @@ Newest session first.
 
 ## Where we are
 
-**Stage 1 (Foundations): items 1 to 6 built; sign-in part B is next, then the Stage 1
-checkpoint.**
+**Stage 1 (Foundations): items 1 to 6 built, and sign-in part B's school side. Akoso
+team sign-in (part B, pull request 2) is next, then the Stage 1 checkpoint.**
 
 - Merged on `main`: spikes 01 to 04 (04 partly blocked), CI/CD Part A, the API
-  conventions, tenancy (with its review fixes) and sign-in part A.
-- **Pull request #19** (time zones, audit log, feature flags, platform settings) is open
-  on `feat/time-audit-flags`, CI green, cross-model review skipped (D-28). It waits for
-  the founder to merge.
+  conventions, tenancy (with its review fixes), sign-in part A, and time zones, the
+  audit log, flags and settings (#19).
+- **Sign-in part B, school side** is on `feat/sign-in-part-b`: custom roles, people with
+  access, the security log and access review, backup numbers, number and email changes,
+  school-assisted recovery and account deletion.
 - Staging (CI/CD Part B) is delayed until there is something to show (D-19).
 
 Feature work goes one spec at a time, in the order below.
@@ -40,8 +41,9 @@ In this order (brief section 32, Stage 1):
 5. Auth with Better Auth: phone OTP, password and MFA; roles, custom roles and Akoso
    team roles; the permission check and its generated tests. **Part A built** (parent
    code sign-in, staff password and MFA, sessions, memberships, school picker, the
-   permission check). Part B next: custom roles, the security log screen, account
-   deletion, phone-number change, Akoso team sign-in.
+   permission check). **Part B's school side built** (custom roles, people with
+   access, the security log, recovery, account deletion). Next: Akoso team sign-in with
+   passkeys in the admin app (part B, pull request 2).
 6. Time-zone handling, the audit log, feature flags: **built** (school-time date
    helpers and a lint rule; the hash-chained, append-only audit log with verification;
    per-school flags; platform settings, which now hold the rate limits).
@@ -49,11 +51,11 @@ In this order (brief section 32, Stage 1):
 Each begins with a spec in `docs/specs/`. Tenancy, auth and audit specs need the
 founder's approval and a threat model before code.
 
-**Next session:** once pull request #19 is merged (delete its branch only if the founder
-asks), write the spec for sign-in part B: custom roles, the security log screen, account
-deletion, phone-number change, and Akoso team sign-in (passkeys). It needs the founder's
-approval and a threat model before code. Ask whether to run the cross-model review on
-its pull request (D-24). After part B, prepare the Stage 1 checkpoint.
+**Next session:** once part B's first pull request is merged (delete its branch only if
+the founder asks), build pull request 2 from the approved spec
+(`docs/specs/stage-1-sign-in-part-b.md`, section 8): Akoso team sign-in with passkeys in
+`apps/admin`, with the new dependency `@better-auth/passkey` 1.7.14. Ask whether to run
+the cross-model review (D-24). Then prepare the Stage 1 checkpoint.
 
 ## Open questions for the founder
 
@@ -71,8 +73,9 @@ Full text and recommendations in `docs/decisions.md`.
 - **Staging (CI/CD Part B):** delayed by choice (D-19); needs `akoso.ng` on Cloudflare
   and the Render account when it resumes.
 
-Nothing blocks sign-in part B. Its phone-number change uses the existing local SMS
-stand-in; live SMS waits for the Termii sender ID.
+Nothing blocks part B's second pull request. Part B's codes, notices and email links
+use local stand-ins; live SMS waits for the Termii sender ID, and live email for the
+Resend or SES account.
 
 ## Founder tasks
 
@@ -92,6 +95,24 @@ have long lead times. Each is listed once.
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 13/11/2026: Sign-in part B, school side (Claude)
+
+- Spec written with a threat model; the founder approved it with all six
+  recommendations. Built as pull request 1 of 2.
+- Two migrations (0009 tables, 0010 checks, grants, RLS and functions). Four new tenant
+  tables under forced RLS, with isolation fixtures. `security_events` gains
+  `caused_by_school_id` (deliberately not `tenant_id`: the table is not a school's), read
+  by schools only through `school_security_log()`, with its own isolation case.
+- New `reauth_required` error; school-scoped server actions name their school in their
+  input; an email interface with a local fake sender.
+- Checks: `pnpm check` passes; 125 database tests (19 new) and 43 end-to-end tests (6
+  new) pass locally.
+- Node had been upgraded to 26 by winget; the founder reinstalled 24 and pinned it.
+- Local database: two functions in migration 0010 changed after it was first applied
+  locally, so they were re-applied by hand as the migration role (deleting the local
+  database was refused by the permission check). A fresh database runs the migrations
+  as committed.
 
 ### 12/11/2026 to 13/11/2026: Spike 04, CI/CD Part A, Stage 1 items 3 to 6 (Claude)
 

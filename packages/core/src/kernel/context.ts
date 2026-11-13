@@ -16,6 +16,8 @@ export interface UserActor {
   userId: string
   roles: readonly string[]
   permissions: ReadonlySet<ActionKey>
+  /** When this session signed in, for changes that need a recent sign-in. */
+  signedInAt?: Date
 }
 
 /** The worker acting on its own schedule or for a queued job. */

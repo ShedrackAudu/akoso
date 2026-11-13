@@ -7,6 +7,7 @@ import type { RoleKey } from "@akoso/schemas/permissions"
 import { describeRoles } from "@/features/shared/auth/role-names"
 import { SignOutButton } from "@/features/shared/auth/sign-out-button"
 import { requireSignedIn } from "@/server/session"
+import { settingsPagesFor } from "@/server/settings"
 
 // A school's home in the app. A placeholder until the first real screens (Stage 2);
 // it proves the school in the address is checked against the person's memberships.
@@ -24,6 +25,15 @@ export default async function SchoolHomePage({
 }: Props): Promise<JSX.Element> {
   const ctx = await requireSignedIn((await params).school)
   const roles = ctx.actor.kind === "user" ? (ctx.actor.roles as RoleKey[]) : []
+  const settings = settingsPagesFor(ctx)
+  const slug = encodeURIComponent(ctx.school?.slug ?? "")
+  const firstSettingsPage = settings.team
+    ? "team"
+    : settings.roles
+      ? "roles"
+      : settings.security
+        ? "security"
+        : null
   return (
     <main className="flex min-h-svh items-center justify-center p-6">
       <div className="flex w-full max-w-md flex-col gap-4 text-center">
@@ -34,6 +44,20 @@ export default async function SchoolHomePage({
         >
           Signed in as {describeRoles(roles)}
         </p>
+        {firstSettingsPage !== null && (
+          <Link
+            href={`/${slug}/settings/${firstSettingsPage}`}
+            className="text-base font-medium text-primary underline"
+          >
+            School settings
+          </Link>
+        )}
+        <Link
+          href="/account"
+          className="text-base font-medium text-primary underline"
+        >
+          My account
+        </Link>
         <Link
           href="/account/security"
           className="text-base font-medium text-primary underline"

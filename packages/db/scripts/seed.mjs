@@ -125,6 +125,37 @@ export const PEOPLE = [
       { school: ST_ANNES, roles: ["guardian"] },
     ],
   },
+  // Sign-in part B: a parent with a backup number, and a suspended teacher.
+  {
+    id: "7a000000-0000-4000-8000-000000000013",
+    name: "Kemi Lawal (test parent, backup number)",
+    email: null,
+    phone: "+2348031000013",
+    backupPhone: "+2348031000113",
+    password: null,
+    memberships: [{ school: GREENFIELD, roles: ["guardian"] }],
+  },
+  {
+    id: "7a000000-0000-4000-8000-000000000004",
+    name: "Dayo Ojo (test teacher, suspended)",
+    email: "suspended-teacher@greenfield.test",
+    phone: "+2348031000004",
+    password: "Greenfield-suspended-local",
+    memberships: [
+      { school: GREENFIELD, roles: ["teacher"], status: "suspended" },
+    ],
+  },
+]
+
+/** A school's own role, for the roles screens (part B, section 2). */
+const CUSTOM_ROLES = [
+  {
+    id: "7c000000-0000-4000-8000-000000000001",
+    school: GREENFIELD,
+    name: "Exams officer",
+    description: "Sees who has access, to plan exam duties",
+    permissions: ["identity.member.read"],
+  },
 ]
 
 /** Better Auth's scrypt format: "<salt hex>:<key hex>" (N 16384, r 16, p 1, 64 bytes). */
@@ -149,7 +180,7 @@ async function seedPeople(migrator) {
        values ($1, $2, $3, $4, $5, true, false)
        on conflict (id) do update set name = excluded.name, email = excluded.email,
          phone_number = excluded.phone_number, two_factor_enabled = false,
-         updated_at = now()`,
+         deleted_at = null, updated_at = now()`,
       [person.id, person.name, email, person.email !== null, person.phone]
     )
     // Every run starts from a known state: no second step, no sessions.
@@ -164,6 +195,17 @@ async function seedPeople(migrator) {
       `delete from platform.user_credentials where user_id = $1`,
       [person.id]
     )
+    await migrator.query(
+      `delete from platform.user_backup_phones where user_id = $1`,
+      [person.id]
+    )
+    if (person.backupPhone !== undefined) {
+      await migrator.query(
+        `insert into platform.user_backup_phones (user_id, phone_number, verified_at)
+         values ($1, $2, now())`,
+        [person.id, person.backupPhone]
+      )
+    }
     if (person.password !== null) {
       await migrator.query(
         `insert into platform.user_credentials (id, account_id, provider_id, user_id, password)
@@ -188,15 +230,43 @@ async function seedMemberships(appConnectionString) {
         await app.query(`select set_config('app.tenant_id', $1, true)`, [
           membership.school,
         ])
-        await app.query(
-          `insert into platform.memberships (tenant_id, user_id, roles)
-           values ($1, $2, $3)
+        const saved = await app.query(
+          `insert into platform.memberships (tenant_id, user_id, roles, status)
+           values ($1, $2, $3, $4)
            on conflict (tenant_id, user_id) do update
-             set roles = excluded.roles, status = 'active', updated_at = now()`,
-          [membership.school, person.id, membership.roles]
+             set roles = excluded.roles, status = excluded.status, ended_at = null,
+                 ended_reason = null, updated_at = now()
+           returning id`,
+          [
+            membership.school,
+            person.id,
+            membership.roles,
+            membership.status ?? "active",
+          ]
+        )
+        // Tests may give seeded people school roles; start each run without them.
+        await app.query(
+          `delete from platform.membership_custom_roles
+           where tenant_id = $1 and membership_id = $2`,
+          [membership.school, saved.rows[0].id]
         )
         await app.query("commit")
       }
+    }
+    for (const role of CUSTOM_ROLES) {
+      await app.query("begin")
+      await app.query(`select set_config('app.tenant_id', $1, true)`, [
+        role.school,
+      ])
+      await app.query(
+        `insert into platform.custom_roles (id, tenant_id, name, description, permissions)
+         values ($1, $2, $3, $4, $5)
+         on conflict (id) do update set name = excluded.name,
+           description = excluded.description, permissions = excluded.permissions,
+           requires_mfa = false, archived_at = null, updated_at = now()`,
+        [role.id, role.school, role.name, role.description, role.permissions]
+      )
+      await app.query("commit")
     }
   } finally {
     await app.end()
