@@ -64,6 +64,20 @@
       "when": 1794496265634,
       "tag": "0008_audit_flags_security",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794574669096,
+      "tag": "0009_sign_in_part_b_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794574698502,
+      "tag": "0010_sign_in_part_b_security",
+      "breakpoints": true
     }
   ]
 }

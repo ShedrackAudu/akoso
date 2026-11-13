@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@akoso/core": "workspace:*",
+    "@akoso/domain": "workspace:*",
     "@akoso/schemas": "workspace:*",
     "@akoso/ui": "workspace:*",
     "@serwist/turbopack": "^9.5.13",

@@ -78,6 +78,8 @@ export async function resolveSignedIn(
   }
 
   const roles = membership?.roles ?? [...access.roles]
+  // Custom roles count only inside their own school.
+  const customPermissions = membership?.customPermissions ?? []
   return {
     requestId: base.requestId,
     tenantId: membership?.school.id ?? null,
@@ -89,7 +91,8 @@ export async function resolveSignedIn(
       kind: "user",
       userId: found.user.id,
       roles,
-      permissions: permissionsFor(roles),
+      permissions: permissionsFor(roles, customPermissions),
+      signedInAt: new Date(found.session.createdAt),
     },
   }
 }

@@ -26,6 +26,12 @@ const signInLimitsSchema = z.object({
   passwordAttemptsPerIpPer15Minutes: count,
 })
 
+/** A school changing someone's sign-in number (part B spec, section 5). */
+const contactChangeLimitsSchema = z.object({
+  perSchoolPerDay: count,
+  perPersonPer30Days: count,
+})
+
 export const SETTINGS = {
   "limits.api": {
     schema: apiLimitsSchema,
@@ -46,6 +52,10 @@ export const SETTINGS = {
       passwordAttemptsPerAccountPer15Minutes: 5,
       passwordAttemptsPerIpPer15Minutes: 30,
     },
+  },
+  "limits.contact_change": {
+    schema: contactChangeLimitsSchema,
+    default: { perSchoolPerDay: 5, perPersonPer30Days: 1 },
   },
 } as const
 

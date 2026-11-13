@@ -124,6 +124,13 @@ export function allocatePayment(
 ): Result<Allocation, AllocationError>
 ```
 
+**Access:** a person's permissions in a school are their built-in roles' plus their
+custom roles' (`permissionsFor(roles, customPermissions)`), worked out per request.
+Risky changes call `requireRecentSignIn(ctx)`; the screen then shows "confirm it's you"
+and retries. A school-scoped server action names its school by slug in its input
+(`school`). Account-level security events live in `platform.security_events`, which is
+not a tenant table; schools read them only through `platform.school_security_log()`.
+
 **Audit:** every change to school data calls `recordAudit(tx, ctx, event)` inside the
 same `withTenant()` transaction, with `changes` from `diffForAudit(before, after,
 sensitive)`. Sensitive fields (health, national IDs, bank details, restricted notes,

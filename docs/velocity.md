@@ -23,6 +23,7 @@ estimate, items are deferred from the cut-line (brief section 32.3).
 | Tenancy                                                                               | 16            | one session                       |                            | n/a   | Includes the request proxy and the isolation suite                                                                               |
 | Sign-in, part A                                                                       | 40            | one session                       |                            | n/a   | Includes the identity tables, Better Auth, screens and end-to-end tests                                                          |
 | Time zones, audit log, flags and settings                                             | 24            | one session (across a break)      |                            | n/a   |                                                                                                                                  |
+| Sign-in part B, school side                                                           | 40            | one session                       |                            | n/a   | Custom roles, people with access, security log, recovery, account deletion                                                       |
 
 ## Cut-line (brief section 32.3)
 

@@ -2,7 +2,11 @@
 import { headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
 
-import { resolveSignedIn } from "@akoso/core/identity"
+import {
+  getMyAccount,
+  getSecurityStatus,
+  resolveSignedIn,
+} from "@akoso/core/identity"
 import {
   createLogger,
   getDatabase,
@@ -11,6 +15,7 @@ import {
   NotFoundError,
   type RequestContext,
 } from "@akoso/core/kernel"
+import type { ActionKey } from "@akoso/schemas/api"
 
 const log = createLogger()
 
@@ -51,5 +56,34 @@ export async function requireSignedIn(
     if (error instanceof MfaRequiredError) redirect("/account/security")
     if (error instanceof NotFoundError) notFound()
     throw error
+  }
+}
+
+/** The signed-in person holds this permission in the request's school. */
+export const can = (ctx: RequestContext, action: ActionKey): boolean =>
+  ctx.actor.kind === "user" && ctx.actor.permissions.has(action)
+
+/** A school page that needs a permission: the page, or 404 for anyone without it. */
+export async function requirePermission(
+  schoolSlug: string,
+  action: ActionKey
+): Promise<RequestContext> {
+  const ctx = await requireSignedIn(schoolSlug)
+  if (!can(ctx, action)) notFound()
+  return ctx
+}
+
+/** How the signed-in person confirms it's them (part B, section 1, rule 6). */
+export async function identityFor(
+  ctx: RequestContext
+): Promise<{ hasPassword: boolean; account: string }> {
+  const [account, security] = await Promise.all([
+    getMyAccount(ctx),
+    getSecurityStatus(ctx),
+  ])
+  return {
+    hasPassword: security.hasPassword,
+    account:
+      (security.hasPassword ? account.email : null) ?? account.phone ?? "",
   }
 }

@@ -16,6 +16,7 @@ import { consumeLimits, getSetting, type LimitCheck } from "../kernel/index"
 import { accessFor } from "./access"
 import { checkStoredCode, protectStoredCode } from "./codes"
 import { recordSecurityEvent } from "./events"
+import { issueCode, useCode } from "./one-time"
 import { isCommonPassword } from "./passwords"
 import { isNigerianNumber, normalisePhone } from "./phone"
 
@@ -74,10 +75,18 @@ function authConfig(options: AuthOptions) {
       throw error
     })
 
-  /** The person who owns a phone number, if they may sign in with a code. */
+  /**
+   * The person who owns a phone number (their main or backup number), if they may sign
+   * in with a code.
+   */
   async function codeSignInUser(phone: string): Promise<string | null> {
     const result = await db.execute(sql`
-      select id, two_factor_enabled from platform.users where phone_number = ${phone}`)
+      select id, two_factor_enabled from platform.users
+      where phone_number = ${phone} and deleted_at is null
+      union all
+      select u.id, u.two_factor_enabled from platform.user_backup_phones b
+      join platform.users u on u.id = b.user_id
+      where b.phone_number = ${phone} and u.deleted_at is null`)
     const user = result.rows[0]
     if (user === undefined) return null
     // Anyone with a second step (or whose role needs one) signs in with a password and
@@ -254,8 +263,30 @@ function authConfig(options: AuthOptions) {
             return { context: { body: { ...body, phoneNumber: phone } } }
           }
           case "/phone-number/verify": {
-            if (phone === null || (await codeSignInUser(phone)) === null) {
-              throw badCode()
+            if (phone === null) throw badCode()
+            const userId = await codeSignInUser(phone)
+            if (userId === null) throw badCode()
+            // A backup number (part B, section 4): check its code here, then sign in
+            // as the account's main number with a fresh internal code that never
+            // leaves the server.
+            const main = await db.execute(sql`
+              select phone_number from platform.users where id = ${userId}`)
+            const mainPhone = text(main.rows[0]?.phone_number)
+            if (mainPhone !== "" && mainPhone !== phone) {
+              const ok = await useCode(
+                db,
+                secret,
+                phone,
+                text(body.code),
+                now()
+              )
+              if (!ok) throw badCode()
+              const internal = await issueCode(db, secret, mainPhone, now())
+              return {
+                context: {
+                  body: { ...body, phoneNumber: mainPhone, code: internal },
+                },
+              }
             }
             return { context: { body: { ...body, phoneNumber: phone } } }
           }

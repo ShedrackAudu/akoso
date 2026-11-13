@@ -226,6 +226,35 @@ describe("tenant isolation", () => {
     expect(failures).toEqual([])
   })
 
+  // Security events belong to people, not schools, so schools read them only through
+  // school_security_log() (sign-in part B, section 3). It must show school B nothing of
+  // school A: not A's staff's sign-ins, not the events A caused.
+  it("keeps one school's security log from another", async () => {
+    const staff = randomUUID()
+    await owner.db.execute(sql`
+      insert into platform.users (id, name, email)
+      values (${staff}, 'Isolation Log Person', ${`${staff}@isolation.invalid`})`)
+    await owner.db.execute(sql`
+      insert into platform.memberships (tenant_id, user_id, roles)
+      values (${SCHOOL_A}, ${staff}, array['teacher'])`)
+    await owner.db.execute(sql`
+      insert into platform.security_events (user_id, kind, caused_by_school_id)
+      values (${staff}, 'sign_in', null), (${staff}, 'roles_changed', ${SCHOOL_A})`)
+    const logOf = (school: string) =>
+      withTenant(app.db, school, (tx) =>
+        tx.execute(sql`select user_id from platform.school_security_log(200)`)
+      )
+    const seenBy = async (school: string) =>
+      (await logOf(school)).rows.filter((row) => row.user_id === staff).length
+    expect(await seenBy(SCHOOL_A)).toBe(2)
+    expect(await seenBy(SCHOOL_B)).toBe(0)
+    // With no school chosen, nothing at all.
+    const unscoped = await app.db.execute(
+      sql`select 1 from platform.school_security_log(200)`
+    )
+    expect(unscoped.rows).toEqual([])
+  })
+
   it("catches an unprotected table (proof the checks bite)", async () => {
     await owner.db.execute(sql`
       drop table if exists public.isolation_planted;

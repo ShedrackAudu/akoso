@@ -81,6 +81,20 @@ export class MfaRequiredError extends AppError {
 }
 
 /**
+ * A risky change (granting roles, changing a sign-in number, deleting an account) needs
+ * a sign-in within the last few minutes (sign-in part B, section 1, rule 6). The screen
+ * asks the person to confirm it's them, then tries again.
+ */
+export class ReauthRequiredError extends AppError {
+  readonly code = "reauth_required"
+  readonly status = 403
+  constructor() {
+    super("Recent sign-in required")
+    this.name = "ReauthRequiredError"
+  }
+}
+
+/**
  * Missing, or belongs to another school or family. Both get the same answer, so
  * nobody can learn what exists elsewhere by trying IDs.
  */

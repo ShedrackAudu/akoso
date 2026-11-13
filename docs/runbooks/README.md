@@ -1,8 +1,8 @@
 # Runbooks
 
-Step-by-step guides for operating Akoso (brief sections 28 and 31). **None is written
-yet**; each is written with the stage that makes it real, and all are finalised in
-Stage 9.
+Step-by-step guides for operating Akoso (brief sections 28 and 31). Each is written with
+the stage that makes it real, and all are finalised in Stage 9. Written so far:
+[Account recovery by Akoso support](account-recovery.md) (sign-in part B).
 
 | Runbook                         | Covers                                                                                                             | Stage |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
