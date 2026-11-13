@@ -72,3 +72,4 @@ Testable statements, including the brief's own acceptance lines for this feature
 | [Sign-in, part A](stage-1-sign-in.md)                                             | Built; part B next                                 |
 | [Time zones, audit log, flags and settings](stage-1-time-audit-flags.md)          | Built                                              |
 | [Sign-in, part B](stage-1-sign-in-part-b.md)                                      | Built                                              |
+| [The app frame (Stage 2)](stage-2-app-frame.md)                                   | Draft, waiting for approval                        |
