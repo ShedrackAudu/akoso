@@ -7,6 +7,7 @@ import { useState, type JSX, type SyntheticEvent } from "react"
 
 import type { MyAccount } from "@akoso/core/identity"
 import { Button } from "@akoso/ui/components/button"
+import { SafeForm } from "@akoso/ui/components/safe-form"
 
 import {
   confirmBackupPhoneAction,
@@ -136,7 +137,7 @@ export function AccountSettings({
       <ProblemText problem={action.problem} />
       {action.confirm}
 
-      <form onSubmit={saveName} className={SECTION}>
+      <SafeForm onSubmit={saveName} className={SECTION}>
         <h2 className="text-lg font-semibold">Your name</h2>
         <Field
           id="name"
@@ -149,14 +150,17 @@ export function AccountSettings({
         <Button type="submit" className={BUTTON} disabled={action.busy}>
           Save name
         </Button>
-      </form>
+      </SafeForm>
 
       {account.phone !== null && (
         <section className={SECTION}>
           <h2 className="text-lg font-semibold">Sign-in number</h2>
           <p className="text-base">{account.phone}</p>
           {phoneStep === null ? (
-            <form onSubmit={startPhoneChange} className="flex flex-col gap-4">
+            <SafeForm
+              onSubmit={startPhoneChange}
+              className="flex flex-col gap-4"
+            >
               <p className="text-base text-muted-foreground">
                 Still have this phone? Move your sign-in to a new number. If
                 you've lost it, ask your school office.
@@ -173,9 +177,12 @@ export function AccountSettings({
               <Button type="submit" className={BUTTON} disabled={action.busy}>
                 Send codes
               </Button>
-            </form>
+            </SafeForm>
           ) : (
-            <form onSubmit={finishPhoneChange} className="flex flex-col gap-4">
+            <SafeForm
+              onSubmit={finishPhoneChange}
+              className="flex flex-col gap-4"
+            >
               <Field
                 id="new-code"
                 name="newCode"
@@ -194,7 +201,7 @@ export function AccountSettings({
               <Button type="submit" className={BUTTON} disabled={action.busy}>
                 Change number
               </Button>
-            </form>
+            </SafeForm>
           )}
         </section>
       )}
@@ -220,7 +227,7 @@ export function AccountSettings({
             </Button>
           </>
         ) : backupStep === null ? (
-          <form onSubmit={startBackup} className="flex flex-col gap-4">
+          <SafeForm onSubmit={startBackup} className="flex flex-col gap-4">
             <Field
               id="backup-phone"
               name="phone"
@@ -232,9 +239,9 @@ export function AccountSettings({
             <Button type="submit" className={BUTTON} disabled={action.busy}>
               Send code
             </Button>
-          </form>
+          </SafeForm>
         ) : (
-          <form onSubmit={finishBackup} className="flex flex-col gap-4">
+          <SafeForm onSubmit={finishBackup} className="flex flex-col gap-4">
             <Field
               id="backup-code"
               name="code"
@@ -246,12 +253,12 @@ export function AccountSettings({
             <Button type="submit" className={BUTTON} disabled={action.busy}>
               Add backup number
             </Button>
-          </form>
+          </SafeForm>
         )}
       </section>
 
       {account.isStaff && (
-        <form onSubmit={changeEmail} className={SECTION}>
+        <SafeForm onSubmit={changeEmail} className={SECTION}>
           <h2 className="text-lg font-semibold">Email</h2>
           <p className="text-base">{account.email ?? "No email yet"}</p>
           <Field
@@ -265,7 +272,7 @@ export function AccountSettings({
           <Button type="submit" className={BUTTON} disabled={action.busy}>
             Send confirmation link
           </Button>
-        </form>
+        </SafeForm>
       )}
 
       <section className={SECTION}>

@@ -14,6 +14,7 @@ import {
   type RoleKey,
 } from "@akoso/schemas/permissions"
 import { Button } from "@akoso/ui/components/button"
+import { SafeForm } from "@akoso/ui/components/safe-form"
 
 import {
   ProblemText,
@@ -204,7 +205,11 @@ export function RolesEditor({
       </section>
 
       {editing !== null && (
-        <form onSubmit={save} className={SECTION} key={current?.id ?? "new"}>
+        <SafeForm
+          onSubmit={save}
+          className={SECTION}
+          key={current?.id ?? "new"}
+        >
           <h2 className="text-lg font-semibold">
             {current === null ? "New role" : `Change ${current.name}`}
           </h2>
@@ -281,10 +286,10 @@ export function RolesEditor({
               Cancel
             </Button>
           </div>
-        </form>
+        </SafeForm>
       )}
 
-      <form onSubmit={saveMfaRoles} className={SECTION}>
+      <SafeForm onSubmit={saveMfaRoles} className={SECTION}>
         <h2 className="text-lg font-semibold">Second sign-in step</h2>
         <p className="text-base text-muted-foreground">
           Proprietors, school administrators and bursars always use one. Choose
@@ -315,7 +320,7 @@ export function RolesEditor({
         <Button type="submit" className={BUTTON} disabled={action.busy}>
           Save
         </Button>
-      </form>
+      </SafeForm>
     </div>
   )
 }

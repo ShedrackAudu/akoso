@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useState, type SyntheticEvent, type JSX } from "react"
 
 import { Button } from "@akoso/ui/components/button"
+import { SafeForm } from "@akoso/ui/components/safe-form"
 
 import { authPost, fieldText } from "./auth-client"
 import { Field } from "./field"
@@ -152,7 +153,7 @@ export function SecuritySettings({
           )}
 
           {!enabled && setup === null && (
-            <form className="flex flex-col gap-4" onSubmit={startSetup}>
+            <SafeForm className="flex flex-col gap-4" onSubmit={startSetup}>
               <p className="text-base text-muted-foreground">
                 You will need an authenticator app on your phone, such as Google
                 Authenticator or Microsoft Authenticator.
@@ -168,11 +169,11 @@ export function SecuritySettings({
               <Button type="submit" className={BUTTON} disabled={busy}>
                 Set up authenticator app
               </Button>
-            </form>
+            </SafeForm>
           )}
 
           {setup !== null && (
-            <form className="flex flex-col gap-4" onSubmit={confirmSetup}>
+            <SafeForm className="flex flex-col gap-4" onSubmit={confirmSetup}>
               <p className="text-base">
                 On your phone, open this link to add Akoso to your authenticator
                 app, or type the key below into it.
@@ -200,7 +201,7 @@ export function SecuritySettings({
               <Button type="submit" className={BUTTON} disabled={busy}>
                 Confirm
               </Button>
-            </form>
+            </SafeForm>
           )}
 
           {shownCodes !== null && (
@@ -238,7 +239,7 @@ export function SecuritySettings({
           <h2 className="font-heading text-lg font-semibold">
             Change password
           </h2>
-          <form className="flex flex-col gap-4" onSubmit={changePassword}>
+          <SafeForm className="flex flex-col gap-4" onSubmit={changePassword}>
             <Field
               id="current"
               name="current"
@@ -264,7 +265,7 @@ export function SecuritySettings({
             >
               Change password
             </Button>
-          </form>
+          </SafeForm>
         </section>
       )}
 
