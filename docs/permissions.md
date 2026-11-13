@@ -20,17 +20,51 @@ founder's decision (section 3.3). Nothing below is enforced by code yet.
 
 ## Actions in use (Stage 1, item 5)
 
-| Action key                     | Roles                                                     |
-| ------------------------------ | --------------------------------------------------------- |
-| `identity.profile.read`        | Every school role                                         |
-| `identity.membership.list_own` | Every school role                                         |
-| `audit.event.read`             | `proprietor`, `school_admin` (D-27; the page comes later) |
+| Action key                         | Roles                                                     |
+| ---------------------------------- | --------------------------------------------------------- |
+| `identity.profile.read`            | Every school role                                         |
+| `identity.membership.list_own`     | Every school role                                         |
+| `audit.event.read`                 | `proprietor`, `school_admin` (D-27; the page comes later) |
+| `identity.profile.update`          | Every school role (own profile only)                      |
+| `identity.member.read`             | `proprietor`, `school_admin`                              |
+| `identity.member.manage`           | `proprietor`, `school_admin` (with the rules below)       |
+| `identity.role.manage`             | `proprietor`, `school_admin`                              |
+| `identity.role.approve_restricted` | `proprietor` only; **never** in a custom role             |
+| `identity.contact.change`          | `proprietor`, `school_admin`                              |
+| `identity.mfa.reset`               | `proprietor`, `school_admin`                              |
+| `identity.security_log.read`       | `proprietor` (others only through a custom role)          |
+| `identity.access_review.read`      | `proprietor` (others only through a custom role)          |
+
+Sign-in part B (`docs/specs/stage-1-sign-in-part-b.md`) added the last nine.
+
+### Rules for changing access (part B, section 1)
+
+1. Nobody changes their own roles or status, or resets their own number or second step.
+2. Only a proprietor grants or removes `proprietor` or `school_admin`, or changes a
+   proprietor's or administrator's number or second step.
+3. Anyone else grants only roles whose every permission they hold, and puts only
+   permissions they hold into a custom role.
+4. A school keeps at least one active proprietor.
+5. A change of roles, a suspension, a number change and a second-step reset sign the
+   person out everywhere.
+6. Changing roles, changing a number, resetting a second step and deleting an account
+   need a sign-in within the last 10 minutes (`reauth_required` otherwise).
+7. A school can't change the number or reset the second step of someone who also
+   belongs to another school: Akoso support does it (`docs/runbooks/account-recovery.md`).
+
+### Custom roles
+
+A school combines permissions from the code table's `CUSTOM_ROLE_ACTIONS` into its own
+roles. `NEVER_IN_CUSTOM_ROLES` lists those that can never go in; `RESTRICTED_ACTIONS`
+lists those only a proprietor can add (empty until the health, notes, custody, payroll
+and settlement permissions exist). A custom role can require a second step, and a
+school can require one for any built-in staff role (`security.mfa_roles`).
 
 The code table is `packages/schemas/src/permissions.ts`; a test checks it grants only
 known actions.
 
 **A second sign-in step is required** for `proprietor`, `school_admin` and `bursar`
-(brief section 6). Until it is set up, every request except setting it up answers `403`
+(brief section 6), and for any role the school chooses (part B). Until it is set up, every request except setting it up answers `403`
 (`mfa_required`). People with a second step cannot sign in by SMS code.
 
 ## School roles (section 6)

@@ -1,6 +1,5 @@
 import { ROLE_LABELS, type RoleKey } from "@akoso/schemas/permissions"
 
-export const roleName = (role: RoleKey): string => ROLE_LABELS[role]
-
+/** Role names as schools say them (the labels live in the shared role table). */
 export const describeRoles = (roles: readonly RoleKey[]): string =>
-  roles.map(roleName).join(", ")
+  roles.map((role) => ROLE_LABELS[role]).join(", ")

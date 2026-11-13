@@ -19,6 +19,8 @@ const serverEnv = {
   // The fake SMS provider writes the newest message per number here; the sign-in
   // tests read codes from it (apps/web/e2e/sms-outbox.ts).
   SMS_FAKE_OUTBOX_FILE: join(tmpdir(), "akoso-e2e-sms-outbox.json"),
+  // The same for email (sign-in part B: email confirmation links).
+  EMAIL_FAKE_OUTBOX_FILE: join(tmpdir(), "akoso-e2e-email-outbox.json"),
 }
 
 export default defineConfig({
