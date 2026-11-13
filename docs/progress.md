@@ -5,8 +5,8 @@ Newest session first.
 
 ## Where we are
 
-**Stage 1 (Foundations): items 1 to 6 built, including all of sign-in part B. Akoso team
-sign-in is in its pull request; the Stage 1 checkpoint is next.**
+**Stage 1 (Foundations): done. The founder approved the Stage 1 checkpoint on
+13/11/2026 (D-32 to D-34). Stage 2 (school structure and people) starts now.**
 
 - Merged on `main`: spikes 01 to 04 (04 partly blocked), CI/CD Part A, the API
   conventions, tenancy (with its review fixes), sign-in part A, and time zones, the
@@ -52,11 +52,12 @@ In this order (brief section 32, Stage 1):
 Each begins with a spec in `docs/specs/`. Tenancy, auth and audit specs need the
 founder's approval and a threat model before code.
 
-**Next session:** once the team sign-in pull request is merged (delete its branch only if
-the founder asks), prepare the **Stage 1 checkpoint**: a short summary of what Stage 1
-built against the brief's Stage 1 row (section 32), the checks it asks for (tenant
-isolation on every table; sign-in with codes and a second step), and the founder
-decisions still open. The founder approves it before Stage 2 starts.
+**Next session:** start Stage 2 with a spec for its first item, **the app frame**
+(D-34): one layout for the school app and one for the admin app, with a header (school
+and person), navigation by role, and a consistent page width and spacing, following
+brief section 4 and the brand kit. It needs the founder's approval before code. Then
+staging (CI/CD Part B), then school setup. Record real hours per pull request in
+`docs/velocity.md` from now on.
 
 ## Open questions for the founder
 
@@ -96,6 +97,17 @@ have long lead times. Each is listed once.
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 13/11/2026: Stage 1 checkpoint approved (Claude)
+
+- Fixed main's red CI after #34 (#36: forms wait for the page and always post, which
+  also stops early submissions putting passwords in the address; the removal
+  confirmation survives the page refresh) and development pages loading without styles
+  (#35: no offline service worker under `next dev`).
+- Wrote the Stage 1 checkpoint (`docs/checkpoints/stage-1.md`). The founder approved it
+  as recommended: "Next.js stays" (D-32), "one dedicated account per billing account"
+  on condition that spike 04's splits pass before Stage 4 (D-33), and the four
+  recommendations (D-34).
 
 ### 13/11/2026: Sign-in part B, Akoso team sign-in (Claude)
 

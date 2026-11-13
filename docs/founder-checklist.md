@@ -15,6 +15,7 @@ Items are grouped by the stage that needs them, not by date. "Blocks" says what 
 - [ ] Ask a Yoruba speaker to confirm the tone and connotations of *àkóso*.
 - [ ] File the Akoso trademark at the Nigerian Trademarks Registry.
 - [x] Approve the project documents, brief split, risks list, `AGENTS.md` and scaffold (Stage 1 checkpoint). *Done 11/11/2026.*
+- [x] Approve the Stage 1 checkpoint (`docs/checkpoints/stage-1.md`) and sign "Next.js stays" and "one dedicated account per billing account". *Done 13/11/2026 (D-32 to D-34).*
 
 ### Paystack (start early; approvals take time)
 
