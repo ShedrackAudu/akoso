@@ -5,9 +5,9 @@ The append-only, hash-chained audit log, security events and the approval reques
 - **Product name:** Platform
 - **Brief:** sections 27, 28.3 (`docs/brief/`)
 - **Main entities:** audit_events, approval_requests, domain_events (outbox). (Idempotency keys live in `kernel`.)
-- **Public interface:** `index.ts` (nothing exported yet)
+- **Public interface:** `index.ts`: `recordAudit`, `diffForAudit`, `verifyAuditChain`
 - **Jobs and events:** none yet
-- **Specs:** none yet (`docs/specs/`)
+- **Specs:** `docs/specs/stage-1-time-audit-flags.md`
 
 ## Where this module lives
 
@@ -17,4 +17,6 @@ The append-only, hash-chained audit log, security events and the approval reques
 | Tables and RLS | `packages/db/src/schema/audit.ts` |
 | Zod schemas    | `packages/schemas/src/audit.ts`   |
 
-**Status:** placeholder. Nothing is implemented yet.
+**Status:** the hash-chained audit log is built (`platform.audit_events`, chained by a
+database trigger, append-only, verified by `platform.verify_audit_chain()`). Approval
+requests and the domain-event outbox come with the features that need them.

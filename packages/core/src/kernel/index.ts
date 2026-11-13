@@ -32,6 +32,8 @@ export {
 } from "./errors"
 export { getHealth } from "./health"
 export { assertSchoolAllows } from "./school-status"
+export { clearSettingsCache, getSetting } from "./settings"
+export { schoolToday } from "./time"
 export {
   handleRequest,
   type HttpDeps,
@@ -47,4 +49,4 @@ export {
 } from "./logger"
 export { decodeCursor, encodeCursor, toPage, type Page } from "./paging"
 export { toProblem } from "./problem"
-export { consumeLimits, RATE_LIMITS, type LimitCheck } from "./rate-limit"
+export { consumeLimits, type LimitCheck } from "./rate-limit"

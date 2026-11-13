@@ -1,11 +1,10 @@
-// Test-only helpers. Imported by test files by path; never exported from index.ts, so
-// no production code can build a signed-in context without sign-in.
+// Test-only helpers. Only test files import this module; production code never builds a
+// signed-in context without sign-in (the boundary check refuses any non-test import of this module).
 import type { ActionKey } from "@akoso/schemas/api"
 
 import type { Database } from "@akoso/db"
 
-import type { RequestContext } from "./context"
-import { createLogger, type Logger } from "./logger"
+import { createLogger, type Logger, type RequestContext } from "../kernel/index"
 
 /** Collects log lines in memory, parsed, so tests can assert what would be logged. */
 export function memoryLogger(): { log: Logger; lines: string[] } {

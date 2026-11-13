@@ -95,6 +95,14 @@ module.exports = {
       },
     },
     {
+      name: "testing-helpers-only-in-tests",
+      comment:
+        "packages/core/src/testing builds signed-in contexts without sign-in: tests only.",
+      severity: "error",
+      from: { path: "^(apps|packages)/", pathNot: NOT_TESTS },
+      to: { path: "^packages/core/src/testing/" },
+    },
+    {
       name: "core-modules-own-their-tables",
       comment:
         "A module uses only its own schema file. Reach another module's data through its services.",

@@ -20,10 +20,11 @@ founder's decision (section 3.3). Nothing below is enforced by code yet.
 
 ## Actions in use (Stage 1, item 5)
 
-| Action key                     | Roles             |
-| ------------------------------ | ----------------- |
-| `identity.profile.read`        | Every school role |
-| `identity.membership.list_own` | Every school role |
+| Action key                     | Roles                                                     |
+| ------------------------------ | --------------------------------------------------------- |
+| `identity.profile.read`        | Every school role                                         |
+| `identity.membership.list_own` | Every school role                                         |
+| `audit.event.read`             | `proprietor`, `school_admin` (D-27; the page comes later) |
 
 The code table is `packages/schemas/src/permissions.ts`; a test checks it grants only
 known actions.

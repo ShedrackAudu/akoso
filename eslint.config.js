@@ -93,6 +93,23 @@ export default tseslint.config(
     languageOptions: { globals: { ...globals.browser } },
   },
   {
+    // Brief section 3.1: every "today" is the school's, never the server's. Server
+    // code reads dates through packages/domain/src/time with an explicit time zone.
+    files: ["packages/core/src/**/*.ts", "packages/domain/src/**/*.ts"],
+    ignores: ["**/*.test.ts"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "CallExpression[callee.property.name=/^(getDate|getDay|getMonth|getFullYear|getYear|getHours|getMinutes|getSeconds|getTimezoneOffset|setDate|setMonth|setFullYear|setHours|setMinutes|toLocaleDateString|toLocaleTimeString|toLocaleString|toDateString|toTimeString)$/]",
+          message:
+            "Server-local date and time. Use the school's time zone through packages/domain/src/time (todayIn, startOfDay, formatDate, formatDateTime).",
+        },
+      ],
+    },
+  },
+  {
     files: SHADCN_GENERATED,
     rules: {
       "@typescript-eslint/explicit-module-boundary-types": "off",

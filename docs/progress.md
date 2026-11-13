@@ -36,7 +36,9 @@ In this order (brief section 32, Stage 1):
    code sign-in, staff password and MFA, sessions, memberships, school picker, the
    permission check). Part B next: custom roles, the security log screen, account
    deletion, phone-number change, Akoso team sign-in.
-6. Time-zone handling, the audit log, feature flags.
+6. Time-zone handling, the audit log, feature flags: **built** (school-time date
+   helpers and a lint rule; the hash-chained, append-only audit log with verification;
+   per-school flags; platform settings, which now hold the rate limits).
 
 Each begins with a spec in `docs/specs/`. Tenancy, auth and audit specs need the
 founder's approval and a threat model before code.

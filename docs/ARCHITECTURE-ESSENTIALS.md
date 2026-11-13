@@ -124,6 +124,20 @@ export function allocatePayment(
 ): Result<Allocation, AllocationError>
 ```
 
+**Audit:** every change to school data calls `recordAudit(tx, ctx, event)` inside the
+same `withTenant()` transaction, with `changes` from `diffForAudit(before, after,
+sensitive)`. Sensitive fields (health, national IDs, bank details, restricted notes,
+custody) record only that they changed. The database numbers and hash-chains records;
+they can never be updated or deleted.
+
+**Time:** never the server's local date (lint enforces it). `schoolToday(ctx)`, and
+`time.startOfDay/endOfDay/formatDate/formatDateTime` from `@akoso/domain` with the
+school's time zone. Calendar dates are `LocalDate` (`YYYY-MM-DD`).
+
+**Flags and settings:** declare a flag in `packages/schemas/src/flags.ts` (off by
+default) and check it with `isEnabled(ctx, key)`; declare a setting with its schema and
+default in `settings.ts` and read it with `getSetting(db, key)`. Never hard-code a limit.
+
 **Lists:** cursor pagination, `{ data, nextCursor }`, `limit` at most 100. Spread
 `pageQuery` into the input; build the page with `toPage()`.
 

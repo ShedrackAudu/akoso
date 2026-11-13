@@ -15,6 +15,21 @@ export const ISOLATION_FIXTURES: Record<string, IsolationFixture> = {
     insert into platform.idempotency_keys (tenant_id, user_id, key, request_hash, state)
     values (${tenantId}, 'isolation', ${marker}, 'hash', 'done')`,
 
+  // The trigger fills seq, time and hashes.
+  "platform.audit_events": (tenantId, marker) => sql`
+    insert into platform.audit_events (tenant_id, actor, action, entity_type, entity_id)
+    values (${tenantId}, 'system:isolation', 'isolation.test', 'isolation', ${marker})`,
+
+  // One per school, so an existing head is left as it is.
+  "platform.audit_chain_heads": (tenantId) => sql`
+    insert into platform.audit_chain_heads (tenant_id, last_seq, last_hash)
+    values (${tenantId}, 0, repeat('0', 64))
+    on conflict (tenant_id) do nothing`,
+
+  "platform.tenant_feature_flags": (tenantId, marker) => sql`
+    insert into platform.tenant_feature_flags (tenant_id, flag_key, enabled)
+    values (${tenantId}, ${`isolation.${marker.replaceAll("-", "_")}`}, true)`,
+
   "platform.memberships": (tenantId, marker) => sql`
     with person as (
       insert into platform.users (id, name, email)
