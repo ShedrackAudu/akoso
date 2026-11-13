@@ -131,6 +131,12 @@ and retries. A school-scoped server action names its school by slug in its input
 (`school`). Account-level security events live in `platform.security_events`, which is
 not a tenant table; schools read them only through `platform.school_security_log()`.
 
+**Team sign-in:** the admin app signs in the Akoso team with passkeys through its own
+Better Auth instance (`@akoso/core/team`), its own tables (`platform.team_*`) and its own
+cookie (`akoso_team`). Boundary rules keep team code out of `apps/web` and school sign-in
+out of `apps/admin`. Team actions go into one hash-chained team audit log
+(`recordTeamAudit`, `verify_team_audit_chain()`).
+
 **Audit:** every change to school data calls `recordAudit(tx, ctx, event)` inside the
 same `withTenant()` transaction, with `changes` from `diffForAudit(before, after,
 sensitive)`. Sensitive fields (health, national IDs, bank details, restricted notes,

@@ -32,7 +32,14 @@ own, from **School settings → People with access**, except in the cases below.
 
 ## Break-glass: a lone Owner locked out of the admin app
 
-Until pull request 2 lands, there is no admin app sign-in to lose. After it, if the only
-Owner loses every passkey and recovery code: someone with production database access
-removes the old Owner's team record (recorded as a break-glass session), then runs
-`pnpm team:invite-owner <email>` and enrols again.
+If the only Owner loses every passkey and every recovery code:
+
+1. Someone with production database access opens a recorded break-glass session
+   (brief 28.3) with the founder's approval.
+2. They take the Owner role from the old record:
+   `delete from platform.team_role_grants where role = 'owner' and user_id = '<id>';`
+   (the record itself stays for the audit log).
+3. They run `pnpm team:invite-owner <email> "Name"` with the production migration
+   role's connection, and give the 30-minute link to the Owner in person.
+4. The Owner enrols, makes new recovery codes and adds a second passkey at once.
+5. Record the session, who did it and why, in the incident log.

@@ -5,15 +5,16 @@ Newest session first.
 
 ## Where we are
 
-**Stage 1 (Foundations): items 1 to 6 built, and sign-in part B's school side. Akoso
-team sign-in (part B, pull request 2) is next, then the Stage 1 checkpoint.**
+**Stage 1 (Foundations): items 1 to 6 built, including all of sign-in part B. Akoso team
+sign-in is in its pull request; the Stage 1 checkpoint is next.**
 
 - Merged on `main`: spikes 01 to 04 (04 partly blocked), CI/CD Part A, the API
   conventions, tenancy (with its review fixes), sign-in part A, and time zones, the
   audit log, flags and settings (#19).
-- **Sign-in part B, school side** is on `feat/sign-in-part-b`: custom roles, people with
-  access, the security log and access review, backup numbers, number and email changes,
-  school-assisted recovery and account deletion.
+- Also merged: sign-in part B's school side (#32) and Node 26 (#33, D-30).
+- **Akoso team sign-in** (part B, pull request 2) is on `feat/team-sign-in`: passkeys in
+  the admin app, enrolment links, recovery codes, team roles, offboarding and the team
+  audit chain.
 - Staging (CI/CD Part B) is delayed until there is something to show (D-19).
 
 Feature work goes one spec at a time, in the order below.
@@ -51,11 +52,11 @@ In this order (brief section 32, Stage 1):
 Each begins with a spec in `docs/specs/`. Tenancy, auth and audit specs need the
 founder's approval and a threat model before code.
 
-**Next session:** once part B's first pull request is merged (delete its branch only if
-the founder asks), build pull request 2 from the approved spec
-(`docs/specs/stage-1-sign-in-part-b.md`, section 8): Akoso team sign-in with passkeys in
-`apps/admin`, with the new dependency `@better-auth/passkey` 1.7.14. Ask whether to run
-the cross-model review (D-24). Then prepare the Stage 1 checkpoint.
+**Next session:** once the team sign-in pull request is merged (delete its branch only if
+the founder asks), prepare the **Stage 1 checkpoint**: a short summary of what Stage 1
+built against the brief's Stage 1 row (section 32), the checks it asks for (tenant
+isolation on every table; sign-in with codes and a second step), and the founder
+decisions still open. The founder approves it before Stage 2 starts.
 
 ## Open questions for the founder
 
@@ -95,6 +96,24 @@ have long lead times. Each is listed once.
 Not blocking yet: golden files and design-partner schools (before Stage 3).
 
 ## Session log
+
+### 13/11/2026: Sign-in part B, Akoso team sign-in (Claude)
+
+- Built pull request 2 of part B from the approved spec (section 8): passkey-only sign-in
+  for the Akoso team in `apps/admin`, through a second Better Auth instance with
+  `@better-auth/passkey` 1.7.14 (approved) and `@simplewebauthn/browser` 13.3.0 (the
+  browser half of the same library).
+- New `team` core module and `platform.team_*` tables (migrations 0011 to 0014).
+  Enrolment links and recovery codes each give a 10-minute, single-use ticket to
+  register a passkey. Team actions go into their own hash-chained audit log.
+- `pnpm team:invite-owner` makes the first Owner. Boundary rules keep team code out of
+  the school app and school sign-in out of the admin app.
+- Better Auth needs an "account" table even without passwords: `team_accounts` stays
+  empty, enforced by a check.
+- Checks: `pnpm check` passes; 135 database tests (10 new) and 49 end-to-end tests (6
+  new, with Chrome's virtual authenticator) pass locally.
+- New tech debt T26 (one database role for both apps) and T27 (the Owner's 10-minute
+  delay).
 
 ### 13/11/2026: Sign-in part B, school side (Claude)
 
