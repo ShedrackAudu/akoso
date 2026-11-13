@@ -6,6 +6,8 @@ import { defineConfig, devices } from "@playwright/test"
 // End-to-end tests in a real browser (brief section 30). They need Docker running
 // (`docker compose up -d`). Run with `pnpm test:e2e`.
 const PORT = 3200
+// The admin app (Akoso team sign-in). Its passkeys are for localhost (packages/core/src/team).
+const ADMIN_PORT = 3201
 
 // Local values matching docker-compose.yml; not secrets. CI sets the same.
 const serverEnv = {
@@ -40,12 +42,22 @@ export default defineConfig({
     ...devices["Pixel 5"],
     trace: "retain-on-failure",
   },
-  webServer: {
-    // The service worker only exists in a production build.
-    command: `pnpm --filter @akoso/web build && pnpm --filter @akoso/web start --port ${String(PORT)}`,
-    url: `http://localhost:${String(PORT)}/spike/offline`,
-    timeout: 300_000,
-    reuseExistingServer: false,
-    env: serverEnv,
-  },
+  webServer: [
+    {
+      // The service worker only exists in a production build.
+      command: `pnpm --filter @akoso/web build && pnpm --filter @akoso/web start --port ${String(PORT)}`,
+      url: `http://localhost:${String(PORT)}/spike/offline`,
+      timeout: 300_000,
+      reuseExistingServer: false,
+      env: serverEnv,
+    },
+    {
+      // The admin app, for Akoso team sign-in (sign-in part B, section 8).
+      command: `pnpm --filter @akoso/admin build && pnpm --filter @akoso/admin start --port ${String(ADMIN_PORT)}`,
+      url: `http://localhost:${String(ADMIN_PORT)}/sign-in`,
+      timeout: 300_000,
+      reuseExistingServer: false,
+      env: serverEnv,
+    },
+  ],
 })

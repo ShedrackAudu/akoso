@@ -14,4 +14,8 @@ or reach admin code.
 
 Run it with `pnpm dev:admin` (port 3001).
 
-**Status:** placeholder page only.
+**Status:** team sign-in built (sign-in part B, section 8): passkeys only, enrolment
+links, recovery codes, the team, offboarding and the team security log. The first Owner
+is created with `pnpm team:invite-owner <email> "Name"`, which prints a 30-minute link.
+Passkeys work on `http://localhost:3001` locally (not on `admin.akoso.localhost`). The
+admin app needs the same environment variables as the web app (`.env.example`).

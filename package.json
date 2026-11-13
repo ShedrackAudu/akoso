@@ -21,6 +21,7 @@
     "db:generate": "pnpm --filter @akoso/db exec drizzle-kit generate",
     "db:migrate": "node packages/db/scripts/migrate.mjs",
     "db:seed": "node packages/db/scripts/seed.mjs",
+    "team:invite-owner": "node packages/db/scripts/team-invite-owner.mjs",
     "boundaries": "depcruise apps packages --config .dependency-cruiser.cjs",
     "unused": "knip",
     "latency:regions": "node scripts/measure-region-latency.mjs",

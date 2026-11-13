@@ -78,6 +78,34 @@
       "when": 1794574698502,
       "tag": "0010_sign_in_part_b_security",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794581862872,
+      "tag": "0011_team_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1794581864103,
+      "tag": "0012_team_security",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1794583813662,
+      "tag": "0013_team_accounts",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1794583818410,
+      "tag": "0014_team_accounts_security",
+      "breakpoints": true
     }
   ]
 }
