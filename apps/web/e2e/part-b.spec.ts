@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process"
+import { randomInt, randomUUID } from "node:crypto"
 
 import { expect, test, type Page } from "@playwright/test"
 
@@ -193,8 +194,8 @@ test("a parent deletes their account and can't sign in again", async ({
   page,
   request,
 }) => {
-  const id = crypto.randomUUID()
-  const phone = `+234803${String(Math.floor(1_000_000 + Math.random() * 8_999_999))}`
+  const id = randomUUID()
+  const phone = `+234803${String(randomInt(1_000_000, 9_999_999))}`
   runSqlAsOwner(
     `insert into platform.users (id, name, email, phone_number, phone_number_verified)
      values ('${id}', 'Leaving Parent', '${id}@phone-only.akoso.invalid', '${phone}', true);
