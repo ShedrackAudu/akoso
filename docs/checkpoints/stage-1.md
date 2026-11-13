@@ -1,6 +1,6 @@
 # Stage 1 checkpoint: Foundations
 
-- **Status:** Ready for the founder's review (13/11/2026)
+- **Status:** Approved (founder, 13/11/2026), as recommended: both decisions signed (D-32, D-33 with its condition), and the four recommendations accepted (D-34)
 - **Brief:** section 32, Stage 1 row
 - **What approval means:** Stage 2 (school structure and people) may start. Nothing in
   Stage 2 starts until this is approved.
