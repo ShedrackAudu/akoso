@@ -155,7 +155,7 @@ export function AppFrame({
               aria-label={collapsed ? "Expand the menu" : "Collapse the menu"}
               aria-expanded={!collapsed}
               className={cn(
-                "flex min-h-11 items-center gap-3 rounded-md px-3 text-base text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring",
+                "flex min-h-8 items-center gap-3 rounded-md px-3 text-sm text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring",
                 collapsed && "justify-center px-0"
               )}
             >

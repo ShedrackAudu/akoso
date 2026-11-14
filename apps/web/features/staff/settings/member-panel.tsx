@@ -35,11 +35,9 @@ import {
   startNumberChangeAction,
 } from "@/server/actions/identity"
 
-const BUTTON = "h-11 text-base"
 const SECTION = "flex flex-col gap-4 rounded-lg border border-border p-4"
-const CHECK = "flex min-h-11 items-center gap-3 text-base"
-const SELECT =
-  "h-11 rounded-md border border-border bg-background px-3 text-base"
+const CHECK = "flex min-h-8 items-center gap-3 text-sm"
+const SELECT = "h-7 rounded-md border border-input bg-input/20 px-2 text-xs"
 
 const METHOD_LABELS = { in_person: "In person", video_call: "By video call" }
 const EVIDENCE_LABELS = {
@@ -73,7 +71,7 @@ export interface MemberPanelProps {
 function IdentityCheckFields({ prefix }: { prefix: string }): JSX.Element {
   return (
     <>
-      <label className="flex flex-col gap-2 text-base">
+      <label className="flex flex-col gap-2 text-sm">
         How did you check who they are?
         <select
           name="checkMethod"
@@ -88,7 +86,7 @@ function IdentityCheckFields({ prefix }: { prefix: string }): JSX.Element {
           ))}
         </select>
       </label>
-      <label className="flex flex-col gap-2 text-base">
+      <label className="flex flex-col gap-2 text-sm">
         What did you see?
         <select
           name="evidence"
@@ -103,7 +101,7 @@ function IdentityCheckFields({ prefix }: { prefix: string }): JSX.Element {
           ))}
         </select>
       </label>
-      <label className="flex flex-col gap-2 text-base">
+      <label className="flex flex-col gap-2 text-sm">
         Why?
         <select
           name="reason"
@@ -232,7 +230,7 @@ export function MemberPanel({
   return (
     <div className="flex flex-col gap-6">
       {notice !== null && (
-        <p role="status" className="text-base" data-testid="member-notice">
+        <p role="status" className="text-sm" data-testid="member-notice">
           {notice}
         </p>
       )}
@@ -240,7 +238,7 @@ export function MemberPanel({
       {action.confirm}
 
       {isSelf && (
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           This is you. Another proprietor or administrator can change your
           access.
         </p>
@@ -266,7 +264,7 @@ export function MemberPanel({
         </fieldset>
         {customRoles.length > 0 && (
           <fieldset className="flex flex-col" disabled={!canEdit}>
-            <legend className="text-base font-semibold">School roles</legend>
+            <legend className="text-sm font-semibold">School roles</legend>
             {customRoles.map((role) => (
               <label key={role.id} className={CHECK}>
                 <input
@@ -285,7 +283,7 @@ export function MemberPanel({
           </fieldset>
         )}
         {canEdit && (
-          <Button type="submit" className={BUTTON} disabled={action.busy}>
+          <Button type="submit" disabled={action.busy}>
             Save roles
           </Button>
         )}
@@ -298,7 +296,6 @@ export function MemberPanel({
             <Button
               type="button"
               variant="destructive"
-              className={BUTTON}
               disabled={action.busy}
               onClick={() => {
                 setStatus("suspended")
@@ -309,7 +306,6 @@ export function MemberPanel({
           ) : (
             <Button
               type="button"
-              className={BUTTON}
               disabled={action.busy}
               onClick={() => {
                 setStatus("active")
@@ -324,7 +320,7 @@ export function MemberPanel({
       {may.changeNumber && !isSelf && !member.mfaEnabled && (
         <section className={SECTION}>
           <h2 className="text-lg font-semibold">Change sign-in number</h2>
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             For someone who has lost the number they sign in with. Check who
             they are in person or by video call first. Their old number will be
             told.
@@ -340,7 +336,7 @@ export function MemberPanel({
                 inputMode="tel"
                 required
               />
-              <Button type="submit" className={BUTTON} disabled={action.busy}>
+              <Button type="submit" disabled={action.busy}>
                 Send a code to the new number
               </Button>
             </SafeForm>
@@ -354,7 +350,7 @@ export function MemberPanel({
                 autoComplete="off"
                 required
               />
-              <Button type="submit" className={BUTTON} disabled={action.busy}>
+              <Button type="submit" disabled={action.busy}>
                 Change number
               </Button>
             </SafeForm>
@@ -365,18 +361,13 @@ export function MemberPanel({
       {may.resetMfa && !isSelf && member.mfaEnabled && (
         <SafeForm onSubmit={resetMfa} className={SECTION}>
           <h2 className="text-lg font-semibold">Reset second sign-in step</h2>
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             For someone who has lost their authenticator app and backup codes.
             Check who they are first. They'll set it up again at their next
             sign-in.
           </p>
           <IdentityCheckFields prefix="mfa" />
-          <Button
-            type="submit"
-            variant="destructive"
-            className={BUTTON}
-            disabled={action.busy}
-          >
+          <Button type="submit" variant="destructive" disabled={action.busy}>
             Reset second step
           </Button>
         </SafeForm>

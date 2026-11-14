@@ -57,7 +57,7 @@ function ScoreCell({
   return (
     <td className="p-1 align-top">
       <input
-        className="h-11 w-16 rounded-md border bg-background px-2 text-center text-base disabled:opacity-50 aria-invalid:border-destructive"
+        className="h-7 w-14 rounded-md border bg-background px-2 text-center text-sm disabled:opacity-50 aria-invalid:border-destructive"
         inputMode="numeric"
         aria-label={label}
         aria-invalid={problem !== null}
@@ -96,7 +96,7 @@ export function ScoreGrid({
 }: ScoreGridProps): JSX.Element {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-base">
+      <table className="w-full border-collapse text-sm">
         <thead>
           <tr>
             <th scope="col" className="p-2 text-left">

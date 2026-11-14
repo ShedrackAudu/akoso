@@ -1,7 +1,7 @@
 # @akoso/ui
 
 The design system for the web app, the PWA and the platform admin. It comes from shadcn
-preset `b4bg87xLw8` (style Nova on Base UI, neutral base, violet theme, Figtree body,
+preset `b4bhL8bH3A` (style Mira on Base UI, neutral base, violet theme, Figtree body,
 Merriweather headings, Phosphor icons). See `docs/adr/0002-design-system.md`.
 
 | Folder                   | What it holds                                                                                                                   | Who writes it                                                                       |

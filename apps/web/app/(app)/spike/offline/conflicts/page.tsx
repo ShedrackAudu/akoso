@@ -27,17 +27,17 @@ export default async function Page(): Promise<JSX.Element> {
   return (
     <main className="space-y-4 p-4">
       <h1 className="font-heading text-2xl font-bold">Overwritten scores</h1>
-      <p className="text-base text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         When two people changed the same score, the change that reached the
         school later was kept. The value it replaced is listed here so nothing
         is lost.
       </p>
       {conflicts.length === 0 ? (
-        <p className="text-base" data-testid="no-conflicts">
+        <p className="text-sm" data-testid="no-conflicts">
           No scores have been overwritten.
         </p>
       ) : (
-        <table className="w-full text-base" data-testid="conflicts">
+        <table className="w-full text-sm" data-testid="conflicts">
           <thead>
             <tr>
               <th scope="col" className="p-2 text-left">

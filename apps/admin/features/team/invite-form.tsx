@@ -54,12 +54,9 @@ export function InviteForm(): JSX.Element {
         required
       />
       <fieldset className="flex flex-col">
-        <legend className="text-base font-semibold">Roles</legend>
+        <legend className="text-sm font-semibold">Roles</legend>
         {TEAM_ROLE_KEYS.map((role) => (
-          <label
-            key={role}
-            className="flex min-h-11 items-center gap-3 text-base"
-          >
+          <label key={role} className="flex min-h-8 items-center gap-3 text-sm">
             <input
               type="checkbox"
               name="roles"
@@ -86,18 +83,18 @@ export function InviteForm(): JSX.Element {
           required
         />
       )}
-      <Button type="submit" className="h-11 text-base" disabled={action.busy}>
+      <Button type="submit" disabled={action.busy}>
         Make invitation link
       </Button>
       <ErrorText error={action.error} />
       {link !== null && (
         <div role="status" className="flex flex-col gap-2">
-          <p className="text-base">
+          <p className="text-sm">
             Send this link to them yourself. It works once, for 24 hours, and
             won&apos;t be shown again.
           </p>
           <code
-            className="rounded-md bg-muted p-3 text-base break-all"
+            className="rounded-md bg-muted p-3 text-sm break-all"
             data-testid="invitation-link"
           >
             {link}

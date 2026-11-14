@@ -39,7 +39,7 @@ export default async function ConfirmEmailPage({
         {confirmed ? "Email confirmed" : "This link doesn't work"}
       </h1>
       <p
-        className="text-base text-muted-foreground"
+        className="text-sm text-muted-foreground"
         data-testid="email-confirm-result"
       >
         {confirmed
@@ -48,7 +48,7 @@ export default async function ConfirmEmailPage({
       </p>
       <Link
         href="/account"
-        className="text-base text-foreground underline underline-offset-4"
+        className="text-sm text-foreground underline underline-offset-4"
       >
         Go to My account
       </Link>

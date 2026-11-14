@@ -31,9 +31,8 @@ import {
 
 import { permissionName } from "./permission-names"
 
-const BUTTON = "h-11 text-base"
 const SECTION = "flex flex-col gap-4 rounded-lg border border-border p-4"
-const CHECK = "flex min-h-11 items-center gap-3 text-base"
+const CHECK = "flex min-h-8 items-center gap-3 text-sm"
 
 export interface RolesEditorProps {
   school: string
@@ -117,7 +116,7 @@ export function RolesEditor({
   return (
     <div className="flex flex-col gap-6">
       {notice !== null && (
-        <p role="status" className="text-base" data-testid="roles-notice">
+        <p role="status" className="text-sm" data-testid="roles-notice">
           {notice}
         </p>
       )}
@@ -129,7 +128,6 @@ export function RolesEditor({
           <h2 className="text-lg font-semibold">School roles</h2>
           <Button
             type="button"
-            className={BUTTON}
             onClick={() => {
               setEditing("new")
             }}
@@ -138,7 +136,7 @@ export function RolesEditor({
           </Button>
         </div>
         {roles.length === 0 ? (
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             No school roles yet. Make one, such as "Exams officer", from the
             permissions below.
           </p>
@@ -151,11 +149,11 @@ export function RolesEditor({
                 data-testid="custom-role"
               >
                 <span className="flex flex-col">
-                  <span className="text-base font-semibold">
+                  <span className="text-sm font-semibold">
                     {role.name}
                     {role.archived ? " (archived)" : ""}
                   </span>
-                  <span className="text-base text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     {role.holders === 1
                       ? "1 person"
                       : `${String(role.holders)} people`}
@@ -166,7 +164,6 @@ export function RolesEditor({
                   <Button
                     type="button"
                     variant="outline"
-                    className={BUTTON}
                     onClick={() => {
                       setEditing(role)
                     }}
@@ -176,7 +173,6 @@ export function RolesEditor({
                   <Button
                     type="button"
                     variant="outline"
-                    className={BUTTON}
                     disabled={action.busy}
                     onClick={() => {
                       archive(role)
@@ -188,7 +184,6 @@ export function RolesEditor({
                     <Button
                       type="button"
                       variant="destructive"
-                      className={BUTTON}
                       disabled={action.busy}
                       onClick={() => {
                         remove(role)
@@ -229,7 +224,7 @@ export function RolesEditor({
             maxLength={300}
           />
           <fieldset className="flex flex-col">
-            <legend className="text-base font-semibold">Permissions</legend>
+            <legend className="text-sm font-semibold">Permissions</legend>
             {offered.map((permission) => {
               const isRestricted = restrictedSet.has(permission)
               const allowed =
@@ -272,13 +267,12 @@ export function RolesEditor({
             People with this role must use a second sign-in step
           </label>
           <div className="flex flex-wrap gap-2">
-            <Button type="submit" className={BUTTON} disabled={action.busy}>
+            <Button type="submit" disabled={action.busy}>
               Save role
             </Button>
             <Button
               type="button"
               variant="ghost"
-              className={BUTTON}
               onClick={() => {
                 setEditing(null)
               }}
@@ -291,7 +285,7 @@ export function RolesEditor({
 
       <SafeForm onSubmit={saveMfaRoles} className={SECTION}>
         <h2 className="text-lg font-semibold">Second sign-in step</h2>
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Proprietors, school administrators and bursars always use one. Choose
           any other roles that must.
         </p>
@@ -317,7 +311,7 @@ export function RolesEditor({
             }
           )}
         </fieldset>
-        <Button type="submit" className={BUTTON} disabled={action.busy}>
+        <Button type="submit" disabled={action.busy}>
           Save
         </Button>
       </SafeForm>

@@ -31,7 +31,7 @@ function Identity({ name }: { name: string }): JSX.Element {
   return (
     <span className="flex min-w-0 items-center gap-3">
       <Monogram name={name} />
-      <span className="truncate text-base font-semibold" title={name}>
+      <span className="truncate text-sm font-semibold" title={name}>
         {name}
       </span>
     </span>
@@ -58,7 +58,7 @@ export function SchoolBrand({
     return (
       <Link
         href={home}
-        className="flex min-h-11 min-w-0 items-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex min-h-8 min-w-0 items-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
         data-testid="school-brand"
       >
         <Identity name={school.name} />
@@ -71,7 +71,7 @@ export function SchoolBrand({
         render={
           <button
             type="button"
-            className="flex min-h-11 max-w-full min-w-0 items-center gap-2 rounded-md text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex min-h-8 max-w-full min-w-0 items-center gap-2 rounded-md text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
             data-testid="school-switcher"
           />
         }

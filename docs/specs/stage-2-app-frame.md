@@ -74,7 +74,7 @@ experience** (Akoso Parent), each with its own frame.
   the bottom, a small, quiet "Akoso" mark: the school comes first (brief 4.0).
 - **The bottom bar** on phones shows up to 4 items for this person's roles, plus
   **More**, which opens a sheet with the rest (open question 2). Every item is at least
-  44 px tall.
+  24 px tall (WCAG 2.2 minimum; compact by design, D-36).
 - **Icons:** Phosphor through the existing `Icon` wrapper. Outline normally, filled for
   the current item (brief 4.1).
 - **"Settings"** groups the part B screens: people with access, roles, the security log.
@@ -171,7 +171,7 @@ arrive, the staff home becomes a short welcome:
 - **Navigation:** a "Skip to content" link first; landmarks (`header`, `nav`, `main`); the
   current page marked with `aria-current`; the sidebar and More sheet usable by keyboard,
   with visible focus.
-- **Text and touch:** 16 px body text; 44 px tap targets; the phone's text-size setting
+- **Text and touch (D-36):** compact, shadcn Mira sizes: 14 px page text, 12 px inside components; targets at least 24 px (WCAG 2.2); the phone's text-size setting
   respected.
 - **Automated check:** an axe check (`@axe-core/playwright`) runs on each frame page, in
   light and dark themes, and fails the tests on any violation.
@@ -233,7 +233,7 @@ The frame changes no data and adds no new access.
    - a teacher who is also a parent switches views without signing out, and the choice
      survives a reload
    - parent pages load no staff code (boundary rule)
-3. **Phones:** at 375 px wide, the bottom bar shows; every target is at least 44 px; no
+3. **Phones:** at 375 px wide, the bottom bar shows; every target is at least 24 px; no
    page scrolls sideways.
 4. **Computers:** at 1280 px, the sidebar shows, and collapses and expands.
 5. **School switcher** for the parent in two schools; no switcher for people in one.

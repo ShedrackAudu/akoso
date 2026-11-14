@@ -87,7 +87,7 @@ export function ProblemText({
     <p
       role="alert"
       data-testid="form-error"
-      className="text-base text-destructive"
+      className="text-sm text-destructive"
     >
       {problem.message}
     </p>

@@ -112,7 +112,7 @@ relationships, golden files and sign-offs.
 
 TypeScript (strict, `noUncheckedIndexedAccess`) · Next.js App Router · pnpm workspaces ·
 PostgreSQL 16 with RLS · Drizzle · Zod · Better Auth · pg-boss · Gotenberg ·
-S3-compatible storage · Tailwind and shadcn/ui preset `b4bg87xLw8` · Phosphor icons ·
+S3-compatible storage · Tailwind and shadcn/ui preset `b4bhL8bH3A` · Phosphor icons ·
 TanStack Table · React Hook Form · Serwist and Dexie · Vitest · Playwright · k6.
 
 Requires Node 26 (D-30) and pnpm 12.18 (the version is pinned in `package.json`). Node 26
@@ -246,7 +246,7 @@ word seems to mean something else, or two words seem to mean the same thing, sto
 
 ### Interface
 
-- Design system: shadcn preset `b4bg87xLw8`. Extend it; never override its tokens ad hoc.
+- Design system: shadcn preset `b4bhL8bH3A`. Extend it; never override its tokens ad hoc.
 - Add components with `pnpm dlx shadcn@latest add <name>` (run in `apps/web`) or the
   shadcn MCP tools. Search the registry before writing a custom component. Never paste
   component code from a website. Do not hand-edit files in
@@ -260,8 +260,10 @@ word seems to mean something else, or two words seem to mean the same thing, sto
   `@akoso/ui/akoso/icon`. Server components import icons from
   `@phosphor-icons/react/ssr`. Two weights only: `regular` and `fill`. When a registry
   component imports another icon library, replace the imports.
-- Mobile-first for 2 GB Android phones on 3G. Body text at least 16 px; tap targets at
-  least 44 px. WCAG 2.2 AA. Status is never shown by colour or icon alone.
+- Mobile-first for 2 GB Android phones on 3G. Compact by design (D-36): use the shadcn
+  Mira sizes as they come; don't enlarge controls or text. Page text 14 px (`text-sm`),
+  text inside components 12 px; every target at least 24 px (WCAG 2.2). WCAG 2.2 AA.
+  Status is never shown by colour or icon alone.
 - Every screen has loading, empty, error and offline states.
 - Dates `dd/mm/yyyy`; phone numbers `+234…`; amounts in naira with thousands separators.
 - Text follows `docs/brand-voice.md`. Product names come from

@@ -51,12 +51,12 @@ export default async function TeamPage({
       nav={{ school, current: "team", show: settingsPagesFor(ctx) }}
     >
       <form method="get" className="flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-2 text-base">
+        <label className="flex flex-col gap-2 text-sm">
           Show
           <select
             name="filter"
             defaultValue={filter}
-            className="h-11 rounded-md border border-border bg-background px-3 text-base"
+            className="h-7 rounded-md border border-input bg-input/20 px-2 text-xs"
           >
             {MEMBER_FILTERS.map((value) => (
               <option key={value} value={value}>
@@ -65,24 +65,24 @@ export default async function TeamPage({
             ))}
           </select>
         </label>
-        <label className="flex flex-col gap-2 text-base">
+        <label className="flex flex-col gap-2 text-sm">
           Name
           <input
             name="search"
             defaultValue={search}
-            className="h-11 rounded-md border border-border bg-background px-3 text-base"
+            className="h-7 rounded-md border border-input bg-input/20 px-2 text-xs"
           />
         </label>
         <button
           type="submit"
-          className="h-11 rounded-md bg-primary px-4 text-base text-primary-foreground"
+          className="h-7 rounded-md bg-primary px-2.5 text-xs font-medium text-primary-foreground"
         >
           Find
         </button>
       </form>
 
       {page.data.length === 0 ? (
-        <p className="text-base text-muted-foreground">Nobody matches.</p>
+        <p className="text-sm text-muted-foreground">Nobody matches.</p>
       ) : (
         <ul className="flex flex-col divide-y divide-border rounded-lg border border-border">
           {page.data.map((member) => (
@@ -93,8 +93,8 @@ export default async function TeamPage({
                 data-testid="member-row"
               >
                 <span className="flex flex-col">
-                  <span className="text-base font-semibold">{member.name}</span>
-                  <span className="text-base text-muted-foreground">
+                  <span className="text-sm font-semibold">{member.name}</span>
+                  <span className="text-sm text-muted-foreground">
                     {[
                       describeRoles(member.roles),
                       ...member.customRoles.map((role) => role.name),
@@ -103,7 +103,7 @@ export default async function TeamPage({
                       .join(", ")}
                   </span>
                 </span>
-                <span className="flex flex-col text-base text-muted-foreground sm:items-end">
+                <span className="flex flex-col text-sm text-muted-foreground sm:items-end">
                   {member.status === "suspended" && (
                     <span className="font-semibold text-destructive">
                       Suspended
@@ -126,7 +126,7 @@ export default async function TeamPage({
       {page.nextCursor !== null && (
         <Link
           href={`${base}?${new URLSearchParams({ filter, search, cursor: page.nextCursor }).toString()}`}
-          className="text-base text-foreground underline underline-offset-4"
+          className="text-sm text-foreground underline underline-offset-4"
         >
           Next page
         </Link>

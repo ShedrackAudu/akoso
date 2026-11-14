@@ -11,7 +11,7 @@ import { SafeForm } from "@akoso/ui/components/safe-form"
 import { authPost, fieldText } from "./auth-client"
 import { Field } from "./field"
 
-const BUTTON = "h-11 w-full text-base"
+const BUTTON = "w-full"
 
 /** The secret inside an otpauth:// address, for typing into an authenticator by hand. */
 function secretOf(totpUri: string): string {
@@ -139,20 +139,20 @@ export function SecuritySettings({
             Second sign-in step
           </h2>
           {mfaRequired && !enabled && (
-            <p className="text-base">
+            <p className="text-sm">
               Your role needs a second sign-in step. Please set it up to
               continue.
             </p>
           )}
           {enabled && shownCodes === null && (
-            <p className="text-base text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Your authenticator app is set up.
             </p>
           )}
 
           {!enabled && setup === null && (
             <SafeForm className="flex flex-col gap-4" onSubmit={startSetup}>
-              <p className="text-base text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 You will need an authenticator app on your phone, such as Google
                 Authenticator or Microsoft Authenticator.
               </p>
@@ -172,13 +172,13 @@ export function SecuritySettings({
 
           {setup !== null && (
             <SafeForm className="flex flex-col gap-4" onSubmit={confirmSetup}>
-              <p className="text-base">
+              <p className="text-sm">
                 On your phone, open this link to add Akoso to your authenticator
                 app, or type the key below into it.
               </p>
               <a
                 href={setup.totpUri}
-                className="text-base font-medium text-foreground underline underline-offset-4"
+                className="text-sm font-medium text-foreground underline underline-offset-4"
               >
                 Add to my authenticator app
               </a>
@@ -204,7 +204,7 @@ export function SecuritySettings({
 
           {shownCodes !== null && (
             <div className="flex flex-col gap-3">
-              <p className="text-base">
+              <p className="text-sm">
                 Your authenticator app is set up. These backup codes let you
                 sign in if you lose your phone. Each works once. Write them down
                 and keep them safe: they will not be shown again.
