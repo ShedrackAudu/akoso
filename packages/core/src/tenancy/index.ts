@@ -8,3 +8,8 @@ export {
 export { classifyHost, normaliseHost, type HostKind } from "./host"
 export { clearFlagCache, isEnabled } from "./flags"
 export { findSchoolByHost, findSchoolById, findSchoolBySlug } from "./lookup"
+export {
+  readSchoolIdentity,
+  updateSchoolIdentity,
+  type SchoolIdentity,
+} from "./identity"

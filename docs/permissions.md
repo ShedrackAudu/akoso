@@ -34,8 +34,13 @@ founder's decision (section 3.3). Nothing below is enforced by code yet.
 | `identity.mfa.reset`               | `proprietor`, `school_admin`                              |
 | `identity.security_log.read`       | `proprietor` (others only through a custom role)          |
 | `identity.access_review.read`      | `proprietor` (others only through a custom role)          |
+| `setup.school.read`                | Every staff role (not parents)                            |
+| `setup.school.manage`              | `proprietor`, `school_admin`                              |
 
-Sign-in part B (`docs/specs/stage-1-sign-in-part-b.md`) added the last nine.
+Sign-in part B (`docs/specs/stage-1-sign-in-part-b.md`) added the nine `identity` keys
+from `identity.member.read` on. School setup part A
+(`docs/specs/stage-2-school-setup-a.md`) added the two `setup` keys; both can go into
+custom roles (for example an exams officer who manages subjects).
 
 ### Rules for changing access (part B, section 1)
 

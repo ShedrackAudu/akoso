@@ -27,6 +27,13 @@ const STAFF: NavEntry[] = [
     exact: true,
   },
   {
+    key: "setup",
+    label: "Setup",
+    path: "/setup",
+    icon: "setup",
+    permission: "setup.school.manage",
+  },
+  {
     key: "settings",
     label: "Settings",
     path: "/settings",

@@ -24,6 +24,7 @@ import { Icon } from "./icon"
 /** The icons navigation may use, by name, so server code can describe items. */
 export type NavIconKey =
   | "home"
+  | "setup"
   | "people"
   | "settings"
   | "roles"

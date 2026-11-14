@@ -106,6 +106,20 @@
       "when": 1794583818410,
       "tag": "0014_team_accounts_security",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1794642569307,
+      "tag": "0015_school_setup_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1794642571441,
+      "tag": "0016_school_setup_security",
+      "breakpoints": true
     }
   ]
 }

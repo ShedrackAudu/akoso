@@ -6,6 +6,6 @@ export default defineConfig({
   dialect: "postgresql",
   schema: "./src/schema/*.ts",
   out: "./migrations",
-  schemaFilter: ["public", "platform"],
+  schemaFilter: ["public", "platform", "school_setup"],
   casing: "snake_case",
 })
