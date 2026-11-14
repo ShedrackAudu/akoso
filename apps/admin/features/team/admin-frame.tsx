@@ -59,7 +59,7 @@ function AdminAccount({
         render={
           <button
             type="button"
-            className="flex min-h-11 min-w-11 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex min-h-8 min-w-8 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
             data-testid="account-menu"
           />
         }
@@ -71,7 +71,7 @@ function AdminAccount({
       <DropdownMenuContent align="end" className="min-w-60">
         <DropdownMenuGroup>
           <DropdownMenuLabel>
-            <span className="block text-base font-semibold text-foreground">
+            <span className="block text-sm font-semibold text-foreground">
               {name}
             </span>
             <span className="block text-sm text-muted-foreground">

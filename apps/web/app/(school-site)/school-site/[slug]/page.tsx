@@ -29,7 +29,7 @@ export default async function SchoolHome({
       <main className="flex min-h-svh items-center justify-center p-6">
         <div className="flex max-w-md flex-col gap-3 text-center">
           <h1 className="font-heading text-3xl font-bold">{school.name}</h1>
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             This page is temporarily unavailable. Please contact the school
             office.
           </p>
@@ -48,15 +48,14 @@ export default async function SchoolHome({
     <main className="flex min-h-svh items-center justify-center p-6">
       <div className="flex max-w-md flex-col items-center gap-6 text-center">
         <h1 className="font-heading text-3xl font-bold">{school.name}</h1>
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Parents and staff: sign in to see results, fees and school updates.
         </p>
         <a
           href={signIn}
           className={buttonVariants({
             size: "lg",
-            // 44 px: the minimum tap target (brief section 4).
-            className: "h-11 px-6 text-base",
+            className: "px-4",
           })}
         >
           Sign in

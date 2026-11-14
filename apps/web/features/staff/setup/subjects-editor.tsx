@@ -22,7 +22,6 @@ import {
 
 import {
   ActionStatus,
-  BUTTON,
   CHECK,
   SECTION,
   SelectField,
@@ -111,15 +110,10 @@ function SubjectForm({
         </SelectField>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button type="submit" className={BUTTON} disabled={action.busy}>
+        <Button type="submit" disabled={action.busy}>
           {subject === null ? "Add subject" : "Save subject"}
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          className={BUTTON}
-          onClick={onDone}
-        >
+        <Button type="button" variant="outline" onClick={onDone}>
           Cancel
         </Button>
       </div>
@@ -165,7 +159,7 @@ function ArmSubjects({
       className="rounded-md border border-border"
       data-testid="arm-subjects"
     >
-      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-3 px-3 text-base">
+      <summary className="flex min-h-8 cursor-pointer items-center justify-between gap-3 px-3 text-sm">
         <span className="font-semibold">{label}</span>
         <span className="text-muted-foreground">
           {arm.subjectIds.length} subjects
@@ -176,7 +170,7 @@ function ArmSubjects({
         className="flex flex-col gap-3 border-t border-border p-3"
         aria-label={`Subjects for ${label}`}
       >
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           {schoolSetup.CURRICULUM_LABELS[arm.curriculum]}
           {limits !== null && (
             <>
@@ -204,12 +198,12 @@ function ArmSubjects({
             </label>
           ))}
         </fieldset>
-        <p className="text-base" aria-live="polite">
+        <p className="text-sm" aria-live="polite">
           {chosen.size} chosen
         </p>
         <ActionStatus action={action} />
         <div>
-          <Button type="submit" className={BUTTON} disabled={action.busy}>
+          <Button type="submit" disabled={action.busy}>
             Save subjects for {label}
           </Button>
         </div>
@@ -246,7 +240,7 @@ export function SubjectsEditor({
           <h2 id="presets" className="text-lg font-semibold">
             Fill arms from the NERDC lists
           </h2>
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {emptyArms.length === 1
               ? "One arm has"
               : `${String(emptyArms.length)} arms have`}{" "}
@@ -257,7 +251,6 @@ export function SubjectsEditor({
           <div>
             <Button
               type="button"
-              className={BUTTON}
               disabled={action.busy}
               onClick={() => {
                 void action.run(
@@ -281,7 +274,7 @@ export function SubjectsEditor({
           Your subjects
         </h2>
         {live.length === 0 ? (
-          <p className="text-base text-muted-foreground">No subjects yet.</p>
+          <p className="text-sm text-muted-foreground">No subjects yet.</p>
         ) : (
           <ul
             className="flex flex-col divide-y divide-border"
@@ -291,10 +284,10 @@ export function SubjectsEditor({
               <li key={subject.id} className="flex flex-col gap-2 py-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="flex flex-col">
-                    <span className="text-base font-semibold">
+                    <span className="text-sm font-semibold">
                       {subject.name}
                     </span>
-                    <span className="text-base text-muted-foreground">
+                    <span className="text-sm text-muted-foreground">
                       {subject.code} · {KIND_LABELS[subject.kind]}
                     </span>
                   </span>
@@ -302,7 +295,6 @@ export function SubjectsEditor({
                     <Button
                       type="button"
                       variant="outline"
-                      className={BUTTON}
                       onClick={() => {
                         setEditing(subject.id)
                       }}
@@ -312,7 +304,6 @@ export function SubjectsEditor({
                     <Button
                       type="button"
                       variant="destructive"
-                      className={BUTTON}
                       disabled={action.busy}
                       onClick={() => {
                         void action.run(
@@ -351,7 +342,6 @@ export function SubjectsEditor({
             <Button
               type="button"
               variant="outline"
-              className={BUTTON}
               onClick={() => {
                 setEditing("new")
               }}

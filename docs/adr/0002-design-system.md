@@ -3,6 +3,13 @@
 - **Status:** Accepted (founder, 11/11/2026, at the section 3.2 checkpoint)
 - **Date:** 11/11/2026
 - **Brief:** sections 4.1, 4.2
+- **Amended 14/11/2026:** at the founder's request the project moved to preset
+  `b4bhL8bH3A`. It is the same as `b4bg87xLw8` (neutral base, violet theme, Figtree,
+  Merriweather, Phosphor) except for the style: **Mira** (`base-mira`), the compact one,
+  instead of Nova. Apply it with `pnpm dlx shadcn@latest apply --preset b4bhL8bH3A`, run
+  in `apps/web` (run in `packages/ui` it stops at "could not detect a supported
+  framework"), then re-add the components with `add <names> --overwrite`. The record
+  below is of the original setup.
 
 ## Context
 

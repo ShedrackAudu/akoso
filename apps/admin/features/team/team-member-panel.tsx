@@ -15,7 +15,6 @@ import { changeTeamRolesAction, removeTeamMemberAction } from "@/server/actions"
 import { Field } from "./field"
 import { ErrorText, useTeamAction } from "./use-team-action"
 
-const BUTTON = "h-11 text-base"
 const SECTION = "flex flex-col gap-4 rounded-lg border border-border p-4"
 
 const text = (form: FormData, name: string): string => {
@@ -70,11 +69,11 @@ export function TeamMemberPanel({
     return (
       <div className="flex flex-col gap-2">
         {notice !== null && (
-          <p role="status" className="text-base" data-testid="team-notice">
+          <p role="status" className="text-sm" data-testid="team-notice">
             {notice}
           </p>
         )}
-        <p className="text-base" data-testid="member-removed">
+        <p className="text-sm" data-testid="member-removed">
           This person&apos;s access has been removed. Invite them again to
           restore it.
         </p>
@@ -85,13 +84,13 @@ export function TeamMemberPanel({
   return (
     <div className="flex flex-col gap-6">
       {notice !== null && (
-        <p role="status" className="text-base" data-testid="team-notice">
+        <p role="status" className="text-sm" data-testid="team-notice">
           {notice}
         </p>
       )}
       <ErrorText error={action.error} />
       {isSelf && (
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           This is you. Another Owner can change your roles.
         </p>
       )}
@@ -103,7 +102,7 @@ export function TeamMemberPanel({
           {TEAM_ROLE_KEYS.map((role) => (
             <label
               key={role}
-              className="flex min-h-11 items-center gap-3 text-base"
+              className="flex min-h-8 items-center gap-3 text-sm"
             >
               <input
                 type="checkbox"
@@ -133,7 +132,7 @@ export function TeamMemberPanel({
           />
         )}
         {editable && (
-          <Button type="submit" className={BUTTON} disabled={action.busy}>
+          <Button type="submit" disabled={action.busy}>
             Save roles
           </Button>
         )}
@@ -142,7 +141,7 @@ export function TeamMemberPanel({
       {editable && (
         <SafeForm onSubmit={(event) => void remove(event)} className={SECTION}>
           <h2 className="text-lg font-semibold">Remove access</h2>
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             For someone leaving the team. It takes effect at once: their
             sessions, passkeys and recovery codes are removed, and it&apos;s
             recorded.
@@ -156,12 +155,7 @@ export function TeamMemberPanel({
               required
             />
           )}
-          <Button
-            type="submit"
-            variant="destructive"
-            className={BUTTON}
-            disabled={action.busy}
-          >
+          <Button type="submit" variant="destructive" disabled={action.busy}>
             Remove access now
           </Button>
         </SafeForm>

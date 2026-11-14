@@ -31,18 +31,13 @@ export function SignIn(): JSX.Element {
 
   return (
     <div className="flex flex-col gap-4">
-      <Button
-        type="button"
-        className="h-11 text-base"
-        disabled={busy}
-        onClick={signIn}
-      >
+      <Button type="button" disabled={busy} onClick={signIn}>
         Sign in with your passkey
       </Button>
       <ErrorText error={error} />
       <Link
         href="/recover"
-        className="text-base text-foreground underline underline-offset-4"
+        className="text-sm text-foreground underline underline-offset-4"
       >
         Lost your passkey? Use a recovery code
       </Link>

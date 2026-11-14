@@ -39,7 +39,7 @@ export function SetupShell({
         above={
           <Link
             href={setupHref(school)}
-            className="text-base underline underline-offset-4"
+            className="text-sm underline underline-offset-4"
           >
             All setup steps
           </Link>
@@ -52,7 +52,7 @@ export function SetupShell({
               key={page.key}
               href={setupHref(school, page.key)}
               aria-current={page.key === current ? "page" : undefined}
-              className="inline-flex min-h-11 items-center rounded-md border border-border px-3 text-base aria-[current=page]:bg-muted aria-[current=page]:font-semibold"
+              className="inline-flex min-h-8 items-center rounded-md border border-border px-3 text-sm aria-[current=page]:bg-muted aria-[current=page]:font-semibold"
             >
               {page.label}
             </Link>

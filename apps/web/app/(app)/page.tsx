@@ -34,13 +34,12 @@ export default function Page(): JSX.Element {
           className="hidden dark:block"
         />
         <h1 className="font-heading text-3xl font-bold">{BRAND_NAME}</h1>
-        <p className="text-base text-muted-foreground">{BRAND_LINES.lead}</p>
+        <p className="text-sm text-muted-foreground">{BRAND_LINES.lead}</p>
         <Link
           href="/sign-in"
           className={buttonVariants({
             size: "lg",
-            // 44 px: the minimum tap target (brief section 4).
-            className: "h-11 px-6 text-base",
+            className: "px-4",
           })}
         >
           Sign in

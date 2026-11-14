@@ -24,7 +24,6 @@ import {
 
 import {
   ActionStatus,
-  BUTTON,
   SECTION,
   SelectField,
   useSetupAction,
@@ -135,21 +134,16 @@ function ClassForm({
       </div>
       <p
         id={`class-${id}-standard-hint`}
-        className="-mt-2 text-base text-muted-foreground"
+        className="-mt-2 text-sm text-muted-foreground"
       >
         Which class this is in the national system, whatever you call it. The
         NERDC subject lists use it.
       </p>
       <div className="flex flex-wrap gap-2">
-        <Button type="submit" className={BUTTON} disabled={action.busy}>
+        <Button type="submit" disabled={action.busy}>
           {entry === null ? "Add class" : "Save class"}
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          className={BUTTON}
-          onClick={onDone}
-        >
+        <Button type="button" variant="outline" onClick={onDone}>
           Cancel
         </Button>
       </div>
@@ -243,15 +237,10 @@ function ArmForm({
         )}
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button type="submit" className={BUTTON} disabled={action.busy}>
+        <Button type="submit" disabled={action.busy}>
           {arm === null ? "Add arm" : "Save arm"}
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          className={BUTTON}
-          onClick={onDone}
-        >
+        <Button type="button" variant="outline" onClick={onDone}>
           Cancel
         </Button>
       </div>
@@ -302,7 +291,7 @@ export function ClassesEditor({
           </h2>
           {hasSchoolTypes ? (
             <>
-              <p className="text-base text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 We&apos;ll add the standard classes for your school&apos;s type,
                 each with one arm called A. You can rename, remove or add
                 classes afterwards.
@@ -310,7 +299,6 @@ export function ClassesEditor({
               <div>
                 <Button
                   type="button"
-                  className={BUTTON}
                   disabled={action.busy}
                   onClick={createDefaults}
                 >
@@ -319,7 +307,7 @@ export function ClassesEditor({
               </div>
             </>
           ) : (
-            <p className="text-base">
+            <p className="text-sm">
               First, say what the school teaches in the{" "}
               <a href={profileHref} className="underline underline-offset-4">
                 school profile
@@ -350,10 +338,10 @@ export function ClassesEditor({
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="flex flex-col">
-                      <h3 className="text-base font-semibold">{entry.name}</h3>
+                      <h3 className="text-sm font-semibold">{entry.name}</h3>
                       {entry.standardClass !== null &&
                         standardLabel(entry.standardClass) !== entry.name && (
-                          <span className="text-base text-muted-foreground">
+                          <span className="text-sm text-muted-foreground">
                             Standard class: {standardLabel(entry.standardClass)}
                           </span>
                         )}
@@ -362,7 +350,6 @@ export function ClassesEditor({
                       <Button
                         type="button"
                         variant="outline"
-                        className={BUTTON}
                         onClick={() => {
                           setEditing({ kind: "class", id: entry.id, stage })
                         }}
@@ -372,7 +359,6 @@ export function ClassesEditor({
                       <Button
                         type="button"
                         variant="outline"
-                        className={BUTTON}
                         disabled={index === 0 || action.busy}
                         onClick={() => {
                           void action.run(
@@ -388,7 +374,6 @@ export function ClassesEditor({
                       <Button
                         type="button"
                         variant="outline"
-                        className={BUTTON}
                         disabled={index === list.length - 1 || action.busy}
                         onClick={() => {
                           void action.run(
@@ -406,7 +391,6 @@ export function ClassesEditor({
                       <Button
                         type="button"
                         variant="destructive"
-                        className={BUTTON}
                         onClick={() => {
                           setEditing({ kind: "remove-class", id: entry.id })
                         }}
@@ -432,7 +416,7 @@ export function ClassesEditor({
                         aria-label={`Remove ${entry.name}`}
                         className="flex flex-col gap-3 rounded-lg border border-destructive/40 p-4"
                       >
-                        <p className="text-base">
+                        <p className="text-sm">
                           Remove {entry.name} and its arms? Nothing uses them
                           yet. They&apos;re kept in the records, out of sight.
                         </p>
@@ -440,7 +424,6 @@ export function ClassesEditor({
                           <Button
                             type="button"
                             variant="destructive"
-                            className={BUTTON}
                             disabled={action.busy}
                             onClick={() => {
                               void action.run(
@@ -458,7 +441,6 @@ export function ClassesEditor({
                           <Button
                             type="button"
                             variant="outline"
-                            className={BUTTON}
                             onClick={close}
                           >
                             Keep it
@@ -474,7 +456,7 @@ export function ClassesEditor({
                     {entry.arms.map((arm) => (
                       <li key={arm.id} className="flex flex-col gap-2">
                         <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border px-3 py-2">
-                          <span className="text-base">
+                          <span className="text-sm">
                             <span className="font-semibold">
                               {entry.name} {arm.name}
                             </span>{" "}
@@ -486,7 +468,6 @@ export function ClassesEditor({
                             <Button
                               type="button"
                               variant="outline"
-                              className={BUTTON}
                               onClick={() => {
                                 setEditing({
                                   kind: "arm",
@@ -504,7 +485,6 @@ export function ClassesEditor({
                             <Button
                               type="button"
                               variant="destructive"
-                              className={BUTTON}
                               onClick={() => {
                                 setEditing({ kind: "remove-arm", id: arm.id })
                               }}
@@ -533,13 +513,12 @@ export function ClassesEditor({
                               aria-label={`Remove ${entry.name} ${arm.name}`}
                               className="flex flex-wrap items-center gap-2 rounded-lg border border-destructive/40 p-3"
                             >
-                              <span className="text-base">
+                              <span className="text-sm">
                                 Remove {entry.name} {arm.name}?
                               </span>
                               <Button
                                 type="button"
                                 variant="destructive"
-                                className={BUTTON}
                                 disabled={action.busy}
                                 onClick={() => {
                                   void action.run(
@@ -557,7 +536,6 @@ export function ClassesEditor({
                               <Button
                                 type="button"
                                 variant="outline"
-                                className={BUTTON}
                                 onClick={close}
                               >
                                 Keep it
@@ -582,7 +560,6 @@ export function ClassesEditor({
                       <Button
                         type="button"
                         variant="outline"
-                        className={BUTTON}
                         onClick={() => {
                           setEditing({
                             kind: "arm",
@@ -620,7 +597,6 @@ export function ClassesEditor({
               <Button
                 type="button"
                 variant="outline"
-                className={BUTTON}
                 onClick={() => {
                   setEditing({
                     kind: "class",
@@ -635,7 +611,6 @@ export function ClassesEditor({
                 <Button
                   type="button"
                   variant="outline"
-                  className={BUTTON}
                   disabled={action.busy}
                   onClick={createDefaults}
                 >

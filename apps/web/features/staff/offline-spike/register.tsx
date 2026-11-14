@@ -35,7 +35,7 @@ export function Register({
         return (
           <li key={student.id} className="py-2">
             <fieldset data-testid={key} data-unsent={unsent ? "yes" : "no"}>
-              <legend className="text-base">
+              <legend className="text-sm">
                 {student.name}
                 {unsent ? (
                   <span className="ml-2 text-xs text-muted-foreground">
@@ -47,7 +47,7 @@ export function Register({
                 {REGISTER_CHOICES.map((choice) => (
                   <label
                     key={choice.value}
-                    className="flex min-h-11 cursor-pointer items-center justify-center rounded-md border text-sm has-checked:border-primary has-checked:bg-primary has-checked:text-primary-foreground has-focus-visible:ring-2 has-focus-visible:ring-ring"
+                    className="flex min-h-8 cursor-pointer items-center justify-center rounded-md border text-sm has-checked:border-primary has-checked:bg-primary has-checked:text-primary-foreground has-focus-visible:ring-2 has-focus-visible:ring-ring"
                   >
                     <input
                       type="radio"

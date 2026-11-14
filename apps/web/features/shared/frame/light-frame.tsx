@@ -35,7 +35,7 @@ const LIGHT_ICONS: FrameIcons = {
 }
 
 const ITEM =
-  "flex min-h-11 w-full items-center rounded-md px-3 text-left text-base text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+  "flex min-h-8 w-full items-center rounded-md px-3 text-left text-sm text-muted-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
 
 export function LightFrame({
   setup,
@@ -59,12 +59,12 @@ export function LightFrame({
     ) : (
       <Link
         href={setup.homeHref}
-        className="flex min-h-11 min-w-0 items-center gap-3 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex min-h-8 min-w-0 items-center gap-3 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring"
         data-testid="school-brand"
       >
         <Monogram name={setup.school.name} />
         <span
-          className="truncate text-base font-semibold"
+          className="truncate text-sm font-semibold"
           title={setup.school.name}
         >
           {setup.school.name}
@@ -80,7 +80,7 @@ export function LightFrame({
       account={
         <Link
           href="/account"
-          className="flex min-h-11 min-w-11 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex min-h-8 min-w-8 items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
           data-testid="account-link"
         >
           <Monogram name={setup.name} />

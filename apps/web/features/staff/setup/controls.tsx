@@ -1,6 +1,6 @@
 "use client"
 
-// Form controls the Setup screens share, at a full 44 px tap target (brief section 4).
+// Form controls the Setup screens share, at the compact Mira sizes (D-36).
 import { useRouter } from "next/navigation"
 import { useState, type ComponentProps, type JSX, type ReactNode } from "react"
 
@@ -13,11 +13,10 @@ import {
   type ActionProblem,
 } from "@/features/shared/actions/call-action"
 
-export const BUTTON = "h-11 text-base"
 export const SECTION = "flex flex-col gap-4 rounded-lg border border-border p-4"
-export const CHECK = "flex min-h-11 items-center gap-3 text-base"
+export const CHECK = "flex min-h-8 items-center gap-3 text-sm"
 const CONTROL =
-  "h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2.5 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
+  "h-7 w-full min-w-0 rounded-md border border-input bg-input/20 px-2 text-xs/relaxed outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 dark:bg-input/30"
 
 /** A labelled list of choices. */
 export function SelectField({
@@ -97,12 +96,12 @@ export function ActionStatus({
         <p
           role="alert"
           data-testid="form-error"
-          className="text-base text-destructive"
+          className="text-sm text-destructive"
         >
           {action.problem.message}
         </p>
       ) : action.notice !== null ? (
-        <p role="status" data-testid="setup-notice" className="text-base">
+        <p role="status" data-testid="setup-notice" className="text-sm">
           {action.notice}
         </p>
       ) : null}

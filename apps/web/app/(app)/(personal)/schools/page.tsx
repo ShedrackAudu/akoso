@@ -35,11 +35,11 @@ export default async function SchoolPickerPage(): Promise<JSX.Element> {
             <li key={school.id}>
               <Link
                 href={`/${school.slug}`}
-                className="flex min-h-11 items-center gap-3 rounded-lg border border-border p-4 hover:bg-muted"
+                className="flex min-h-8 items-center gap-3 rounded-lg border border-border p-4 hover:bg-muted"
               >
                 <Monogram name={school.name} />
                 <span className="flex flex-col">
-                  <span className="text-base font-medium">{school.name}</span>
+                  <span className="text-sm font-medium">{school.name}</span>
                   <span className="text-sm text-muted-foreground">
                     {describeRoles(school.roles)}
                   </span>

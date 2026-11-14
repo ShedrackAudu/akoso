@@ -19,14 +19,14 @@ export function PageHeader({
 }): JSX.Element {
   return (
     <div className="flex flex-col gap-2 pb-6">
-      {above !== undefined && <div className="text-base">{above}</div>}
+      {above !== undefined && <div className="text-sm">{above}</div>}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1">
           <h1 className="font-heading text-2xl font-bold break-words">
             {title}
           </h1>
           {description !== undefined && (
-            <p className="text-base text-muted-foreground">{description}</p>
+            <p className="text-sm text-muted-foreground">{description}</p>
           )}
         </div>
         {actions !== undefined && (
@@ -89,7 +89,7 @@ export function EmptyState({
       {icon !== undefined && (
         <div className="text-muted-foreground">{icon}</div>
       )}
-      <p className="max-w-md text-base text-muted-foreground">{children}</p>
+      <p className="max-w-md text-sm text-muted-foreground">{children}</p>
       {action !== undefined && <div>{action}</div>}
     </div>
   )

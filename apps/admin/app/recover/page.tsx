@@ -10,13 +10,13 @@ export default function RecoverPage(): JSX.Element {
   return (
     <main className="mx-auto flex min-h-svh w-full max-w-sm flex-col justify-center gap-6 p-6">
       <h1 className="font-heading text-2xl font-bold">Use a recovery code</h1>
-      <p className="text-base text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         Each code works once. You&apos;ll create a new passkey straight away.
       </p>
       <Recover />
       <Link
         href="/sign-in"
-        className="text-base text-foreground underline underline-offset-4"
+        className="text-sm text-foreground underline underline-offset-4"
       >
         Back to sign-in
       </Link>

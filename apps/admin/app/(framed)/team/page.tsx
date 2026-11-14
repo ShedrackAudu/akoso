@@ -31,12 +31,12 @@ export default async function TeamPage(): Promise<JSX.Element> {
                 data-testid="team-member-row"
               >
                 <span className="flex flex-col">
-                  <span className="text-base font-semibold">{member.name}</span>
-                  <span className="text-base text-muted-foreground">
+                  <span className="text-sm font-semibold">{member.name}</span>
+                  <span className="text-sm text-muted-foreground">
                     {member.email}
                   </span>
                 </span>
-                <span className="flex flex-col text-base text-muted-foreground sm:items-end">
+                <span className="flex flex-col text-sm text-muted-foreground sm:items-end">
                   <span>
                     {member.removed
                       ? "Access removed"

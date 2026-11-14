@@ -88,12 +88,12 @@ export function SecurityLogView({
   return (
     <section className="flex flex-col gap-4 rounded-lg border border-border p-4">
       {lockedRecently && (
-        <p role="status" className="rounded-md bg-muted p-3 text-base">
+        <p role="status" className="rounded-md bg-muted p-3 text-sm">
           Someone's account was locked after too many wrong sign-ins. If that
           wasn't them, ask them to change their password.
         </p>
       )}
-      <label className="flex min-h-11 items-center gap-3 text-base">
+      <label className="flex min-h-8 items-center gap-3 text-sm">
         <input
           type="checkbox"
           className="size-5"
@@ -109,13 +109,13 @@ export function SecurityLogView({
         <p
           role="alert"
           data-testid="form-error"
-          className="text-base text-destructive"
+          className="text-sm text-destructive"
         >
           {error}
         </p>
       )}
       {entries.length === 0 ? (
-        <p className="text-base text-muted-foreground">Nothing to show yet.</p>
+        <p className="text-sm text-muted-foreground">Nothing to show yet.</p>
       ) : (
         <ul className="flex flex-col divide-y divide-border">
           {entries.map((entry) => (
@@ -125,18 +125,18 @@ export function SecurityLogView({
               data-testid="security-log-entry"
             >
               <span className="flex flex-col">
-                <span className="text-base font-semibold">{entry.name}</span>
+                <span className="text-sm font-semibold">{entry.name}</span>
                 <span
                   className={
                     FAILURES.has(entry.kind)
-                      ? "text-base text-destructive"
-                      : "text-base"
+                      ? "text-sm text-destructive"
+                      : "text-sm"
                   }
                 >
                   {KIND_LABELS[entry.kind]}
                 </span>
               </span>
-              <span className="flex flex-col text-base text-muted-foreground sm:items-end">
+              <span className="flex flex-col text-sm text-muted-foreground sm:items-end">
                 <span>{time.formatDateTime(new Date(entry.at), timeZone)}</span>
                 {!entry.causedBySchool && (
                   <span>
@@ -153,7 +153,6 @@ export function SecurityLogView({
         <Button
           type="button"
           variant="outline"
-          className="h-11 text-base"
           disabled={busy}
           onClick={() => {
             void load({ failuresOnly, cursor })

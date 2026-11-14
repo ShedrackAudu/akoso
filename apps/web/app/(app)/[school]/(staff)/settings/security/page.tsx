@@ -40,13 +40,13 @@ export default async function SecurityLogPage({
             <h2 className="text-lg font-semibold">Access review</h2>
             <a
               href={`${base}/access-review`}
-              className="inline-flex h-11 items-center rounded-md border border-border px-4 text-base"
+              className="inline-flex h-7 items-center rounded-md border border-border px-2.5 text-xs font-medium"
               download
             >
               Download CSV
             </a>
           </div>
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Everyone with a role that reaches money, health or the school's
             settings. Check it every term, and remove access nobody needs.
           </p>
@@ -58,12 +58,12 @@ export default async function SecurityLogPage({
                 data-testid="access-review-row"
               >
                 <span className="flex flex-col">
-                  <span className="text-base font-semibold">{row.name}</span>
-                  <span className="text-base text-muted-foreground">
+                  <span className="text-sm font-semibold">{row.name}</span>
+                  <span className="text-sm text-muted-foreground">
                     {row.roles.join(", ")}
                   </span>
                 </span>
-                <span className="flex flex-col text-base text-muted-foreground sm:items-end">
+                <span className="flex flex-col text-sm text-muted-foreground sm:items-end">
                   {row.status === "suspended" && <span>Suspended</span>}
                   <span>Second step {row.mfaEnabled ? "on" : "off"}</span>
                   <span>

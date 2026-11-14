@@ -47,12 +47,12 @@ export default async function TeamSecurityLogPage({
             data-testid="team-log-entry"
           >
             <span className="flex flex-col">
-              <span className="text-base font-semibold">{entry.name}</span>
-              <span className="text-base">
+              <span className="text-sm font-semibold">{entry.name}</span>
+              <span className="text-sm">
                 {KIND_LABELS[entry.kind] ?? entry.kind}
               </span>
             </span>
-            <span className="flex flex-col text-base text-muted-foreground sm:items-end">
+            <span className="flex flex-col text-sm text-muted-foreground sm:items-end">
               <span>
                 {time.formatDateTime(new Date(entry.at), "Africa/Lagos")}
               </span>
@@ -64,7 +64,7 @@ export default async function TeamSecurityLogPage({
       {page.nextCursor !== null && (
         <Link
           href={`/security-log?cursor=${encodeURIComponent(page.nextCursor)}`}
-          className="text-base text-foreground underline underline-offset-4"
+          className="text-sm text-foreground underline underline-offset-4"
         >
           Older
         </Link>

@@ -16,7 +16,6 @@ import { saveProfileAction } from "@/server/actions/school-setup"
 
 import {
   ActionStatus,
-  BUTTON,
   CHECK,
   fieldProblem,
   SECTION,
@@ -72,16 +71,16 @@ export function ProfileForm({
         maxLength={200}
         aria-invalid={problem("name") !== undefined}
       />
-      <p className="text-base text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         Your school&apos;s address is <strong>{profile.slug}</strong>. To change
         it, ask Akoso support: it&apos;s printed on flyers and QR codes.
       </p>
 
       <fieldset className="flex flex-col">
-        <legend className="text-base font-semibold">
+        <legend className="text-sm font-semibold">
           What the school teaches
         </legend>
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Choose more than one for a combined school.
         </p>
         {schoolSetup.SCHOOL_TYPES.map((type) => (
@@ -165,7 +164,7 @@ export function ProfileForm({
         maxLength={64}
         aria-describedby="timeZone-hint"
       />
-      <p id="timeZone-hint" className="-mt-2 text-base text-muted-foreground">
+      <p id="timeZone-hint" className="-mt-2 text-sm text-muted-foreground">
         Schools in Nigeria use Africa/Lagos. Every date and deadline uses it.
       </p>
 
@@ -187,21 +186,18 @@ export function ProfileForm({
         </div>
         <span
           aria-hidden="true"
-          className="size-11 shrink-0 rounded-lg border border-border"
+          className="size-7 shrink-0 rounded-lg border border-border"
           style={swatch === null ? undefined : { backgroundColor: swatch }}
         />
       </div>
-      <p
-        id="brandColour-hint"
-        className="-mt-2 text-base text-muted-foreground"
-      >
+      <p id="brandColour-hint" className="-mt-2 text-sm text-muted-foreground">
         A six-digit colour code. It must be dark enough for white text on it.
         Leave it empty to use Akoso&apos;s colours.
       </p>
 
       <ActionStatus action={action} />
       <div>
-        <Button type="submit" className={BUTTON} disabled={action.busy}>
+        <Button type="submit" disabled={action.busy}>
           Save profile
         </Button>
       </div>

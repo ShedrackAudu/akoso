@@ -88,7 +88,7 @@ export function ErrorText({
     <p
       role="alert"
       data-testid="form-error"
-      className="text-base text-destructive"
+      className="text-sm text-destructive"
     >
       {error}
     </p>

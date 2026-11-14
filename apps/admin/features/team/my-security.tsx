@@ -18,7 +18,6 @@ import { registerPasskey, signInWithPasskey } from "./passkey-client"
 import { RecoveryCodes } from "./recovery-codes"
 import { ErrorText, useTeamAction } from "./use-team-action"
 
-const BUTTON = "h-11 text-base"
 const SECTION = "flex flex-col gap-4 rounded-lg border border-border p-4"
 
 export function MySecurity({
@@ -73,7 +72,7 @@ export function MySecurity({
   return (
     <div className="flex flex-col gap-6">
       {notice !== null && (
-        <p role="status" className="text-base" data-testid="security-notice">
+        <p role="status" className="text-sm" data-testid="security-notice">
           {notice}
         </p>
       )}
@@ -91,8 +90,8 @@ export function MySecurity({
               className="flex flex-wrap items-center justify-between gap-2 py-3"
             >
               <span className="flex flex-col">
-                <span className="text-base font-semibold">{passkey.name}</span>
-                <span className="text-base text-muted-foreground">
+                <span className="text-sm font-semibold">{passkey.name}</span>
+                <span className="text-sm text-muted-foreground">
                   Added{" "}
                   {time.formatDateTime(
                     new Date(passkey.createdAt),
@@ -104,7 +103,6 @@ export function MySecurity({
                 <Button
                   type="button"
                   variant="destructive"
-                  className={BUTTON}
                   disabled={action.busy}
                   onClick={() => void remove(passkey.id)}
                 >
@@ -115,14 +113,13 @@ export function MySecurity({
           ))}
         </ul>
         {security.passkeys.length < 2 && (
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Add a second passkey, such as a security key or another phone, so
             losing one device doesn&apos;t lock you out.
           </p>
         )}
         <Button
           type="button"
-          className={BUTTON}
           disabled={action.busy}
           onClick={() => void addPasskey()}
         >
@@ -132,7 +129,7 @@ export function MySecurity({
 
       <section className={SECTION}>
         <h2 className="text-lg font-semibold">Recovery codes</h2>
-        <p className="text-base" data-testid="codes-left">
+        <p className="text-sm" data-testid="codes-left">
           {security.recoveryCodesLeft} of 10 unused.
         </p>
         {codes !== null ? (
@@ -141,7 +138,6 @@ export function MySecurity({
           <Button
             type="button"
             variant="outline"
-            className={BUTTON}
             disabled={action.busy}
             onClick={() => void newCodes()}
           >

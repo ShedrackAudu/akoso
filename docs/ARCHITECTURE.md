@@ -62,7 +62,7 @@ The stack is fixed by section 2; changing any of it needs an ADR and the founder
 | pg-boss                                    | A job queue on Postgres: no extra infrastructure, and jobs commit in the same transaction as the data that caused them                            |
 | Gotenberg                                  | Reliable HTML-to-PDF in its own container, so PDF rendering never runs in the web process                                                         |
 | S3-compatible storage (Cloudflare R2)      | Tenant-prefixed keys and short-lived signed URLs                                                                                                  |
-| Tailwind and shadcn/ui preset `b4bg87xLw8` | A consistent, accessible design system ([ADR 0002](adr/0002-design-system.md))                                                                    |
+| Tailwind and shadcn/ui preset `b4bhL8bH3A` | A consistent, accessible design system ([ADR 0002](adr/0002-design-system.md))                                                                    |
 | Serwist and Dexie                          | Installable PWA with an IndexedDB queue for offline work                                                                                          |
 
 Decisions are recorded in [`docs/adr/`](adr/README.md):
