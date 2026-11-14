@@ -112,7 +112,7 @@ relationships, golden files and sign-offs.
 
 TypeScript (strict, `noUncheckedIndexedAccess`) · Next.js App Router · pnpm workspaces ·
 PostgreSQL 16 with RLS · Drizzle · Zod · Better Auth · pg-boss · Gotenberg ·
-S3-compatible storage · Tailwind and shadcn/ui preset `b4bg87xLw8` · Phosphor icons ·
+S3-compatible storage · Tailwind and shadcn/ui preset `b4bhL8bH3A` · Phosphor icons ·
 TanStack Table · React Hook Form · Serwist and Dexie · Vitest · Playwright · k6.
 
 Requires Node 26 (D-30) and pnpm 12.18 (the version is pinned in `package.json`). Node 26
@@ -246,7 +246,7 @@ word seems to mean something else, or two words seem to mean the same thing, sto
 
 ### Interface
 
-- Design system: shadcn preset `b4bg87xLw8`. Extend it; never override its tokens ad hoc.
+- Design system: shadcn preset `b4bhL8bH3A`. Extend it; never override its tokens ad hoc.
 - Add components with `pnpm dlx shadcn@latest add <name>` (run in `apps/web`) or the
   shadcn MCP tools. Search the registry before writing a custom component. Never paste
   component code from a website. Do not hand-edit files in

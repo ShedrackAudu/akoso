@@ -7,7 +7,7 @@ agents: `AGENTS.md`. Then load only the brief sections for your task from `docs/
 
 TypeScript strict · Next.js App Router · pnpm workspaces · PostgreSQL 16 with RLS ·
 Drizzle · Zod · Better Auth · pg-boss · Gotenberg · S3-compatible storage · Tailwind and
-shadcn/ui (preset `b4bg87xLw8`, Base UI, Phosphor icons) · Serwist and Dexie for offline.
+shadcn/ui (preset `b4bhL8bH3A`, Base UI, Phosphor icons) · Serwist and Dexie for offline.
 
 ## Folder map
 
