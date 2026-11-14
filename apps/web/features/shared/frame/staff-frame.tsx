@@ -6,6 +6,7 @@ import {
   GearIcon,
   HouseIcon,
   KeyIcon,
+  ListChecksIcon,
   ListMagnifyingGlassIcon,
   ShieldCheckIcon,
   UserCircleIcon,
@@ -30,6 +31,7 @@ const FrameLinkComponent: FrameLink = (props) => <Link {...props} />
 /** The icons the staff navigation uses (features/shared/navigation.ts). */
 const STAFF_ICONS: FrameIcons = {
   home: HouseIcon,
+  setup: ListChecksIcon,
   people: UsersThreeIcon,
   settings: GearIcon,
   roles: KeyIcon,

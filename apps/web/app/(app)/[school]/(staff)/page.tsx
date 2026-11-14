@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const DESCRIPTIONS: Record<string, string> = {
+  setup: "Your school's profile, terms, calendar, classes and subjects.",
   team: "Who can use the school's account, and with which roles.",
   roles: "Your school's own roles, and which roles use a second sign-in step.",
   security: "Sign-ins, failures and changes to people's access.",
@@ -39,7 +40,7 @@ export default async function SchoolHomePage({
     redirect(`/${encodeURIComponent(school)}/parent`)
   }
   const pages = staffNav(school, frame.permissions).flatMap(
-    (item) => item.children ?? []
+    (item) => item.children ?? (item.key === "home" ? [] : [item])
   )
 
   return (

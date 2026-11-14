@@ -260,3 +260,17 @@ unique rules that start with `tenant_id`.
    flyers and QR codes. I recommend this.
 5. **Form teachers** are assigned when staff records exist. The field is ready now, empty.
    I recommend this rather than inviting staff from inside setup now.
+
+## Notes from building it
+
+Where the build differs from the text above, and why. Each is in `docs/decisions.md`.
+
+- **Primary 4 to 6 limit:** 11 to 13 subjects, as NERDC's 2025 offering states, not the
+  10 to 12 in the table above (D-OPEN-8, item 3).
+- **LGAs are typed** for now; states are a fixed list (D-OPEN-8, item 4).
+- **Removing** a class, arm or subject archives it (A-20).
+- **Default curriculum per arm** follows NERDC's cohort phase-in (A-22).
+- **The brand colour** must reach 4.5:1 against white (A-23).
+- **A combined school** gets all four levels; a secondary school gets JSS and SSS, as
+  in the edge cases. Every school also gets Pre-nursery to Reception when it teaches
+  nursery.
