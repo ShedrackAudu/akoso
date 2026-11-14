@@ -67,9 +67,16 @@ afterAll(async () => {
 
 const ownerRun = (query: ReturnType<typeof sql>) => owner.db.execute(query)
 
+/** A school name suffix without digits, so it can never look like a code. */
+const lettersOf = (id: string): string =>
+  id
+    .replace(/-/g, "")
+    .slice(0, 6)
+    .replace(/\d/g, (digit) => "ghijklmnop"[Number(digit)] ?? "x")
+
 async function newSchool(): Promise<{ id: string; name: string }> {
   const id = randomUUID()
-  const name = `Part B School ${id.slice(0, 6)}`
+  const name = `Part B School ${lettersOf(id)}`
   await ownerRun(sql`
     insert into platform.tenants (id, slug, name, status)
     values (${id}, ${`partb-${id.slice(0, 8)}`}, ${name}, 'active')`)
@@ -163,8 +170,12 @@ async function sessionsOf(userId: string): Promise<number> {
   return Number(result.rows[0]?.n)
 }
 
+/**
+ * The code in a message: the last six-digit run, since every message puts the code
+ * after the school's name (which once held digits and was read as the code).
+ */
 const codeIn = (message: string | undefined): string =>
-  /(\d{6})/.exec(message ?? "")?.[1] ?? ""
+  [...(message ?? "").matchAll(/\b(\d{6})\b/g)].at(-1)?.[1] ?? ""
 
 const refusal = (promise: Promise<unknown>) =>
   promise.then(

@@ -7,7 +7,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/80",
+        // Akoso: hover darkens the violet (6.6:1 to 8.1:1 against the text, light
+        // and dark). The preset's 80% tint lightened it to 4.3:1 mid-transition,
+        // below WCAG AA's 4.5:1 (caught by axe in PR #41's CI).
+        default:
+          "bg-primary text-primary-foreground hover:bg-[color-mix(in_oklch,var(--primary),black_10%)]",
         outline:
           "border-border hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-input/30",
         secondary:
