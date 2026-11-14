@@ -20,7 +20,7 @@ export default async function EnrolPage({
       {typeof token === "string" && token !== "" ? (
         <Enrol token={token} />
       ) : (
-        <p className="text-base">
+        <p className="text-sm">
           This link is incomplete. Ask the Owner for a new one.
         </p>
       )}

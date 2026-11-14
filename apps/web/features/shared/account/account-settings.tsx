@@ -24,7 +24,6 @@ import { ProblemText, useGuardedAction } from "../actions/use-guarded-action"
 import { fieldText } from "../auth/auth-client"
 import { Field } from "../auth/field"
 
-const BUTTON = "h-11 text-base"
 const SECTION = "flex flex-col gap-4 rounded-lg border border-border p-4"
 
 const formText = (event: SyntheticEvent<HTMLFormElement>, name: string) =>
@@ -130,7 +129,7 @@ export function AccountSettings({
   return (
     <div className="flex flex-col gap-6">
       {notice !== null && (
-        <p role="status" className="text-base" data-testid="account-notice">
+        <p role="status" className="text-sm" data-testid="account-notice">
           {notice}
         </p>
       )}
@@ -147,7 +146,7 @@ export function AccountSettings({
           autoComplete="name"
           required
         />
-        <Button type="submit" className={BUTTON} disabled={action.busy}>
+        <Button type="submit" disabled={action.busy}>
           Save name
         </Button>
       </SafeForm>
@@ -155,13 +154,13 @@ export function AccountSettings({
       {account.phone !== null && (
         <section className={SECTION}>
           <h2 className="text-lg font-semibold">Sign-in number</h2>
-          <p className="text-base">{account.phone}</p>
+          <p className="text-sm">{account.phone}</p>
           {phoneStep === null ? (
             <SafeForm
               onSubmit={startPhoneChange}
               className="flex flex-col gap-4"
             >
-              <p className="text-base text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Still have this phone? Move your sign-in to a new number. If
                 you've lost it, ask your school office.
               </p>
@@ -174,7 +173,7 @@ export function AccountSettings({
                 autoComplete="tel"
                 required
               />
-              <Button type="submit" className={BUTTON} disabled={action.busy}>
+              <Button type="submit" disabled={action.busy}>
                 Send codes
               </Button>
             </SafeForm>
@@ -198,7 +197,7 @@ export function AccountSettings({
                 inputMode="numeric"
                 required
               />
-              <Button type="submit" className={BUTTON} disabled={action.busy}>
+              <Button type="submit" disabled={action.busy}>
                 Change number
               </Button>
             </SafeForm>
@@ -208,18 +207,17 @@ export function AccountSettings({
 
       <section className={SECTION}>
         <h2 className="text-lg font-semibold">Backup number</h2>
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           A second number you can sign in with if you lose your phone.
         </p>
         {account.backupPhone !== null ? (
           <>
-            <p className="text-base" data-testid="backup-phone">
+            <p className="text-sm" data-testid="backup-phone">
               {account.backupPhone}
             </p>
             <Button
               type="button"
               variant="outline"
-              className={BUTTON}
               disabled={action.busy}
               onClick={removeBackup}
             >
@@ -236,7 +234,7 @@ export function AccountSettings({
               inputMode="tel"
               required
             />
-            <Button type="submit" className={BUTTON} disabled={action.busy}>
+            <Button type="submit" disabled={action.busy}>
               Send code
             </Button>
           </SafeForm>
@@ -250,7 +248,7 @@ export function AccountSettings({
               autoComplete="one-time-code"
               required
             />
-            <Button type="submit" className={BUTTON} disabled={action.busy}>
+            <Button type="submit" disabled={action.busy}>
               Add backup number
             </Button>
           </SafeForm>
@@ -260,7 +258,7 @@ export function AccountSettings({
       {account.isStaff && (
         <SafeForm onSubmit={changeEmail} className={SECTION}>
           <h2 className="text-lg font-semibold">Email</h2>
-          <p className="text-base">{account.email ?? "No email yet"}</p>
+          <p className="text-sm">{account.email ?? "No email yet"}</p>
           <Field
             id="email"
             name="email"
@@ -269,7 +267,7 @@ export function AccountSettings({
             autoComplete="email"
             required
           />
-          <Button type="submit" className={BUTTON} disabled={action.busy}>
+          <Button type="submit" disabled={action.busy}>
             Send confirmation link
           </Button>
         </SafeForm>
@@ -277,12 +275,12 @@ export function AccountSettings({
 
       <section className={SECTION}>
         <h2 className="text-lg font-semibold">Delete my account</h2>
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Your sign-in is deleted and you can't sign in again. Your schools keep
           their own records about you and your children, such as fees and
           results, as the law allows. Ask each school if you want those removed.
         </p>
-        <label className="flex min-h-11 items-center gap-3 text-base">
+        <label className="flex min-h-8 items-center gap-3 text-sm">
           <input
             type="checkbox"
             className="size-5"
@@ -296,7 +294,6 @@ export function AccountSettings({
         <Button
           type="button"
           variant="destructive"
-          className={BUTTON}
           disabled={!confirmDelete || action.busy}
           onClick={deleteAccount}
         >

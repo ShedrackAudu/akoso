@@ -64,7 +64,7 @@ export function Recover(): JSX.Element {
         autoComplete="off"
         required
       />
-      <Button type="submit" className="h-11 text-base" disabled={action.busy}>
+      <Button type="submit" disabled={action.busy}>
         Use code and create a new passkey
       </Button>
       <ErrorText error={error ?? action.error} />

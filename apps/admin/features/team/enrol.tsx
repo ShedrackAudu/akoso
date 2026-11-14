@@ -41,13 +41,12 @@ export function Enrol({ token }: { token: string }): JSX.Element {
   if (codes !== null) {
     return (
       <div className="flex flex-col gap-4">
-        <p role="status" className="text-base font-semibold">
+        <p role="status" className="text-sm font-semibold">
           Your passkey is ready and you&apos;re signed in.
         </p>
         <RecoveryCodes codes={codes} />
         <Button
           type="button"
-          className="h-11 text-base"
           onClick={() => {
             router.push("/")
           }}
@@ -60,17 +59,12 @@ export function Enrol({ token }: { token: string }): JSX.Element {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-base">
+      <p className="text-sm">
         Your device will ask for your fingerprint, face or PIN, and save a
         passkey for Akoso Admin. Use it to sign in from now on. Once you&apos;re
         in, add a second passkey, such as a security key.
       </p>
-      <Button
-        type="button"
-        className="h-11 text-base"
-        disabled={action.busy}
-        onClick={() => void enrol()}
-      >
+      <Button type="button" disabled={action.busy} onClick={() => void enrol()}>
         Create your passkey
       </Button>
       <ErrorText error={error ?? action.error} />

@@ -19,7 +19,7 @@ type Step =
   | { kind: "staff-password" }
   | { kind: "staff-second-step"; useBackup: boolean }
 
-const BUTTON = "h-11 w-full text-base"
+const BUTTON = "w-full"
 
 export function SignInForm({
   schoolName,
@@ -147,7 +147,7 @@ export function SignInForm({
         <h1 className="font-heading text-2xl font-bold">
           {schoolName ?? "Sign in"}
         </h1>
-        <p className="text-base text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           {schoolName === null
             ? "Your whole school, brought together."
             : "Sign in to continue."}

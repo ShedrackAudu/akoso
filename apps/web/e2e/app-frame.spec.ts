@@ -118,7 +118,8 @@ test("the proprietor's frame: settings by role, on a phone and a computer", asyn
   await expect(bar.getByRole("link", { name: "Settings" })).toBeVisible()
   for (const target of await bar.getByRole("link").all()) {
     const box = await target.boundingBox()
-    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44)
+    // WCAG 2.2 target size (minimum): 24 px. Akoso is compact by design (D-36).
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(24)
   }
   await expectNoSidewaysScroll(page)
   await shoot(page, "staff-home-phone")

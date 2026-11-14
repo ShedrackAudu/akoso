@@ -11,8 +11,6 @@ import { SafeForm } from "@akoso/ui/components/safe-form"
 import { authPost, fieldText } from "./auth-client"
 import { Field } from "./field"
 
-const BUTTON = "h-11 text-base"
-
 export interface ConfirmIdentityProps {
   /** How this person signs in: with a password (staff) or a code (parents). */
   hasPassword: boolean
@@ -118,7 +116,7 @@ export function ConfirmIdentity({
       <h2 id="confirm-identity-title" className="text-lg font-semibold">
         Confirm it's you
       </h2>
-      <p className="text-base text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         For your security, sign in again before this change.
       </p>
       {hasPassword && step === "start" && (
@@ -131,7 +129,7 @@ export function ConfirmIdentity({
             autoComplete="current-password"
             required
           />
-          <Button type="submit" className={BUTTON} disabled={busy}>
+          <Button type="submit" disabled={busy}>
             Confirm
           </Button>
         </SafeForm>
@@ -146,18 +144,13 @@ export function ConfirmIdentity({
             autoComplete="one-time-code"
             required
           />
-          <Button type="submit" className={BUTTON} disabled={busy}>
+          <Button type="submit" disabled={busy}>
             Confirm
           </Button>
         </SafeForm>
       )}
       {!hasPassword && step === "start" && (
-        <Button
-          type="button"
-          className={BUTTON}
-          disabled={busy}
-          onClick={sendCode}
-        >
+        <Button type="button" disabled={busy} onClick={sendCode}>
           Send a code to {account}
         </Button>
       )}
@@ -171,7 +164,7 @@ export function ConfirmIdentity({
             autoComplete="one-time-code"
             required
           />
-          <Button type="submit" className={BUTTON} disabled={busy}>
+          <Button type="submit" disabled={busy}>
             Confirm
           </Button>
         </SafeForm>
@@ -180,17 +173,12 @@ export function ConfirmIdentity({
         <p
           role="alert"
           data-testid="form-error"
-          className="text-base text-destructive"
+          className="text-sm text-destructive"
         >
           {error}
         </p>
       )}
-      <Button
-        type="button"
-        variant="ghost"
-        className={BUTTON}
-        onClick={onCancel}
-      >
+      <Button type="button" variant="ghost" onClick={onCancel}>
         Cancel
       </Button>
     </section>

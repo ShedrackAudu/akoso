@@ -43,17 +43,17 @@ export function StatusBar({
     >
       {needsSignIn ? (
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <p role="status" className="text-base">
+          <p role="status" className="text-sm">
             Your sign-in has expired. {waiting}{" "}
             {waiting === 1 ? "change is" : "changes are"} kept on this phone and
             will be sent after you sign in.
           </p>
-          <Button size="lg" className="min-h-11" onClick={onSignInAgain}>
+          <Button size="lg" className="min-h-8" onClick={onSignInAgain}>
             Sign in again
           </Button>
         </div>
       ) : (
-        <p role="status" className="text-base">
+        <p role="status" className="text-sm">
           <span
             aria-hidden="true"
             className={`mr-2 inline-block size-2.5 rounded-full ${online ? "bg-primary" : "bg-muted-foreground"}`}

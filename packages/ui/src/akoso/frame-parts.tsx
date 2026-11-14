@@ -68,7 +68,7 @@ export function SkipLink(): JSX.Element {
   return (
     <a
       href="#main"
-      className="sr-only z-50 rounded-md bg-background px-4 py-2 text-base focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+      className="sr-only z-50 rounded-md bg-background px-4 py-2 text-sm focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
     >
       Skip to content
     </a>
@@ -102,7 +102,7 @@ function NavLink({
       aria-label={collapsed ? item.label : undefined}
       onClick={onNavigate}
       className={cn(
-        "flex min-h-11 items-center gap-3 rounded-md px-3 text-base outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring",
+        "flex min-h-8 items-center gap-3 rounded-md px-3 text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring",
         active && "bg-muted font-semibold text-foreground",
         !active && "text-muted-foreground",
         nested && "pl-10 text-sm",
@@ -212,7 +212,7 @@ export function MenuSheet({
         onClick={() => {
           dialog.current?.showModal()
         }}
-        className="flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-md px-2 text-xs text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex min-h-8 min-w-8 flex-col items-center justify-center gap-0.5 rounded-md px-2 text-xs text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         {trigger}
       </button>
@@ -245,7 +245,7 @@ export function MenuSheet({
             <button
               type="button"
               onClick={close}
-              className="flex min-h-11 min-w-11 items-center justify-center rounded-md outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex min-h-8 min-w-8 items-center justify-center rounded-md outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
             >
               <Icon icon={XIcon} />
               <span className="sr-only">Close</span>

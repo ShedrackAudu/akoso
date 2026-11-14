@@ -260,8 +260,10 @@ word seems to mean something else, or two words seem to mean the same thing, sto
   `@akoso/ui/akoso/icon`. Server components import icons from
   `@phosphor-icons/react/ssr`. Two weights only: `regular` and `fill`. When a registry
   component imports another icon library, replace the imports.
-- Mobile-first for 2 GB Android phones on 3G. Body text at least 16 px; tap targets at
-  least 44 px. WCAG 2.2 AA. Status is never shown by colour or icon alone.
+- Mobile-first for 2 GB Android phones on 3G. Compact by design (D-36): use the shadcn
+  Mira sizes as they come; don't enlarge controls or text. Page text 14 px (`text-sm`),
+  text inside components 12 px; every target at least 24 px (WCAG 2.2). WCAG 2.2 AA.
+  Status is never shown by colour or icon alone.
 - Every screen has loading, empty, error and offline states.
 - Dates `dd/mm/yyyy`; phone numbers `+234…`; amounts in naira with thousands separators.
 - Text follows `docs/brand-voice.md`. Product names come from

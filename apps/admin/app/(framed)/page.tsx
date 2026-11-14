@@ -36,7 +36,7 @@ export default async function HomePage(): Promise<JSX.Element> {
       {recoveries.length > 0 ? (
         <section
           role="status"
-          className="rounded-lg border border-border bg-muted p-4 text-base"
+          className="rounded-lg border border-border bg-muted p-4 text-sm"
           data-testid="recovery-alert"
         >
           <p className="font-semibold">

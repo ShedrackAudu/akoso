@@ -121,8 +121,8 @@ export function OfflineSpike(): JSX.Element {
   if (snapshot.signedOut) {
     return (
       <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-6 text-center">
-        <p className="text-base">You are signed out.</p>
-        <Button size="lg" className="min-h-11" onClick={() => void signIn()}>
+        <p className="text-sm">You are signed out.</p>
+        <Button size="lg" className="min-h-8" onClick={() => void signIn()}>
           Sign in
         </Button>
       </main>
@@ -141,7 +141,7 @@ export function OfflineSpike(): JSX.Element {
         onSignInAgain={() => void signInAgain()}
       />
       {sheet === undefined ? (
-        <p className="p-4 text-base">
+        <p className="p-4 text-sm">
           Loading the class. The first time, this needs a connection; after that
           it works offline.
         </p>
@@ -151,7 +151,7 @@ export function OfflineSpike(): JSX.Element {
             <h1 className="font-heading text-2xl font-bold">
               {sheet.className}
             </h1>
-            <p className="text-base text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               {sheet.subjectName} · Register for{" "}
               {sheet.schoolToday.split("-").reverse().join("/")}
             </p>
@@ -163,7 +163,7 @@ export function OfflineSpike(): JSX.Element {
           {sheet.locked ? (
             <p
               role="status"
-              className="rounded-md border p-3 text-base"
+              className="rounded-md border p-3 text-sm"
               data-testid="locked-note"
             >
               This sheet has been approved and is locked. Scores cannot be
@@ -177,7 +177,7 @@ export function OfflineSpike(): JSX.Element {
               className="rounded-md border border-destructive p-3"
               data-testid="refused"
             >
-              <h2 id="refused" className="text-base font-bold">
+              <h2 id="refused" className="text-sm font-bold">
                 {rejected.length}{" "}
                 {rejected.length === 1 ? "change was" : "changes were"} not
                 saved
@@ -186,7 +186,7 @@ export function OfflineSpike(): JSX.Element {
                 {rejected.map((change) => (
                   <li
                     key={change.opId}
-                    className="flex flex-wrap items-center justify-between gap-2 text-base"
+                    className="flex flex-wrap items-center justify-between gap-2 text-sm"
                   >
                     <span>
                       {change.message ??
@@ -195,7 +195,7 @@ export function OfflineSpike(): JSX.Element {
                     <Button
                       variant="outline"
                       size="lg"
-                      className="min-h-11"
+                      className="min-h-8"
                       onClick={() => {
                         if (
                           change.seq !== undefined &&
@@ -227,7 +227,7 @@ export function OfflineSpike(): JSX.Element {
                 aria-selected={tab === name}
                 variant={tab === name ? "default" : "outline"}
                 size="lg"
-                className="min-h-11"
+                className="min-h-8"
                 onClick={() => {
                   setTab(name)
                 }}
@@ -249,7 +249,7 @@ export function OfflineSpike(): JSX.Element {
             <Button
               variant="outline"
               size="lg"
-              className="min-h-11"
+              className="min-h-8"
               onClick={() => {
                 void trySignOut().then(({ unsent }) => {
                   setSignOutPrompt(unsent === 0 ? null : unsent)
@@ -264,7 +264,7 @@ export function OfflineSpike(): JSX.Element {
               aria-labelledby="sign-out-warning"
               className="space-y-2 rounded-md border border-destructive p-3"
             >
-              <p id="sign-out-warning" className="text-base">
+              <p id="sign-out-warning" className="text-sm">
                 {signOutPrompt}{" "}
                 {signOutPrompt === 1 ? "change has" : "changes have"} not
                 reached the school yet. If you sign out now,{" "}
@@ -273,7 +273,7 @@ export function OfflineSpike(): JSX.Element {
               <div className="flex flex-wrap gap-2">
                 <Button
                   size="lg"
-                  className="min-h-11"
+                  className="min-h-8"
                   onClick={() => {
                     setSignOutPrompt(null)
                   }}
@@ -283,7 +283,7 @@ export function OfflineSpike(): JSX.Element {
                 <Button
                   variant="destructive"
                   size="lg"
-                  className="min-h-11"
+                  className="min-h-8"
                   onClick={() => {
                     void clearAndSignOut().then(() => {
                       setSignOutPrompt(null)

@@ -62,8 +62,8 @@ export default async function SchoolHomePage({
                 className="flex h-full flex-col gap-1 rounded-lg border border-border p-4 outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
                 data-testid="home-card"
               >
-                <span className="text-base font-semibold">{page.label}</span>
-                <span className="text-base text-muted-foreground">
+                <span className="text-sm font-semibold">{page.label}</span>
+                <span className="text-sm text-muted-foreground">
                   {DESCRIPTIONS[page.key] ?? ""}
                 </span>
               </Link>

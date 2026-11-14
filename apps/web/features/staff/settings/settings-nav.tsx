@@ -29,7 +29,7 @@ export function SettingsNav({
           key={page}
           href={`/${encodeURIComponent(school)}/settings/${page}`}
           aria-current={page === current ? "page" : undefined}
-          className="inline-flex min-h-11 items-center rounded-md border border-border px-3 text-base aria-[current=page]:bg-muted aria-[current=page]:font-semibold"
+          className="inline-flex min-h-8 items-center rounded-md border border-border px-3 text-sm aria-[current=page]:bg-muted aria-[current=page]:font-semibold"
         >
           {LABELS[page]}
         </Link>
