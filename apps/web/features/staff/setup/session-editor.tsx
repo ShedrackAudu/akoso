@@ -19,7 +19,6 @@ import {
 
 import {
   ActionStatus,
-  BUTTON,
   SECTION,
   useSetupAction,
   type SetupAction,
@@ -105,7 +104,7 @@ function SessionForm({
         />
       </div>
       <div>
-        <Button type="submit" className={BUTTON} disabled={action.busy}>
+        <Button type="submit" disabled={action.busy}>
           {session === null ? "Add session" : "Save session"}
         </Button>
       </div>
@@ -127,7 +126,7 @@ function TermFields({
   const id = (field: string) => `term-${sessionId}-${String(number)}-${field}`
   return (
     <fieldset className="flex flex-col gap-4" disabled={readOnly}>
-      <legend className="text-base font-semibold">
+      <legend className="text-sm font-semibold">
         Term {number}
         {term !== undefined && (
           <span className="font-normal text-muted-foreground">
@@ -237,7 +236,7 @@ function TermsForm({
       <ActionStatus action={action} />
       {!readOnly && (
         <div>
-          <Button type="submit" className={BUTTON} disabled={action.busy}>
+          <Button type="submit" disabled={action.busy}>
             Save term dates
           </Button>
         </div>
@@ -278,7 +277,7 @@ export function SessionEditor({
           <h2 id="first-session" className="text-lg font-semibold">
             This session
           </h2>
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Name the session and give its first and last day. Then add each
             term&apos;s dates.
           </p>
@@ -306,7 +305,7 @@ export function SessionEditor({
               >
                 {session.name}
               </h2>
-              <span className="text-base text-muted-foreground">
+              <span className="text-sm text-muted-foreground">
                 {STATUS_LABELS[session.status]}
               </span>
             </div>
@@ -315,7 +314,6 @@ export function SessionEditor({
                 <Button
                   type="button"
                   variant="outline"
-                  className={BUTTON}
                   aria-expanded={editing === session.id}
                   onClick={() => {
                     setEditing(editing === session.id ? null : session.id)
@@ -328,7 +326,6 @@ export function SessionEditor({
                 <Button
                   type="button"
                   variant="outline"
-                  className={BUTTON}
                   disabled={action.busy}
                   onClick={() => {
                     void action.run(
@@ -378,7 +375,6 @@ export function SessionEditor({
               <Button
                 type="button"
                 variant="outline"
-                className={BUTTON}
                 onClick={() => {
                   setAdding(true)
                 }}

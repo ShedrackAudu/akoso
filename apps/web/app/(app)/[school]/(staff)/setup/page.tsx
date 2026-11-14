@@ -54,17 +54,17 @@ export default async function SetupPage({
               data-testid={`setup-step-${step.key}`}
             >
               <span className="flex flex-col gap-1">
-                <span className="text-base font-semibold">
+                <span className="text-sm font-semibold">
                   {index + 1}. {step.title}
                 </span>
                 {step.note !== "" && (
-                  <span className="text-base text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     {step.note}
                   </span>
                 )}
               </span>
               <span
-                className={`shrink-0 rounded-full border px-3 py-1 text-base ${STATE_STYLES[step.state]}`}
+                className={`shrink-0 rounded-full border px-3 py-1 text-sm ${STATE_STYLES[step.state]}`}
                 data-state={step.state}
               >
                 {STATE_LABELS[step.state]}

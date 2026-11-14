@@ -20,7 +20,6 @@ import {
 
 import {
   ActionStatus,
-  BUTTON,
   CHECK,
   SECTION,
   SelectField,
@@ -104,12 +103,12 @@ export function CalendarEditor({
             School days in {current.name}
           </h2>
           {current.terms.length === 0 ? (
-            <p className="text-base text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Add the term dates first. School days are counted from them.
             </p>
           ) : (
             <ul
-              className="flex flex-col gap-1 text-base"
+              className="flex flex-col gap-1 text-sm"
               data-testid="school-days"
             >
               {current.terms.map((term) => (
@@ -119,7 +118,7 @@ export function CalendarEditor({
               ))}
             </ul>
           )}
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Weekdays in each term, less the mid-term break and the days off
             below.
           </p>
@@ -135,7 +134,7 @@ export function CalendarEditor({
           <h2 id="suggested" className="text-lg font-semibold">
             Suggested public holidays
           </h2>
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             These fall on fixed dates. Tick the ones your school closes for.
             Holidays that move, like Easter and the Eids, are announced later:
             add them below when they are declared.
@@ -157,7 +156,7 @@ export function CalendarEditor({
           </fieldset>
           <ActionStatus action={confirm} />
           <div>
-            <Button type="submit" className={BUTTON} disabled={confirm.busy}>
+            <Button type="submit" disabled={confirm.busy}>
               Add ticked holidays
             </Button>
           </div>
@@ -204,7 +203,7 @@ export function CalendarEditor({
         />
         <ActionStatus action={add} />
         <div>
-          <Button type="submit" className={BUTTON} disabled={add.busy}>
+          <Button type="submit" disabled={add.busy}>
             Add day off
           </Button>
         </div>
@@ -216,7 +215,7 @@ export function CalendarEditor({
         </h2>
         <ActionStatus action={remove} />
         {nonSchoolDays.length === 0 ? (
-          <p className="text-base text-muted-foreground">No days off yet.</p>
+          <p className="text-sm text-muted-foreground">No days off yet.</p>
         ) : (
           <ul
             className="flex flex-col divide-y divide-border"
@@ -228,10 +227,10 @@ export function CalendarEditor({
                 className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:justify-between"
               >
                 <span className="flex flex-col">
-                  <span className="text-base font-semibold">
+                  <span className="text-sm font-semibold">
                     <Days day={day} />
                   </span>
-                  <span className="text-base text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     {REASON_LABELS[day.reason]}
                     {day.note !== "" && <> · {day.note}</>}
                   </span>
@@ -239,7 +238,6 @@ export function CalendarEditor({
                 <Button
                   type="button"
                   variant="destructive"
-                  className={BUTTON}
                   disabled={remove.busy}
                   onClick={() => {
                     void remove.run(
