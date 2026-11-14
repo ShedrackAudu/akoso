@@ -40,7 +40,10 @@ export function SignIn(): JSX.Element {
         Sign in with your passkey
       </Button>
       <ErrorText error={error} />
-      <Link href="/recover" className="text-base text-primary underline">
+      <Link
+        href="/recover"
+        className="text-base text-foreground underline underline-offset-4"
+      >
         Lost your passkey? Use a recovery code
       </Link>
     </div>

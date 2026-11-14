@@ -117,9 +117,7 @@ export function SecuritySettings({
   }
 
   return (
-    <div className="flex w-full max-w-md flex-col gap-8">
-      <h1 className="font-heading text-2xl font-bold">Sign-in and security</h1>
-
+    <div className="flex w-full flex-col gap-8">
       {message !== null && (
         <p className="text-sm text-muted-foreground" role="status">
           {message}
@@ -180,7 +178,7 @@ export function SecuritySettings({
               </p>
               <a
                 href={setup.totpUri}
-                className="text-base font-medium text-primary underline"
+                className="text-base font-medium text-foreground underline underline-offset-4"
               >
                 Add to my authenticator app
               </a>

@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process"
 import { expect, test, type BrowserContext, type Page } from "@playwright/test"
 
 import { querySqlAsOwner, runSqlAsOwner } from "./global-setup"
+import { signOutViaMenu } from "./sign-in-helpers"
 
 // Akoso team sign-in in the admin app (spec: docs/specs/stage-1-sign-in-part-b.md,
 // section 8, acceptance criteria 10 to 14), with Chrome's virtual authenticator standing
@@ -96,8 +97,7 @@ test("the first Owner enrols with a passkey from the command line's link", async
 })
 
 test("the Owner signs out and back in with the passkey", async () => {
-  await ownerPage.getByRole("button", { name: "Sign out" }).click()
-  await expect(ownerPage).toHaveURL(/\/sign-in$/)
+  await signOutViaMenu(ownerPage)
   await ownerPage
     .getByRole("button", { name: "Sign in with your passkey" })
     .click()

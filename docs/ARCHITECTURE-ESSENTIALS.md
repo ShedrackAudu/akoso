@@ -137,6 +137,15 @@ cookie (`akoso_team`). Boundary rules keep team code out of `apps/web` and schoo
 out of `apps/admin`. Team actions go into one hash-chained team audit log
 (`recordTeamAudit`, `verify_team_audit_chain()`).
 
+**The app frame:** every signed-in page sits in a frame. Staff pages live under
+`app/(app)/[school]/(staff)/` (sidebar frame), parent pages under
+`app/(app)/[school]/parent/` (column frame, kept light), and pages about the person under
+`app/(app)/(personal)/`. A new screen adds one entry to `features/shared/navigation.ts`
+with its permission, and builds its page from `PageHeader` and `PageBody` (narrow,
+standard or wide) from `@akoso/ui/akoso/page`. Parent pages never import from
+`features/staff` (lint enforces it), and the frame's icons are passed in by each app, so
+parents' phones load only the few they use.
+
 **Forms:** every form a screen handles in JavaScript is a `SafeForm`
 (`@akoso/ui/components/safe-form`): it posts, and its controls stay disabled until the
 page is interactive, so an early submission on a slow phone never puts a password or

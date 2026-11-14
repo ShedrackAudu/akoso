@@ -11,6 +11,7 @@ import {
   totp,
   waitForCode,
   waitForEmail,
+  expectSignedInAs,
 } from "./sign-in-helpers"
 
 // Sign-in part B, the school side (spec: docs/specs/stage-1-sign-in-part-b.md,
@@ -73,7 +74,10 @@ test("the proprietor changes a teacher's roles, and it shows in the security log
   browser,
 }) => {
   const secret = await proprietorSignIn(page)
-  await page.getByRole("link", { name: "School settings" }).click()
+  await page
+    .getByTestId("bottom-bar")
+    .getByRole("link", { name: "Settings" })
+    .click()
   await expect(page).toHaveURL(/\/greenfield\/settings\/team$/)
   await page
     .getByTestId("member-row")
@@ -89,10 +93,11 @@ test("the proprietor changes a teacher's roles, and it shows in the security log
   const teacher = await browser.newPage()
   await staffPassword(teacher, PEOPLE.teacher.email, PEOPLE.teacher.password)
   await expect(teacher).toHaveURL(/\/greenfield$/)
-  await expect(teacher.getByTestId("signed-in-as")).toHaveText(
-    "Signed in as Head teacher, Teacher"
-  )
-  await teacher.getByRole("link", { name: "School settings" }).click()
+  await expectSignedInAs(teacher, "Head teacher, Teacher")
+  await teacher
+    .getByTestId("bottom-bar")
+    .getByRole("link", { name: "Settings" })
+    .click()
   await expect(teacher.getByTestId("member-row").first()).toBeVisible()
   // ...but not to change anyone's roles.
   await teacher
@@ -155,7 +160,7 @@ test("pages need their permission: a teacher gets 404 for the security log", asy
 
 test("a parent signs in with their backup number", async ({ page }) => {
   await parentSignIn(page, "0803 100 0113", "+2348031000113")
-  await expect(page).toHaveURL(/\/greenfield$/)
+  await expect(page).toHaveURL(/\/greenfield\/parent$/)
   await page.goto("/account")
   await expect(page.getByTestId("backup-phone")).toHaveText("+2348031000113")
 })
@@ -203,7 +208,7 @@ test("a parent deletes their account and can't sign in again", async ({
      values ('9a000000-0000-4000-8000-000000000001', '${id}', array['guardian']);`
   )
   await parentSignIn(page, phone, phone)
-  await expect(page).toHaveURL(/\/greenfield$/)
+  await expect(page).toHaveURL(/\/greenfield\/parent$/)
   await page.goto("/account")
   await page.getByRole("checkbox", { name: /can't be undone/ }).check()
   await page.getByRole("button", { name: "Delete my account" }).click()

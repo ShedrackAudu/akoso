@@ -68,3 +68,52 @@ export async function getSecurityStatus(ctx: RequestContext): Promise<{
     hasPassword: row.has_password === true,
   }
 }
+
+/** What the app frame shows a person (app frame spec, section 9). */
+export interface FrameInfo {
+  name: string
+  /** The schools they may use, for the school switcher. */
+  schools: { slug: string; name: string }[]
+  /** This request's school, or null on pages across schools. */
+  school: { slug: string; name: string; status: string } | null
+  /** They work for this school (a staff role or a custom role). */
+  isStaffHere: boolean
+  /** They are a parent or guardian in this school. */
+  isGuardianHere: boolean
+  /** Their permissions in this school, for the navigation list. */
+  permissions: string[]
+}
+
+/** Everything the frame needs, in one read. */
+export async function getFrame(ctx: RequestContext): Promise<FrameInfo> {
+  const userId = userIdOf(ctx)
+  const [user, access] = await Promise.all([
+    ctx.db.execute(sql`select name from platform.users where id = ${userId}`),
+    accessFor(ctx.db, userId),
+  ])
+  const here =
+    ctx.tenantId === null
+      ? undefined
+      : access.schools.find((school) => school.school.id === ctx.tenantId)
+  return {
+    name: typeof user.rows[0]?.name === "string" ? user.rows[0].name : "",
+    schools: access.schools.map(({ school }) => ({
+      slug: school.slug,
+      name: school.name,
+    })),
+    school:
+      ctx.school === null
+        ? null
+        : {
+            slug: ctx.school.slug,
+            name: ctx.school.name,
+            status: ctx.school.status,
+          },
+    isStaffHere:
+      here !== undefined &&
+      (here.hasCustomRole || here.roles.some((role) => role !== "guardian")),
+    isGuardianHere: here?.roles.includes("guardian") ?? false,
+    permissions:
+      ctx.actor.kind === "user" ? [...ctx.actor.permissions].map(String) : [],
+  }
+}
