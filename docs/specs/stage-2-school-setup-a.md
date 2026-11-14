@@ -1,6 +1,6 @@
 # School setup, part A: profile, calendar, classes and subjects
 
-- **Status:** Draft (14/11/2026), waiting for the founder's approval
+- **Status:** Approved (founder, 14/11/2026), with all five recommendations: section 8 in three parts; NERDC lists researched with cited sources and checked by the founder before they ship; only fixed-date holidays suggested; slug changes through Akoso support; form teachers once staff records exist
 - **Module:** `school-setup` (`packages/core/src/school-setup`, `packages/db/src/schema/school-setup.ts`, `packages/schemas/src/school-setup.ts`), `packages/domain/src/school-setup` (presets, school-day counting), `tenancy` (school name and time zone), `apps/web` (the Setup screens under `/{school}/setup`) · **Brief:** section 8 (steps 1 to 4), 3.1, 9 · **Stage:** 2
 - **Estimate:** 40 hours of agent time
 - **No new dependencies.**
