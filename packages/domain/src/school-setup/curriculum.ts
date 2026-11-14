@@ -14,6 +14,13 @@
 // - [N2011] NERDC publications list, "Senior Secondary Curriculum / Trade Subjects":
 //   https://www.nerdc.gov.ng/content_manager/pdf_files/nerdc_publications.pdf
 
+import {
+  CURRICULUM_VERSIONS,
+  SCHOOL_TYPES,
+  TRACKS,
+  type SUBJECT_KINDS,
+} from "@akoso/schemas/school-setup"
+
 /** The standard classes of Nigerian schools, whatever a school calls them. */
 export const STANDARD_CLASSES = [
   { key: "pre_nursery", label: "Pre-nursery", stage: "nursery" },
@@ -44,11 +51,7 @@ export const STAGE_LABELS: Readonly<Record<Stage, string>> = {
   senior: "Senior secondary",
 }
 
-export const CURRICULUM_VERSIONS = [
-  "nerdc_2025",
-  "nerdc_pre2025",
-  "own",
-] as const
+export { CURRICULUM_VERSIONS, SCHOOL_TYPES, TRACKS }
 export type CurriculumVersion = (typeof CURRICULUM_VERSIONS)[number]
 
 export const CURRICULUM_LABELS: Readonly<Record<CurriculumVersion, string>> = {
@@ -58,12 +61,6 @@ export const CURRICULUM_LABELS: Readonly<Record<CurriculumVersion, string>> = {
 }
 
 /** Senior secondary fields of study. Technology exists only before 2025 [N2011]. */
-export const TRACKS = [
-  "science",
-  "humanities",
-  "business",
-  "technology",
-] as const
 export type Track = (typeof TRACKS)[number]
 
 export const TRACK_LABELS: Readonly<Record<Track, string>> = {
@@ -73,7 +70,7 @@ export const TRACK_LABELS: Readonly<Record<Track, string>> = {
   technology: "Technology",
 }
 
-export type SubjectKind = "core" | "elective" | "trade" | "optional"
+export type SubjectKind = (typeof SUBJECT_KINDS)[number]
 
 export interface PresetSubject {
   /** A stable key, so a school's subject can be matched to its NERDC subject. */
@@ -365,4 +362,67 @@ export function subjectLimits(
   if (stage === "junior") return { min: 12, max: 14 }
   if (stage === "senior") return { min: 8, max: 9 }
   return null
+}
+
+/** What a school teaches; a combined school has more than one. */
+export type SchoolType = (typeof SCHOOL_TYPES)[number]
+
+export const SCHOOL_TYPE_LABELS: Readonly<Record<SchoolType, string>> = {
+  nursery: "Nursery",
+  primary: "Primary",
+  secondary: "Secondary",
+}
+
+const STAGES_FOR_TYPE: Readonly<Record<SchoolType, readonly Stage[]>> = {
+  nursery: ["nursery"],
+  primary: ["primary"],
+  secondary: ["junior", "senior"],
+}
+
+/** The levels a school of these types starts with, in order (spec, edge cases). */
+export function defaultStages(types: readonly SchoolType[]): Stage[] {
+  const wanted = new Set(types.flatMap((type) => STAGES_FOR_TYPE[type]))
+  return (Object.keys(STAGE_LABELS) as Stage[]).filter((stage) =>
+    wanted.has(stage)
+  )
+}
+
+/** The standard classes a school of these types starts with, in order. */
+export function defaultClasses(
+  types: readonly SchoolType[]
+): (typeof STANDARD_CLASSES)[number][] {
+  const stages = new Set(defaultStages(types))
+  return STANDARD_CLASSES.filter((entry) => stages.has(entry.stage))
+}
+
+export const isStandardClass = (value: string): value is StandardClassKey =>
+  STANDARD_CLASSES.some((entry) => entry.key === value)
+
+export const stageOfClass = (standardClass: StandardClassKey): Stage =>
+  stageOf(standardClass)
+
+// The 2025 curriculum starts in September 2025 with Primary 1, Primary 4, JSS 1 and SS 1
+// and moves up with those pupils, one class a year [N2025S]. So in the session starting
+// in 2026, the first two classes of each band are on it.
+const BANDS: readonly (readonly StandardClassKey[])[] = [
+  ["primary_1", "primary_2", "primary_3"],
+  ["primary_4", "primary_5", "primary_6"],
+  ["jss_1", "jss_2", "jss_3"],
+  ["sss_1", "sss_2", "sss_3"],
+]
+
+/**
+ * The curriculum a new arm starts on, for a session starting in `sessionStartYear`. A
+ * default only: the school sets each arm's version itself. Nursery arms have no NERDC
+ * subject list, so they start on the school's own.
+ */
+export function defaultCurriculum(
+  standardClass: StandardClassKey | null,
+  sessionStartYear: number
+): CurriculumVersion {
+  if (standardClass === null) return "own"
+  const band = BANDS.find((entry) => entry.includes(standardClass))
+  if (band === undefined) return "own"
+  const yearsIn = sessionStartYear - 2025 + 1
+  return band.indexOf(standardClass) < yearsIn ? "nerdc_2025" : "nerdc_pre2025"
 }

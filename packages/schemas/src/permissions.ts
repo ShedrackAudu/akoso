@@ -57,8 +57,16 @@ const EVERY_ROLE: readonly ActionKey[] = [
   "identity.membership.list_own",
 ]
 
+/**
+ * Every staff role: classes, arms, subjects and the calendar appear on many screens
+ * (school setup part A spec, section 7).
+ */
+const EVERY_STAFF_ROLE: readonly ActionKey[] = ["setup.school.read"]
+
 /** Proprietor and school administrator (part B spec, Permissions). */
 const SCHOOL_MANAGERS: readonly ActionKey[] = [
+  // The school's set-up (school setup part A spec, section 7).
+  "setup.school.manage",
   // Reading a school's audit log (D-27): its page comes later; the right exists now.
   "audit.event.read",
   "identity.member.read",
@@ -78,13 +86,16 @@ const PROPRIETOR_ONLY: readonly ActionKey[] = [
 export const ROLE_PERMISSIONS: Readonly<Record<RoleKey, readonly ActionKey[]>> =
   Object.fromEntries(
     ROLE_KEYS.map((role) => {
+      const base = isStaffRole(role)
+        ? [...EVERY_ROLE, ...EVERY_STAFF_ROLE]
+        : EVERY_ROLE
       if (role === "proprietor") {
-        return [role, [...EVERY_ROLE, ...SCHOOL_MANAGERS, ...PROPRIETOR_ONLY]]
+        return [role, [...base, ...SCHOOL_MANAGERS, ...PROPRIETOR_ONLY]]
       }
       if (role === "school_admin") {
-        return [role, [...EVERY_ROLE, ...SCHOOL_MANAGERS]]
+        return [role, [...base, ...SCHOOL_MANAGERS]]
       }
-      return [role, EVERY_ROLE]
+      return [role, base]
     })
   ) as Record<RoleKey, readonly ActionKey[]>
 

@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest"
 
+import { STANDARD_CLASS_KEYS } from "@akoso/schemas/school-setup"
+
 import type { LocalDate } from "../time/index"
 import {
   countSchoolDays,
@@ -8,7 +10,18 @@ import {
   isWeekday,
   termProblems,
 } from "./calendar"
-import { presetSubjects, subjectLimits } from "./curriculum"
+import {
+  brandColourReadable,
+  contrastRatio,
+  normaliseHexColour,
+} from "./colour"
+import {
+  STANDARD_CLASSES,
+  defaultClasses,
+  defaultCurriculum,
+  presetSubjects,
+  subjectLimits,
+} from "./curriculum"
 
 const d = (value: string) => value as LocalDate
 
@@ -112,5 +125,47 @@ describe("NERDC presets", () => {
     })
     expect(subjectLimits("jss_2", "nerdc_2025")).toEqual({ min: 12, max: 14 })
     expect(subjectLimits("primary_4", "nerdc_pre2025")).toBeNull()
+  })
+})
+
+describe("set-up defaults", () => {
+  it("give a primary school Primary 1 to 6, and a secondary school JSS and SSS", () => {
+    expect(defaultClasses(["primary"]).map((entry) => entry.key)).toEqual([
+      "primary_1",
+      "primary_2",
+      "primary_3",
+      "primary_4",
+      "primary_5",
+      "primary_6",
+    ])
+    expect(defaultClasses(["secondary"])).toHaveLength(6)
+    expect(defaultClasses(["nursery", "primary", "secondary"])).toHaveLength(16)
+  })
+
+  it("move the 2025 curriculum up one class a year", () => {
+    expect(defaultCurriculum("primary_4", 2025)).toBe("nerdc_2025")
+    expect(defaultCurriculum("primary_5", 2025)).toBe("nerdc_pre2025")
+    expect(defaultCurriculum("primary_5", 2026)).toBe("nerdc_2025")
+    expect(defaultCurriculum("primary_6", 2026)).toBe("nerdc_pre2025")
+    expect(defaultCurriculum("sss_3", 2027)).toBe("nerdc_2025")
+    expect(defaultCurriculum("nursery_1", 2026)).toBe("own")
+  })
+})
+
+describe("the brand colour", () => {
+  it("accepts a dark enough colour and refuses a pale one", () => {
+    expect(normaliseHexColour("1F6FEB")).toBe("#1f6feb")
+    expect(normaliseHexColour("#12345")).toBeNull()
+    expect(contrastRatio("#000000", "#ffffff")).toBeCloseTo(21)
+    expect(brandColourReadable("#5b21b6")).toBe(true)
+    expect(brandColourReadable("#fde047")).toBe(false)
+  })
+})
+
+describe("the standard classes", () => {
+  it("match the keys the inputs accept", () => {
+    expect(STANDARD_CLASSES.map((entry) => entry.key)).toEqual([
+      ...STANDARD_CLASS_KEYS,
+    ])
   })
 })
