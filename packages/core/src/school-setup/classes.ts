@@ -26,7 +26,11 @@ import { checkCap, checkVersion, uniqueViolationOf, versionOf } from "./shared"
 
 type Stage = schoolSetup.Stage
 
-/** The level for a stage, created the first time the school needs it. */
+/**
+ * The level for a stage, created the first time the school needs it. The upsert also
+ * locks the level's row until the transaction ends, so changes to one level's classes
+ * (new positions, moves) happen one at a time and never share a position.
+ */
 async function levelFor(
   tx: TenantTransaction,
   tenantId: string,
@@ -225,6 +229,14 @@ export async function moveClass(
   authorize(ctx, "setup.school.manage")
   const tenantId = requireTenant(ctx)
   await withTenant(ctx.db, tenantId, async (tx) => {
+    // Lock the level first, so two moves in one level queue instead of each holding
+    // one class and waiting for the other (a deadlock; review of PR #39, finding 1).
+    const level = await tx.execute(sql`
+      select l.id from school_setup.levels l
+      join school_setup.classes c on c.level_id = l.id
+      where c.id = ${input.id} and c.archived_at is null
+      for update of l`)
+    if (level.rows[0] === undefined) throw new NotFoundError()
     const found = await tx.execute(sql`
       select id, level_id, position from school_setup.classes
       where id = ${input.id} and archived_at is null for update`)
@@ -275,14 +287,21 @@ export async function removeClass(
       update school_setup.classes set archived_at = now(), updated_at = now()
       where id = ${input.id} and archived_at is null returning name`)
     if (result.rows[0] === undefined) throw new NotFoundError()
-    await tx.execute(sql`
+    const arms = await tx.execute(sql`
       update school_setup.class_arms set archived_at = now(), updated_at = now()
-      where class_id = ${input.id} and archived_at is null`)
+      where class_id = ${input.id} and archived_at is null returning id`)
     await recordAudit(tx, ctx, {
       action: "class.archived",
       entityType: "class",
       entityId: input.id,
-      changes: { archived: { before: false, after: true } },
+      changes: {
+        archived: { before: false, after: true },
+        // The arms archived with it (review of PR #39, finding 7).
+        armsArchived: {
+          before: null,
+          after: arms.rows.map((arm) => String(arm.id)).sort(),
+        },
+      },
     })
   })
 }

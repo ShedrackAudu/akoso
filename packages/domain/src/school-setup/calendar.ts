@@ -101,10 +101,10 @@ export function termProblems(
   const problems: { term: number; message: string }[] = []
   const ordered = [...terms].sort((a, b) => a.number - b.number)
   ordered.forEach((term, index) => {
-    if (term.endsOn < term.startsOn) {
+    if (term.endsOn <= term.startsOn) {
       problems.push({
         term: term.number,
-        message: "The term ends before it starts.",
+        message: "The term must end after it starts.",
       })
     }
     if (

@@ -72,7 +72,7 @@ const optionalDate = dateSchema.nullable().default(null)
  * The row's version as the screen last saw it (its updated_at). A save based on an
  * older version is refused as a conflict (spec, edge cases: two people editing).
  */
-const versionSchema = z.string().max(64).optional()
+const versionSchema = z.iso.datetime({ offset: true }).optional()
 
 const name = (max: number, what: string) =>
   z

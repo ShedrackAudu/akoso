@@ -38,11 +38,21 @@ export function versionOf(value: unknown): string {
 const CHANGED_ELSEWHERE =
   "Someone else changed this while you were editing. Refresh the page to see their change, then try again."
 
+/** The answer when someone else's change got there first. */
+export const changedElsewhere = (): ConflictError =>
+  new ConflictError(CHANGED_ELSEWHERE)
+
+/**
+ * The database's "one current session per school" rule, broken when two people make a
+ * session current at the same moment (review of PR #39, finding 3).
+ */
+export const ONE_CURRENT_SESSION = "academic_sessions_one_current"
+
 /** Refuses a save based on an older version than the row has now (item 3's conflict). */
 export function checkVersion(current: unknown, sent: string | undefined): void {
   if (sent === undefined) return
   if (versionOf(current) !== versionOf(sent)) {
-    throw new ConflictError(CHANGED_ELSEWHERE)
+    throw changedElsewhere()
   }
 }
 

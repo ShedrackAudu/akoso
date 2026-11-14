@@ -14,6 +14,48 @@ ALTER TABLE "school_setup"."school_profiles"
   ADD CONSTRAINT "school_profiles_lengths_check"
   CHECK (length("motto") <= 200 AND length("address") <= 500 AND length("lga") <= 100);
 --> statement-breakpoint
+-- The 36 states and the FCT, as in packages/domain/src/school-setup/states.ts.
+ALTER TABLE "school_setup"."school_profiles"
+  ADD CONSTRAINT "school_profiles_state_check"
+  CHECK ("state" IS NULL OR "state" IN (
+      'Abia',
+      'Adamawa',
+      'Akwa Ibom',
+      'Anambra',
+      'Bauchi',
+      'Bayelsa',
+      'Benue',
+      'Borno',
+      'Cross River',
+      'Delta',
+      'Ebonyi',
+      'Edo',
+      'Ekiti',
+      'Enugu',
+      'Federal Capital Territory',
+      'Gombe',
+      'Imo',
+      'Jigawa',
+      'Kaduna',
+      'Kano',
+      'Katsina',
+      'Kebbi',
+      'Kogi',
+      'Kwara',
+      'Lagos',
+      'Nasarawa',
+      'Niger',
+      'Ogun',
+      'Ondo',
+      'Osun',
+      'Oyo',
+      'Plateau',
+      'Rivers',
+      'Sokoto',
+      'Taraba',
+      'Yobe',
+      'Zamfara'));
+--> statement-breakpoint
 ALTER TABLE "school_setup"."school_profiles"
   ADD CONSTRAINT "school_profiles_phone_check"
   CHECK ("phone" IS NULL OR "phone" ~ '^\+[1-9][0-9]{7,14}$');
@@ -44,7 +86,7 @@ ALTER TABLE "school_setup"."terms"
 --> statement-breakpoint
 ALTER TABLE "school_setup"."terms"
   ADD CONSTRAINT "terms_dates_check"
-  CHECK ("ends_on" >= "starts_on");
+  CHECK ("ends_on" > "starts_on");
 --> statement-breakpoint
 ALTER TABLE "school_setup"."terms"
   ADD CONSTRAINT "terms_mid_term_check"

@@ -22,6 +22,8 @@ import {
 import {
   checkVersion,
   touchSession,
+  changedElsewhere,
+  ONE_CURRENT_SESSION,
   uniqueViolationOf,
   versionOf,
 } from "./shared"
@@ -129,12 +131,14 @@ export async function saveSession(
       return { id, version: versionOf(row?.updated_at) }
     })
   } catch (error) {
-    if (uniqueViolationOf(error) === "academic_sessions_tenant_name_unique") {
+    const constraint = uniqueViolationOf(error)
+    if (constraint === "academic_sessions_tenant_name_unique") {
       throw ValidationError.of(
         "name",
         `There's already a session called ${input.name}.`
       )
     }
+    if (constraint === ONE_CURRENT_SESSION) throw changedElsewhere()
     throw error
   }
 }
@@ -149,6 +153,21 @@ export async function makeSessionCurrent(
 ): Promise<void> {
   authorize(ctx, "setup.school.manage")
   const tenantId = requireTenant(ctx)
+  try {
+    await makeCurrent(ctx, tenantId, input.sessionId)
+  } catch (error) {
+    if (uniqueViolationOf(error) === ONE_CURRENT_SESSION)
+      throw changedElsewhere()
+    throw error
+  }
+}
+
+async function makeCurrent(
+  ctx: RequestContext,
+  tenantId: string,
+  sessionId: string
+): Promise<void> {
+  const input = { sessionId }
   await withTenant(ctx.db, tenantId, async (tx) => {
     const row = await lockSession(tx, input.sessionId)
     if (row.status === "current") return

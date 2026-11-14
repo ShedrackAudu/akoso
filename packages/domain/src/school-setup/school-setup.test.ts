@@ -73,6 +73,19 @@ describe("the school calendar", () => {
     ])
   })
 
+  it("refuses a term that ends the day it starts", () => {
+    const problems = termProblems([
+      {
+        number: 1,
+        startsOn: d("2026-09-07"),
+        endsOn: d("2026-09-07"),
+        midTerm: null,
+        resumesOn: null,
+      },
+    ]).map((problem) => problem.message)
+    expect(problems).toEqual(["The term must end after it starts."])
+  })
+
   it("explains term problems in plain words", () => {
     const problems = termProblems([
       { number: 1, ...term, resumesOn: d("2026-09-10") },

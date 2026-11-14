@@ -27,6 +27,8 @@ import {
   createDefaultClasses,
   getSchoolSetup,
   isSchoolDay,
+  makeSessionCurrent,
+  moveClass,
   removeClass,
   saveArm,
   saveSchoolProfile,
@@ -354,6 +356,48 @@ describe("school setup part A", () => {
     ).not.toContain("Independence Day")
   })
 
+  it("keeps one current session when two are made at once", async () => {
+    const school = await newSchool()
+    const ctx = as(school, ["proprietor"])
+    const results = await Promise.allSettled(
+      ["2026/2027", "2027/2028"].map((name, index) =>
+        saveSession(ctx, {
+          school: school.slug,
+          name,
+          startsOn: `${String(2026 + index)}-09-07`,
+          endsOn: `${String(2027 + index)}-07-23`,
+        })
+      )
+    )
+    for (const result of results) {
+      if (result.status === "rejected") {
+        expect(result.reason).toBeInstanceOf(ConflictError)
+      }
+    }
+    const setup = await getSchoolSetup(ctx)
+    expect(
+      setup.sessions.filter((session) => session.status === "current")
+    ).toHaveLength(1)
+    // Asking again for a session that is already current changes nothing.
+    const current = setup.current
+    if (current === null) throw new Error("no current session")
+    await makeSessionCurrent(ctx, {
+      school: school.slug,
+      sessionId: current.id,
+    })
+  })
+
+  it("refuses a version that isn't a time, before any database work", () => {
+    expect(
+      saveProfileInput.safeParse({
+        school: "greenfield",
+        name: "Greenfield",
+        schoolTypes: ["primary"],
+        version: "not-a-date",
+      }).success
+    ).toBe(false)
+  })
+
   it("keeps arm rules and archives a removed class", async () => {
     const { ctx, school } = await primarySchool(
       "2026/2027",
@@ -382,7 +426,23 @@ describe("school setup part A", () => {
     expect((duplicate as ValidationError).fieldErrors[0]?.message).toBe(
       "This class already has an arm called a."
     )
+    // Two opposite moves at once queue on the level instead of deadlocking.
+    const [first, second] = setup.classes
+    if (first === undefined || second === undefined)
+      throw new Error("no classes")
+    await Promise.all([
+      moveClass(ctx, { school: school.slug, id: first.id, direction: "down" }),
+      moveClass(ctx, { school: school.slug, id: second.id, direction: "up" }),
+    ])
+
     await removeClass(ctx, { school: school.slug, id: p1.id })
+    const archived = await owner.db.execute(sql`
+      select changes from platform.audit_events
+      where tenant_id = ${school.id} and action = 'class.archived'`)
+    const changes = archived.rows[0]?.changes as {
+      armsArchived?: { after: string[] }
+    }
+    expect(changes.armsArchived?.after).toEqual(p1.arms.map((arm) => arm.id))
     const after = await getSchoolSetup(ctx)
     expect(after.classes.map((entry) => entry.id)).not.toContain(p1.id)
     expect(await auditCount(school, "class.archived")).toBe(1)
