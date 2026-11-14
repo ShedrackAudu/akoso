@@ -31,6 +31,9 @@ export interface TermDates extends DateRange {
 const within = (date: LocalDate, range: DateRange): boolean =>
   date >= range.startsOn && date <= range.endsOn
 
+/** A range whose last day comes before its first. */
+const isBackwards = (range: DateRange): boolean => range.endsOn < range.startsOn
+
 /**
  * Whether school opened on a date: a weekday inside a term, outside its mid-term break,
  * and not a non-school day (a holiday or closure).
@@ -109,7 +112,7 @@ export function termProblems(
     }
     if (
       term.midTerm !== null &&
-      (term.midTerm.endsOn < term.midTerm.startsOn ||
+      (isBackwards(term.midTerm) ||
         !within(term.midTerm.startsOn, term) ||
         !within(term.midTerm.endsOn, term))
     ) {
