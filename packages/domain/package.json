@@ -9,6 +9,9 @@
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@akoso/schemas": "workspace:*"
+  },
   "devDependencies": {
     "@akoso/typescript-config": "workspace:*"
   }

@@ -426,6 +426,10 @@ importers:
         version: 0.31.11
 
   packages/domain:
+    dependencies:
+      '@akoso/schemas':
+        specifier: workspace:*
+        version: link:../schemas
     devDependencies:
       '@akoso/typescript-config':
         specifier: workspace:*
